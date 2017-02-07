@@ -2,14 +2,19 @@ version: '2'
 services:
   indexd:
     image: "quay.io/cdis/indexd"
+    volumes:
+      - ./index_settings.py:/var/www/indexd/local_settings.py
     ports:
       - "8080:80"
   user-api:
     image: "quay.io/cdis/user-api"
+    volumes:
+      - ./userapi_settings.py:/var/www/user-api/local_settings.py
     ports:
       - "8081:80"
   gdcapi:
     image: "quay.io/cdis/gdcapi:docker"
+    volumes:
+      - ./gdcapi_wsgi.py:/var/www/gdcapi/wsgi.py
     ports:
       - "8082:80"
-     
