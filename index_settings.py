@@ -2,10 +2,10 @@ from indexd.index.drivers.alchemy import SQLAlchemyIndexDriver
 from indexd.alias.drivers.alchemy import SQLAlchemyAliasDriver
 from indexd.auth.drivers.alchemy import SQLAlchemyAuthDriver
 
-usr = None
-db = None
-psw = None
-pghost = None
+usr = "pguserenv"
+db = "envdb"
+psw = "pgpass3"
+pghost = "postgres"
 pgport = 5432
 CONFIG = {}
 

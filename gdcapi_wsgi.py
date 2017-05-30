@@ -21,13 +21,22 @@ config['SIGNPOST'] = {
     'auth': ('username', 'password'),
 }
 config["PSQLGRAPH"] = {
-    'host': None,
-    'user': None,
-    'password': None,
-    'database': None,
+    'host': "postgres",
+    'user': "pguserenv",
+    'password': "pgpass3",
+    'database': "envdb",
 }
 
+config["OAUTH2"] = {
+    'client_id': "",
+    'client_secret': "",
+    'oauth_provider': "",
+    'redirect_uri': "",
+}
+
+config["USER_API"] = 'userapi'
+
 config['HMAC_ENCRYPTION_KEY'] = 'shared_encryption_key_with_userapi'
-config['PSQL_USER_DB_CONNECTION'] = 'postgresql://username:password@host:5432/db_name'
+config['PSQL_USER_DB_CONNECTION'] = 'postgresql://pguserenv:pgpass3@postgres:5432/envdb'
 app_init(app)
 application = app

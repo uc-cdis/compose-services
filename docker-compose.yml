@@ -1,20 +1,53 @@
 version: '2'
 services:
   indexd:
-    image: "quay.io/cdis/indexd"
+    image: "indexd"
     volumes:
       - ./index_settings.py:/var/www/indexd/local_settings.py
     ports:
       - "8080:80"
+    depends_on:
+      - postgres
   user-api:
-    image: "quay.io/cdis/user-api"
+    image: "userapi"
     volumes:
       - ./userapi_settings.py:/var/www/user-api/local_settings.py
     ports:
       - "8081:80"
+    depends_on:
+      - postgres
   gdcapi:
-    image: "quay.io/cdis/gdcapi:docker"
+    image: "gdcapi"
     volumes:
       - ./gdcapi_wsgi.py:/var/www/gdcapi/wsgi.py
     ports:
       - "8082:80"
+    depends_on:
+      - postgres
+  dataportal:
+    image: "dataportal"
+    ports:
+      - "8083:80"
+    depends_on:
+      - postgres
+    environment:
+      APP: 'edc'
+  postgres:
+    image: postgres:9.6.1
+    ports:
+      - 5432:5432
+    volumes:
+      # Mount the DB dumps folder into the container, to be able to create & access database dumps:
+      - /mnt/pgdata/db/dumps:/db/dumps
+      # Mount out tmp folder, we might want to have access to something there during development:
+      - /mnt/pgdata/tmp:/tmp
+      # Mount our 'restoredb' script:
+      - /mnt/pgdata/bin/restoredb:/bin/restoredb:ro
+      # Mount our 'dumpdb' script:
+      - /mnt/pgdata/bin/dumpdb:/bin/dumpdb:ro
+      # We'll mount the 'postgres-data' volume into the location Postgres stores it's data:
+      - /mnt/pgdata/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: pguserenv
+      POSTGRES_PASSWORD: pgpass3
+      POSTGRES_DB: envdb
