@@ -1,5 +1,5 @@
 from boto.s3.connection import OrdinaryCallingFormat
-DB = 'postgresql://pguserenv:pgpass3@postgres:5432/envdb'
+DB = 'postgresql://test:test@postgres:5432/userapi'
 
 MOCK_AUTH = True
 MOCK_STORAGE = True

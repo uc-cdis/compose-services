@@ -10,7 +10,7 @@ except:
 
 config = app.config
 
-config["AUTH"] = None 
+config["AUTH"] = None
 config["AUTH_ADMIN_CREDS"] = None
 config["INTERNAL_AUTH"] = None
 
@@ -22,21 +22,22 @@ config['SIGNPOST'] = {
 }
 config["PSQLGRAPH"] = {
     'host': "postgres",
-    'user': "pguserenv",
-    'password': "pgpass3",
-    'database': "envdb",
+    'user': "test",
+    'password': "test",
+    'database': "bpareplicate",
 }
 
 config["OAUTH2"] = {
-    'client_id': "",
-    'client_secret': "",
-    'oauth_provider': "",
-    'redirect_uri': "",
+    'client_id': "MkyDcVzGJ2w2eJYmksf2rNZ44lFn49I4iKwCWCuC",
+    'client_secret': "mQPax6tyRO2KlSnNcChwD93bhPqN03lwv9kVruAhWJfe9t30Wr4qtsN",
+    'internal_oauth_provider': 'http://user-api/oauth2/',
+    'oauth_provider': 'http://localhost/user/oauth2/',
+    'redirect_uri': 'http://localhost/api/v0/oauth2/authorize'
 }
 
-config["USER_API"] = 'userapi'
+config["USER_API"] = 'http://user-api/'
 
 config['HMAC_ENCRYPTION_KEY'] = 'shared_encryption_key_with_userapi'
-config['PSQL_USER_DB_CONNECTION'] = 'postgresql://pguserenv:pgpass3@postgres:5432/envdb'
+config['PSQL_USER_DB_CONNECTION'] = 'postgresql://test:test@postgres:5432/userapi'
 app_init(app)
 application = app
