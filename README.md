@@ -3,9 +3,24 @@ Compose-Services
 
 Docker-compose setup for local development of the Gen3 stack. Production use should use [cloud-automation](https://github.com/uc-cdis/cloud-automation).
 
+
+added creds.json file as well as apis_configs files from cloud-automation
+created indexd user, pass, and db
+
+
+
+
+
+
+
+
+
+
+
+
 ## Installation
 
-This setup uses Docker containers for postgres, indexd, gdcapi, user-api, data-portal and nginx as a reverse proxy to each of the services.
+This setup uses Docker containers for postgres, indexd, fence, peregrine, sheepdog, data-portal and nginx. Images for the cdis microservices will be pulled from quay.io, while postgres and nginx images will be pulled from Docker Hub. Nginx will be used as a reverse proxy to each of the services. 
 
 It enables a test user that can use OAuth2 locally.
 
