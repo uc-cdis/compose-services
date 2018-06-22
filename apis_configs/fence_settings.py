@@ -78,12 +78,13 @@ def get_from_dict(dictionary, key, default=''):
     return value
 
 
-creds = load_json('creds.json')
+creds = load_json('creds.json')[APP_NAME]
 key_list = ['db_username', 'db_password', 'db_host', 'db_database']
 
 DB = (
     'postgresql://%s:%s@%s:5432/%s' % tuple([get_from_dict(creds, k, 'unknown-'+k) for k in key_list])
 )
+
 HMAC_ENCRYPTION_KEY = get_from_dict(creds, 'hmac_key', 'unknown-hmac_key')
 HOSTNAME = get_from_dict(creds, 'hostname', 'unknown-hostname')
 BASE_URL = 'https://%s/user' % HOSTNAME
@@ -132,4 +133,4 @@ CIRRUS_CFG["GOOGLE_STORAGE_CREDS"] = (
 
 DEFAULT_LOGIN_URL_REDIRECT_PARAM = 'redirect'
 
-INDEXD = 'http://indexd-service/'
+INDEXD = 'http://compose-services_indexd_1'

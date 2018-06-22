@@ -5,6 +5,11 @@ groups: {}
 users:
   cdis:
     admin: True
+  scui729@uchicago.edu:
+    admin: True
+    projects:
+    - auth_id: acct
+      privilege: ['create', 'read', 'update', 'delete', 'upload']
   yajingt@uchicago.edu:
     admin: True
     projects:

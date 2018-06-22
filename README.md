@@ -5,12 +5,17 @@ Docker-compose setup for local development of the Gen3 stack. Production use sho
 
 
 added creds.json file as well as apis_configs files from cloud-automation
-created indexd user, pass, and db
+modified creds.json fields 
+modified docker-compose.yaml to mount files similarly to cloud-automation
+manually went on postgres container and added databases and users 
+wrote keypair.sh script and manually went on fence to run it to generate keypairs
+
+TODO: figure out how to make a proper workflow for editing, currently have to docker-compose down and docker-compose up again to fully rebuild to make sure everything is running updated files.
 
 
 
 
-
+  
 
 
 

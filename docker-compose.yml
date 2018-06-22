@@ -1,21 +1,26 @@
 version: '3'
 services:
-  indexd:
-    image: "quay.io/cdis/indexd"
-    volumes:
-      - ./apis_configs/indexd_settings.py:/var/www/indexd/local_settings.py
-      - ./apis_configs/creds.json:/var/www/indexd/creds.json
-      - ./apis_configs/config_helper.py:/var/www/indexd/config_helper.py
-    ports:
-      - "8080:80"
-    depends_on:
-      - postgres
+  # indexd:
+  #   image: "quay.io/cdis/indexd"
+  #   volumes:
+  #     - ./apis_configs/indexd_settings.py:/var/www/indexd/local_settings.py
+  #     - ./apis_configs/creds.json:/var/www/indexd/creds.json
+  #     - ./apis_configs/config_helper.py:/var/www/indexd/config_helper.py
+  #   ports:
+  #     - "8080:80"
+  #   depends_on:
+  #     - postgres
   # fence:
   #   image: "quay.io/cdis/fence"
   #   volumes:
-  #     - ./local_settings.py:/var/www/fence/local_settings.py
+  #     - ./apis_configs/fence_settings.py:/var/www/fence/local_settings.py
+  #     - ./apis_configs/creds.json:/var/www/fence/creds.json
+  #     - ./apis_configs/config_helper.py:/var/www/fence/config_helper.py
+  #     - ./apis_configs/fence_credentials.json:/var/www/fence/fence_credentials.json
+  #     - ./apis_configs/user.yaml:/var/www/fence/user.yaml
+  #     - ./keypair.sh:/var/www/fence/keypair.sh
   #   ports:
-  #     - "8081:80"
+  #     - "8000:80"
   #   depends_on:
   #     - postgres
   # peregrine:
@@ -60,9 +65,6 @@ services:
     ports:
       - 5432:5432
     restart: unless-stopped
-    # environment:
-    #   POSTGRES_USER: test
-    #   POSTGRES_PASSWORD: test
     
 volumes:
   psqldata:
