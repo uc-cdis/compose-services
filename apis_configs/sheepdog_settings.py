@@ -6,7 +6,7 @@ APP_NAME='sheepdog'
 def load_json(file_name):
   return config_helper.load_json(file_name, APP_NAME)
 
-conf_data = load_json('creds.json')
+conf_data = load_json('creds.json')[APP_NAME]
 config = app.config
 
 config["AUTH"] = 'https://auth.service.consul:5000/v3/'
@@ -15,7 +15,7 @@ config["INTERNAL_AUTH"] = None
 
 # Signpost
 config['SIGNPOST'] = {
-    'host': environ.get('SIGNPOST_HOST', 'http://indexd-service'),
+    'host': environ.get('SIGNPOST_HOST', 'http://compose-services_indexd_1'),
     'version': 'v0',
     'auth': ('gdcapi', conf_data.get('indexd_password', '{{indexd_password}}')),
 }
@@ -48,7 +48,7 @@ config['OAUTH2'] = {
     'oauth_provider': 'https://%s/user/oauth2/' % conf_data['hostname'],
     'redirect_uri': 'https://%s/api/v0/oauth2/authorize'  % conf_data['hostname']
 }
-config['USER_API'] = 'http://fence-service/'
+config['USER_API'] = 'http://compose-services_fence_1'
 config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL','https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json')
 
 app_init(app)

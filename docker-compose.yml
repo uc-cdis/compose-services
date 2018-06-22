@@ -25,16 +25,20 @@ services:
   #     - postgres
   # peregrine:
   #   image: "quay.io/cdis/peregrine"
-  #   # volumes:
-  #   #   - ./peregrine_wsgi.py:/var/www/peregrine/wsgi.py
+  #   volumes:
+  #     - ./apis_configs/peregrine_settings.py:/var/www/peregrine/wsgi.py
+  #     - ./apis_configs/creds.json:/var/www/peregrine/creds.json
+  #     - ./apis_configs/config_helper.py:/var/www/peregrine/config_helper.py 
   #   ports:
   #     - "4000:80"
   #   depends_on:
   #     - postgres
   # sheepdog:
   #   image: "quay.io/cdis/sheepdog"
-  #   # volumes:
-  #   #   - ./gdcapi_wsgi.py:/var/www/gdcapi/wsgi.py
+  #   volumes:
+  #     - ./apis_configs/sheepdog_settings.py:/var/www/sheepdog/wsgi.py
+  #     - ./apis_configs/creds.json:/var/www/sheepdog/creds.json
+  #     - ./apis_configs/config_helper.py:/var/www/sheepdog/config_helper.py 
   #   ports:
   #     - "5000:80"
   #   depends_on:
