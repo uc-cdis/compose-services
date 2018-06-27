@@ -1,6 +1,6 @@
 {
     "fence": {
-        "db_host": "compose-services_postgres_1",
+        "db_host": "postgres",
         "db_username": "fence_user",
         "db_password": "fence_pass",
         "db_database": "fence_db",
@@ -10,11 +10,11 @@
         "hmac_key": ""
     },
     "sheepdog": {
-        "fence_host": "compose-services_postgres_1",
+        "fence_host": "postgres",
         "fence_username": "fence_user",
         "fence_password": "fence_pass",
         "fence_database": "fence_db",
-        "db_host": "compose-services_postgres_1",
+        "db_host": "postgres",
         "db_username": "sheepdog_user",
         "db_password": "sheepdog_pass",
         "db_database": "metadata_db",
@@ -25,11 +25,11 @@
         "oauth2_client_secret": "n/a"
     },
     "peregrine": {
-        "fence_host": "compose-services_postgres_1",
+        "fence_host": "postgres",
         "fence_username": "fence_user",
         "fence_password": "fence_pass",
         "fence_database": "fence_db",
-        "db_host": "compose-services_postgres_1",
+        "db_host": "postgres",
         "db_username": "peregrine_user",
         "db_password": "peregrine_pass",
         "db_database": "metadata_db",
@@ -37,7 +37,7 @@
         "hostname": "localhost"
     },  
     "indexd": {
-        "db_host": "compose-services_postgres_1",
+        "db_host": "postgres",
         "db_username": "indexd_user",
         "db_password": "indexd_pass",
         "db_database": "indexd_db",

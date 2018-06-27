@@ -5,14 +5,17 @@ Docker-compose setup for local development of the Gen3 stack. Production use sho
 
 
 added creds.json file as well as apis_configs files from cloud-automation
-modified creds.json fields 
+modified creds.json fields
 modified docker-compose.yaml to mount files similarly to cloud-automation
-manually went on postgres container and added databases and users 
-wrote keypair.sh script and manually went on fence to run it to generate keypairs
+modified apis_configs files in order to composeify them rather than kubeify them
+manually went on postgres container and added databases and users (this doesn't get erased when the container gets removed because of the persistent volume) 
+USER STEP: update creds.json fence area with google API client secret and client ID
+
+
 
 TODO: figure out how to make a proper workflow for editing, currently have to docker-compose down and docker-compose up again to fully rebuild to make sure everything is running updated files.
 
-
+TODO: automate the script setup processes and make api_configs folder hardcoding more of an automated process
 
 
   
@@ -45,40 +48,9 @@ Three postgres databases are recommended:
 
 However, as currently there isn't table name overlap, it would be fine to compress it all into one database.
 
-#### User Setup
-
-To create the test user:
-```
-userapi-create create ua.yaml
-```
-
-Signpost user setup
-
-
-#### Local OAuth2
-
-
-On the user-api Docker:
-```
-userapi-create client-create --client gdcapi --urls http://localhost/api/v0/oauth2/authorize --username test
-```
-
-Returns a keypair tuple, the first value should be set as `client_id` and the second as `client_secret` in the gdcapi OAUTH2 config.
-
-### Usage
-
 After the initial setup, all docker compose features should be available.
 
 When running at the beginning, using the attached mode of `docker-compose up` can be useful for debugging errors. To run in backgrounded mode `docker-compose up -d`. The logs for each service can be accessed using `docker logs`.
-
-
-Services will be available on the ports defined in docker-compose.yml, to test the default settings:
-
-```
-$ curl http://localhost:8080/index/
-$ curl http://localhost:8081/user/
-$ curl http://localhost:8082/v0/submission
-```
 
 To stop the services use?
 ```
