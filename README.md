@@ -8,17 +8,16 @@ added creds.json file as well as apis_configs files from cloud-automation
 modified creds.json fields
 modified docker-compose.yaml to mount files similarly to cloud-automation
 modified apis_configs files in order to composeify them rather than kubeify them
-manually went on postgres container and added databases and users (this doesn't get erased when the container gets removed because of the persistent volume) 
+manually went on postgres container and added databases and users, peregrine has to be superuser (this doesn't get erased when the container gets removed because of the persistent volume) 
 USER STEP: update creds.json fence area with google API client secret and client ID
+USER STEP: run keypair.sh and ssl_setup.sh (ssl_setup.sh with sudo)
+NOTE: you can restart a single container with docker-compose restart [CONTAINER_NAME]
+after you update some code in order to see changes without having to rebuild (does not apply changes in docker-compose file)
 
 
-
-TODO: figure out how to make a proper workflow for editing, currently have to docker-compose down and docker-compose up again to fully rebuild to make sure everything is running updated files.
 
 TODO: automate the script setup processes and make api_configs folder hardcoding more of an automated process
 
-
-  
 
 
 

@@ -52,6 +52,7 @@ config['OAUTH2'] = {
     'redirect_uri': 'https://%s/api/v0/oauth2/authorize'  % conf_data['hostname']
 }
 
-config['USER_API'] = 'http://fence-service/'
+config['USER_API'] = 'http://fence/'
+
 app_init(app)
 application = app
