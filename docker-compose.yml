@@ -2,12 +2,14 @@ version: '3'
 services:
   indexd:
     image: "quay.io/cdis/indexd"
+    command: "bash waitForPostgres.sh"
     networks:
       - devnet
     volumes:
       - ./apis_configs/indexd_settings.py:/var/www/indexd/local_settings.py
       - ./apis_configs/creds.json:/var/www/indexd/creds.json
       - ./apis_configs/config_helper.py:/var/www/indexd/config_helper.py
+      - ./waitForPostgres.sh:/var/www/indexd/waitForPostgres.sh
     depends_on:
       - postgres
   fence:
@@ -27,7 +29,7 @@ services:
     depends_on:
       - postgres
   peregrine:
-    image: "quay.io/cdis/peregrine"
+    image: "quay.io/cdis/peregrine:chore_userdb"
     networks:
       - devnet
     command: bash /peregrine_setup.sh
@@ -43,7 +45,7 @@ services:
     depends_on:
       - postgres
   sheepdog:
-    image: "quay.io/cdis/sheepdog"
+    image: "quay.io/cdis/sheepdog:chore_userdatamodel"
     networks:
       - devnet
     volumes:
@@ -91,6 +93,7 @@ services:
       - devnet
     volumes:
       - "psqldata:/var/lib/postgresql/data"
+      - "./postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql"
     restart: unless-stopped
     
 volumes:
