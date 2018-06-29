@@ -53,6 +53,7 @@ config['OAUTH2'] = {
 }
 
 config['USER_API'] = 'http://fence/'
+config['FORCE_ISSUER'] = True
 
 app_init(app)
 application = app

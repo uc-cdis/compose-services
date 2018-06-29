@@ -27,7 +27,7 @@ of race condition)
 
 
 
-userdatamodel-init to initialize databases beforehand, run it off of fence, stagger peregrine and sheepdog
+CHECK WITH NEW PEREGRINE BUILD TO SEE IF UPDATED AUTHUTILS WORKS
 
 
 

@@ -39,7 +39,6 @@ services:
       - ./apis_configs/config_helper.py:/var/www/peregrine/config_helper.py 
       - ./temp_creds/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
       - ./peregrine_setup.sh:/peregrine_setup.sh
-      - ../peregrine/src/authutils:/peregrine/src/authutils
     environment:
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     depends_on:
