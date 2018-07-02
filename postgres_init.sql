@@ -1,3 +1,6 @@
+/* Entrypoint script for postgres container to set up databases and users for 
+docker-compose setup */
+
 CREATE DATABASE metadata_db;
 CREATE DATABASE fence_db;
 CREATE DATABASE indexd_db;

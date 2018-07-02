@@ -1,4 +1,5 @@
 #!bin/bash
+# Script to setup keys for fence as well as ssl credentials 
 
 # make directory for temporary credentials
 mkdir -p temp_creds
