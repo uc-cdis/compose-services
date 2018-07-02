@@ -23,10 +23,10 @@ Database setup only has to occur the very first time you setup your local gen3 D
   - Python 2.7
 
 ### Docker Setup
-The official Docker installation page can be found [here](https://docs.docker.com/install/#supported-platforms).If you've never used Docker before, it may be helpful to read some of the Docker documentation to familiarize yourself with containers. 
+The official Docker installation page can be found [here](https://docs.docker.com/install/#supported-platforms). If you've never used Docker before, it may be helpful to read some of the Docker documentation to familiarize yourself with containers. 
 
 ### Docker Compose Setup
-The official Docker Compose installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information. Go through the steps of installing Docker Compose for your platform, then proceed to setting up credentials.
+If you are using Linux, then the official Docker installation does not come with Docker Compose. The official Docker Compose installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information. Go through the steps of installing Docker Compose for your platform, then proceed to setting up credentials.
 
 ### Setting up Credentials
 Setup the credentials with the provided script by running:
@@ -34,6 +34,8 @@ Setup the credentials with the provided script by running:
 sudo bash creds_setup.sh
 ```
 This script will create a `temp_creds` directory with the credential files in it. 
+
+If you are using MacOS, you may run into an error with the default MacOS OpenSSL config not including the configuration for v3_ca certificate generation. You can refer to the solution on [this Github issue](https://github.com/jetstack/cert-manager/issues/279) on a related issue on Jetstack's cert-manager.
 
 This Docker Compose setup also requires Google API Credentials in order for the fence microservice to complete its authentication. If you have Google API credentials set up already that you would like to use with the local gen3 Docker Compose setup, simply add `https://localhost/user/login/google/login/` to your Authorized redirect URIs. If you do not already have Google API Credentials, follow the steps below to set them up.
 
@@ -65,4 +67,4 @@ When developing, you can have a local repositories of the services you are worki
 ```
 docker-compose restart [CONTAINER_NAME]
 ```
-after you update some code in order to see changes without having to rebuild. Keep in mind that running `docker-compose restart` does not apply changes you make in the docker-compose file. Look up the Docker documentation for more information about [volumes](https://docs.docker.com/storage/)
+after you update some code in order to see changes without having to rebuild. Keep in mind that running `docker-compose restart` does not apply changes you make in the docker-compose file. Look up the Docker documentation for more information about [volumes](https://docs.docker.com/storage/).
