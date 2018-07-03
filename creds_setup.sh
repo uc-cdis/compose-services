@@ -18,6 +18,11 @@ openssl rsa -pubout -in temp_keys/${timestamp}/jwt_private_key.pem \
 SUBJ="/countryName=US/stateOrProvinceName=IL/localityName=Chicago/organizationName=CDIS/organizationalUnitName=PlanX/commonName=localhost/emailAddress=cdis@uchicago.edu"
 openssl req -new -x509 -nodes -extensions v3_ca -keyout temp_creds/ca-key.pem \
     -out temp_creds/ca.pem -days 365 -subj $SUBJ
+if [[ $? -eq 1 ]]; then    
+    echo "problem with creds_setup.sh script, refer to compose-services wiki"
+    exit 1
+fi
+
 
 (
     cd temp_creds
