@@ -15,17 +15,14 @@ services:
   fence:
     image: "quay.io/cdis/fence"
     networks:
-      devnet:
-        aliases:
-          - lol
+      - devnet
     volumes:
       - ./apis_configs/fence_settings.py:/var/www/fence/local_settings.py
       - ./apis_configs/creds.json:/var/www/fence/creds.json
       - ./apis_configs/config_helper.py:/var/www/fence/config_helper.py
       - ./apis_configs/fence_credentials.json:/var/www/fence/fence_credentials.json
       - ./apis_configs/user.yaml:/var/www/fence/user.yaml
-      - ./temp_creds/jwt_private_key.pem:/fence/keys/temp_keys/jwt_private_key.pem
-      - ./temp_creds/jwt_public_key.pem:/fence/keys/temp_keys/jwt_public_key.pem
+      - ./temp_keys:/fence/keys
     depends_on:
       - postgres
   peregrine:

@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 # entrypoint script for data-portal to healthcheck sheepdog and peregrine to 
 # make sure they are ready before dataportal attempts to get information from 
 # them

@@ -1,14 +1,18 @@
-#!bin/bash
+#!/bin/bash
 # Script to setup keys for fence as well as ssl credentials 
 
-# make directory for temporary credentials
+# make directories for temporary credentials
+timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 mkdir -p temp_creds
+mkdir -p temp_keys
+mkdir -p temp_keys/${timestamp}
 
 # generate private and public key for fence
-openssl genpkey -algorithm RSA -out temp_creds/jwt_private_key.pem \
+openssl genpkey -algorithm RSA -out temp_keys/${timestamp}/jwt_private_key.pem \
     -pkeyopt rsa_keygen_bits:2048
-openssl rsa -pubout -in temp_creds/jwt_private_key.pem \
-    -out temp_creds/jwt_public_key.pem
+openssl rsa -pubout -in temp_keys/${timestamp}/jwt_private_key.pem \
+    -out temp_keys/${timestamp}/jwt_public_key.pem
+
 
 # generate certs for nginx ssl
 SUBJ="/countryName=US/stateOrProvinceName=IL/localityName=Chicago/organizationName=CDIS/organizationalUnitName=PlanX/commonName=localhost/emailAddress=cdis@uchicago.edu"
