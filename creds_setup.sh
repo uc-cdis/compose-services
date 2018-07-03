@@ -20,6 +20,7 @@ openssl req -new -x509 -nodes -extensions v3_ca -keyout temp_creds/ca-key.pem \
     -out temp_creds/ca.pem -days 365 -subj $SUBJ
 if [[ $? -eq 1 ]]; then    
     echo "problem with creds_setup.sh script, refer to compose-services wiki"
+    rm -rf temp*
     exit 1
 fi
 
