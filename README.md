@@ -1,7 +1,7 @@
 Compose-Services
 ===
 
-Docker-compose setup for local development of the Gen3 stack. Production use should use [cloud-automation](https://github.com/uc-cdis/cloud-automation). 
+Docker-compose setup for experimental commons, small commons, or local development of the Gen3 stack. Production use should use [cloud-automation](https://github.com/uc-cdis/cloud-automation). 
 
 ## Introduction
 This setup uses Docker containers for postgres, indexd, fence, peregrine, sheepdog, data-portal and nginx. Images for the cdis microservices will be pulled from quay.io, while postgres (9.5) and nginx (latest) images will be pulled from Docker Hub. Nginx will be used as a reverse proxy to each of the services. Config file formats were copied from [cloud-automation](https://github.com/uc-cdis/cloud-automation) and stored in the `api_configs` directory and modified for local use with Docker Compose.
@@ -20,7 +20,8 @@ Database setup only has to occur the very first time you setup your local gen3 D
 
 ## Setup
 ### Dependencies
-  - Python 2.7
+  - openssl
+  - Docker and Docker Compose
 
 ### Docker Setup
 The official Docker installation page can be found [here](https://docs.docker.com/install/#supported-platforms). If you've never used Docker before, it may be helpful to read some of the Docker documentation to familiarize yourself with containers. 
@@ -31,7 +32,7 @@ If you are using Linux, then the official Docker installation does not come with
 ### Setting up Credentials
 Setup the credentials with the provided script by running:
 ```
-sudo bash creds_setup.sh
+bash creds_setup.sh
 ```
 This script will create a `temp_creds` directory with the credential files in it. 
 
