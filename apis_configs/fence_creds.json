@@ -1,0 +1,10 @@
+{
+  "db_host": "postgres",
+  "db_username": "fence_user",
+  "db_password": "fence_pass",
+  "db_database": "fence_db",
+  "hostname": "localhost",
+  "google_client_secret": "look-it-up",
+  "google_client_id": "look-it-up",
+  "hmac_key": ""
+}

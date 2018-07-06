@@ -78,7 +78,7 @@ def get_from_dict(dictionary, key, default=''):
     return value
 
 
-creds = load_json('creds.json')[APP_NAME]
+creds = load_json('creds.json')
 key_list = ['db_username', 'db_password', 'db_host', 'db_database']
 
 DB = (
