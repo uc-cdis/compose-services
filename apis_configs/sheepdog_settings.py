@@ -48,8 +48,9 @@ config['OAUTH2'] = {
     'oauth_provider': 'https://%s/user/oauth2/' % conf_data['hostname'],
     'redirect_uri': 'https://%s/api/v0/oauth2/authorize'  % conf_data['hostname']
 }
-config['USER_API'] = 'http://compose-services_fence_1'
+config['USER_API'] = 'http://fence/'
 config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL','https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json')
+config['FORCE_ISSUER'] = True
 
 app_init(app)
 application = app
