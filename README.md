@@ -85,4 +85,5 @@ docker-compose restart [CONTAINER_NAME]
 ```
 after you update some code in order to see changes without having to rebuild all the microservices. Keep in mind that running `docker-compose restart` does not apply changes you make in the docker-compose file. Look up the Docker documentation for more information about [volumes](https://docs.docker.com/storage/).
 
-## Running Docker Compose
+## Running Docker Compose on a Remote Machine
+To run Docker Compose on a remote machine, modify the `hostname` field in `fence_creds.json`, `peregrine_cresd.json`, and `sheepdog_creds.json` in the `apis_configs` directory.
