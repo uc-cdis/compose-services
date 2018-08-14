@@ -2,14 +2,14 @@ version: '3'
 services:
   indexd:
     image: "quay.io/cdis/indexd:master"
-    command: bash waitForPostgres.sh
+    command: bash indexd_setup.sh
     networks:
       - devnet
     volumes:
       - ./apis_configs/indexd_settings.py:/var/www/indexd/local_settings.py
       - ./apis_configs/indexd_creds.json:/var/www/indexd/creds.json
       - ./apis_configs/config_helper.py:/var/www/indexd/config_helper.py
-      - ./scripts/waitForPostgres.sh:/var/www/indexd/waitForPostgres.sh
+      - ./scripts/indexd_setup.sh:/var/www/indexd/indexd_setup.sh
     depends_on:
       - postgres
   fence:
@@ -46,12 +46,14 @@ services:
       - postgres
   sheepdog:
     image: "quay.io/cdis/sheepdog:chore_userdatamodel"
+    command: bash /sheepdog_setup.sh
     networks:
       - devnet
     volumes:
       - ./apis_configs/sheepdog_settings.py:/var/www/sheepdog/wsgi.py
       - ./apis_configs/sheepdog_creds.json:/var/www/sheepdog/creds.json
       - ./apis_configs/config_helper.py:/var/www/sheepdog/config_helper.py 
+      - ./scripts/sheepdog_setup.sh:/sheepdog_setup.sh
     depends_on:
       - postgres
   dataportal:

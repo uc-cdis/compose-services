@@ -8,6 +8,9 @@ users:
   scui729@uchicago.edu:
     admin: True
     projects:
-    - auth_id: acct
+    - auth_id: DEV
       privilege: ['create', 'read', 'update', 'delete', 'upload']
+    - auth_id: project1
+      privilege: ['create', 'read', 'update', 'delete', 'upload']
+    
   

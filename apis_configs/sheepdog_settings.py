@@ -17,7 +17,7 @@ config["INTERNAL_AUTH"] = None
 config['SIGNPOST'] = {
     'host': environ.get('SIGNPOST_HOST', 'http://compose-services_indexd_1'),
     'version': 'v0',
-    'auth': ('gdcapi', conf_data.get('indexd_password', '{{indexd_password}}')),
+    'auth': (conf_data.get('indexd_client', '{{indexd_client}}'), conf_data.get('indexd_password', '{{indexd_password}}')),
 }
 config["FAKE_AUTH"] = False
 config["PSQLGRAPH"] = {
