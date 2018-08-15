@@ -6,7 +6,7 @@ APP_NAME='peregrine'
 def load_json(file_name):
   return config_helper.load_json(file_name, APP_NAME)
 
-conf_data = load_json('creds.json')[APP_NAME]
+conf_data = load_json('creds.json')
 config = app.config
 
 config["AUTH"] = 'https://auth.service.consul:5000/v3/'

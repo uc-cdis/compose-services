@@ -1,62 +1,68 @@
 version: '3'
 services:
   indexd:
-    image: "quay.io/cdis/indexd"
-    command: "bash waitForPostgres.sh"
+    image: "quay.io/cdis/indexd:master"
+    command: bash indexd_setup.sh
     networks:
       - devnet
     volumes:
       - ./apis_configs/indexd_settings.py:/var/www/indexd/local_settings.py
-      - ./apis_configs/creds.json:/var/www/indexd/creds.json
+      - ./apis_configs/indexd_creds.json:/var/www/indexd/creds.json
       - ./apis_configs/config_helper.py:/var/www/indexd/config_helper.py
-      - ./waitForPostgres.sh:/var/www/indexd/waitForPostgres.sh
+      - ./scripts/indexd_setup.sh:/var/www/indexd/indexd_setup.sh
     depends_on:
       - postgres
   fence:
-    image: "quay.io/cdis/fence"
+    image: "quay.io/cdis/fence:master"
+    command: bash /var/www/fence/fence_setup.sh
     networks:
       - devnet
     volumes:
       - ./apis_configs/fence_settings.py:/var/www/fence/local_settings.py
-      - ./apis_configs/creds.json:/var/www/fence/creds.json
+      - ./apis_configs/fence_creds.json:/var/www/fence/creds.json
       - ./apis_configs/config_helper.py:/var/www/fence/config_helper.py
       - ./apis_configs/fence_credentials.json:/var/www/fence/fence_credentials.json
       - ./apis_configs/user.yaml:/var/www/fence/user.yaml
       - ./temp_keys:/fence/keys
+      - ./scripts/fence_setup.sh:/var/www/fence/fence_setup.sh
+    environment:
+      - PYTHONPATH=/var/www/fence
     depends_on:
       - postgres
   peregrine:
     image: "quay.io/cdis/peregrine:chore_userdb"
+    command: bash /peregrine_setup.sh
     networks:
       - devnet
-    command: bash /peregrine_setup.sh
     volumes:
       - ./apis_configs/peregrine_settings.py:/var/www/peregrine/wsgi.py
-      - ./apis_configs/creds.json:/var/www/peregrine/creds.json
+      - ./apis_configs/peregrine_creds.json:/var/www/peregrine/creds.json
       - ./apis_configs/config_helper.py:/var/www/peregrine/config_helper.py 
       - ./temp_creds/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
-      - ./peregrine_setup.sh:/peregrine_setup.sh
+      - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
     environment:
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     depends_on:
       - postgres
   sheepdog:
     image: "quay.io/cdis/sheepdog:chore_userdatamodel"
+    command: bash /sheepdog_setup.sh
     networks:
       - devnet
     volumes:
       - ./apis_configs/sheepdog_settings.py:/var/www/sheepdog/wsgi.py
-      - ./apis_configs/creds.json:/var/www/sheepdog/creds.json
+      - ./apis_configs/sheepdog_creds.json:/var/www/sheepdog/creds.json
       - ./apis_configs/config_helper.py:/var/www/sheepdog/config_helper.py 
+      - ./scripts/sheepdog_setup.sh:/sheepdog_setup.sh
     depends_on:
       - postgres
   dataportal:
-    image: "quay.io/cdis/data-portal"
+    image: "quay.io/cdis/data-portal:master"
+    command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
       - devnet
     volumes:
-      - ./waitForContainers.sh:/var/www/data-portal/waitForContainers.sh
-    command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
+      - ./scripts/waitForContainers.sh:/var/www/data-portal/waitForContainers.sh
     environment:
       - NODE_ENV=dev
       - MOCK_STORE=true
@@ -67,7 +73,7 @@ services:
       - peregrine
       - sheepdog
   nginx:
-    image: "nginx"
+    image: "nginx:latest"
     networks:
       - devnet
     volumes:
@@ -89,7 +95,7 @@ services:
       - devnet
     volumes:
       - "psqldata:/var/lib/postgresql/data"
-      - "./postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql"
+      - "./scripts/postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql"
     restart: unless-stopped
     
 volumes:

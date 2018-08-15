@@ -8,66 +8,9 @@ users:
   scui729@uchicago.edu:
     admin: True
     projects:
-    - auth_id: acct
+    - auth_id: DEV
       privilege: ['create', 'read', 'update', 'delete', 'upload']
-  yajingt@uchicago.edu:
-    admin: True
-    projects:
-    - auth_id: acct
+    - auth_id: project1
       privilege: ['create', 'read', 'update', 'delete', 'upload']
-  fortuno@uchicago.edu:
-    admin: True
-    projects:
-    - auth_id: acct
-      privilege: ['create', 'read', 'update', 'delete', 'upload']
-  thanhnd@uchicago.edu:
-    admin: True
-    projects:
-    - auth_id: acct
-      privilege: ['create', 'read', 'update', 'delete', 'upload']
-  zflamig@uchicago.edu:
-    admin: True
-    projects:
-    - auth_id: acct
-      privilege: ['create', 'read', 'update', 'delete', 'upload']
-  dmiller15@uchicago.edu:
-    admin: True
-    projects:
-    - auth_id: acct
-      privilege: ['create', 'read', 'update', 'delete', 'upload']
-  reubenonrye@uchicago.edu:
-    admin: True
-    projects:
-    - auth_id: acct
-      privilege: ['create', 'read', 'update', 'delete', 'upload']
-  rudyardrichter@uchicago.edu:
-    admin: True
-    projects:
-    - auth_id: acct
-      privilege: ['create', 'read', 'update', 'delete', 'upload']
-  avantol@uchicago.edu:
-    admin: True
-    projects:
-    - auth_id: acct
-      privilege: ['create', 'read', 'update', 'delete', 'upload']
-  cgmeyer@uchicago.edu:
-    admin: True
-    projects:
-    - auth_id: acct
-      privilege: ['create', 'read', 'update', 'delete', 'upload']
-  giangbui@uchicago.edu:
-    admin: True
-    projects:
-    - auth_id: acct
-      privilege: ['create', 'read', 'update', 'delete', 'upload']
-  fauzi@uchicago.edu:
-    admin: True
-    projects:
-    - auth_id: acct
-      privilege: ['create', 'read', 'update', 'delete', 'upload']
-  rarya@uchicago.edu:
-    admin: True
-    projects:
-    - auth_id: acct
-      privilege: ['create', 'read', 'update', 'delete', 'upload']
+    
   

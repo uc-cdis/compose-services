@@ -7,7 +7,7 @@ APP_NAME='indexd'
 def load_json(file_name):
   return config_helper.load_json(file_name, APP_NAME)
 
-conf_data = load_json('creds.json')[APP_NAME]
+conf_data = load_json('creds.json')
 
 usr = conf_data.get('db_username', '{{db_username}}')
 db = conf_data.get('db_database', '{{db_database}}')

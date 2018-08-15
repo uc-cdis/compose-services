@@ -1,0 +1,16 @@
+{
+  "fence_host": "postgres",
+  "fence_username": "fence_user",
+  "fence_password": "fence_pass",
+  "fence_database": "fence_db",
+  "db_host": "postgres",
+  "db_username": "sheepdog_user",
+  "db_password": "sheepdog_pass",
+  "db_database": "metadata_db",
+  "gdcapi_secret_key": "1JMWnHdApSGMJ8OIqA0IwWUEo8nJ1NJqwDQbjrz5L5v1QtW2ke",
+  "indexd_client": "indexd_client",
+  "indexd_password": "indexd_client_pass",
+  "hostname": "localhost",
+  "oauth2_client_id": "n/a",
+  "oauth2_client_secret": "n/a"
+}

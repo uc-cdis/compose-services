@@ -9,4 +9,6 @@ until (echo > /dev/tcp/postgres/5432) >/dev/null 2>&1; do
 done
 
 echo "postgres is ready"
+
+python /indexd/bin/index_admin.py create --username indexd_client --password indexd_client_pass
 rm -f /var/run/apache2/apache2.pid && /indexd/dockerrun.bash

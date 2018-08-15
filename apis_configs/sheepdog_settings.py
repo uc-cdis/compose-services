@@ -6,7 +6,7 @@ APP_NAME='sheepdog'
 def load_json(file_name):
   return config_helper.load_json(file_name, APP_NAME)
 
-conf_data = load_json('creds.json')[APP_NAME]
+conf_data = load_json('creds.json')
 config = app.config
 
 config["AUTH"] = 'https://auth.service.consul:5000/v3/'
@@ -17,7 +17,7 @@ config["INTERNAL_AUTH"] = None
 config['SIGNPOST'] = {
     'host': environ.get('SIGNPOST_HOST', 'http://compose-services_indexd_1'),
     'version': 'v0',
-    'auth': ('gdcapi', conf_data.get('indexd_password', '{{indexd_password}}')),
+    'auth': (conf_data.get('indexd_client', '{{indexd_client}}'), conf_data.get('indexd_password', '{{indexd_password}}')),
 }
 config["FAKE_AUTH"] = False
 config["PSQLGRAPH"] = {
@@ -48,8 +48,9 @@ config['OAUTH2'] = {
     'oauth_provider': 'https://%s/user/oauth2/' % conf_data['hostname'],
     'redirect_uri': 'https://%s/api/v0/oauth2/authorize'  % conf_data['hostname']
 }
-config['USER_API'] = 'http://compose-services_fence_1'
+config['USER_API'] = 'http://fence/'
 config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL','https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json')
+config['FORCE_ISSUER'] = True
 
 app_init(app)
 application = app

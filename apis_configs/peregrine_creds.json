@@ -1,0 +1,12 @@
+{
+  "fence_host": "postgres",
+  "fence_username": "fence_user",
+  "fence_password": "fence_pass",
+  "fence_database": "fence_db",
+  "db_host": "postgres",
+  "db_username": "peregrine_user",
+  "db_password": "peregrine_pass",
+  "db_database": "metadata_db",
+  "gdcapi_secret_key": "1JMWnHdApSGMJ8OIqA0IwWUEo8nJ1NJqwDQbjrz5L5v1QtW2ke",
+  "hostname": "localhost"
+}
