@@ -3,6 +3,12 @@ Compose-Services
 
 Docker-compose setup for experimental commons, small commons, or local development of the Gen3 stack. Production use should use [cloud-automation](https://github.com/uc-cdis/cloud-automation). 
 
+* [Introduction](#Introduction)
+* [Setup](#Setup)
+* [Dev Tips](#Dev-Tips)
+* [Using the Data Commons](#Using-the-data-commons)
+
+
 ## Introduction
 This setup uses Docker containers for postgres, indexd, fence, peregrine, sheepdog, data-portal and nginx. Images for the cdis microservices will be pulled from quay.io, while postgres (9.5) and nginx (latest) images will be pulled from Docker Hub. Nginx will be used as a reverse proxy to each of the services. Config file formats were copied from [cloud-automation](https://github.com/uc-cdis/cloud-automation) and stored in the `api_configs` directory and modified for local use with Docker Compose. Setup scripts for some of the containers are kept in the `scripts` directory.
 
@@ -85,5 +91,32 @@ docker-compose restart [CONTAINER_NAME]
 ```
 after you update some code in order to see changes without having to rebuild all the microservices. Keep in mind that running `docker-compose restart` does not apply changes you make in the docker-compose file. Look up the Docker documentation for more information about [volumes](https://docs.docker.com/storage/).
 
-## Running Docker Compose on a Remote Machine
-To run Docker Compose on a remote machine, modify the `hostname` field in `fence_creds.json`, `peregrine_cresd.json`, and `sheepdog_creds.json` in the `apis_configs` directory.
+### Running Docker Compose on a Remote Machine
+To run Docker Compose on a remote machine, modify the `hostname` field in `fence_creds.json`, `peregrine_creds.json`, and `sheepdog_creds.json` in the `apis_configs` directory.
+
+* * *
+
+## Using the Data Commons
+For some general information about Gen3 Data Commons and how they work (such as how to access and submit data), visit the [official site](https://gen3.org/). The section below will go over some useful technical aspects of Gen3.
+
+### Programs and Projects
+In a Gen3 Data Commons, programs and projects are two administrative nodes in the graph database that serve as the most upstream nodes. A program must be created first, followed by a project. Any subsequent data submission and data access, along with control of access to data, is done through the project scope.   
+
+To create a program, visit the url where your Gen3 Commons is hosted and append `/_root`. If you are running the Docker Compose setup locally, then this will be `localhost/_root`. Otherwise, this will be whatever you set the `hostname` field to in the creds files for the services with `/_root` added to the end. Here, you can choose to either use form submission or upload a file. I will go through the process of using form submission here, as it will show you what your file would need to look like if you were using file upload. Search for "program," and then fill in the "dbgap_accession_number" and "name" fields, and hit "Submit". If the message is green ("succeeded:200"), that indicates success, while a grey message indicates failure. More details can be viewed by clicking on the "DETAILS" button.
+
+To create a project, visit the url where your Gen3 Commons is hosted and append the name of the program you want to create the project under. For example, if you are running the Docker Compose setup locally and would like to create a project under the program "Program1", the url you will visit will be `localhost/Program1`. You will see the same options to use form submission or upload a file. This time, search for "project," and then fill in the fields and hit "Submit." Again, a green message indicates success while a grey message indicates failure, and more details can be viewed by clicking on the "DETAILS" button.
+
+Once you've created a program and a project, you're ready to start submitting data for that project!
+
+### Controlling access to data
+Access to data and admin privileges in Gen3 are controlled using fence through the `user.yaml` file found in the `apis_configs` directory. For each user, you can control admin status as well as specific per-project permissions. The format of the `user.yaml` file is shown below:
+```
+users:
+  user_email_1:
+    admin: True
+    projects:
+    - auth_id: project1
+      privilege: ['create', 'read', 'update', 'delete', 'upload']   
+```
+
+Refer to [Setting up Users](#Setting-Up-Users) to review how to apply the changes made in the `user.yaml` file to the database
