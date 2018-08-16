@@ -109,7 +109,7 @@ To create a project, visit the url where your Gen3 Commons is hosted and append 
 Once you've created a program and a project, you're ready to start submitting data for that project!
 
 ### Controlling access to data
-Access to data and admin privileges in Gen3 are controlled using fence through the `user.yaml` file found in the `apis_configs` directory. For each user, you can control admin status as well as specific per-project permissions. The format of the `user.yaml` file is shown below:
+Access to data and admin privileges in Gen3 are controlled using fence through the `user.yaml` file found in the `apis_configs` directory. Admin privileges are required to create administrative nodes, which include programs and projects. For each user, you can control admin status as well as specific per-project permissions. The format of the `user.yaml` file is shown below:
 ```
 users:
   user_email_1:
