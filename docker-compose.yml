@@ -30,7 +30,7 @@ services:
     depends_on:
       - postgres
   peregrine:
-    image: "quay.io/cdis/peregrine:chore_userdb"
+    image: "quay.io/cdis/peregrine:master"
     command: bash /peregrine_setup.sh
     networks:
       - devnet
@@ -45,7 +45,7 @@ services:
     depends_on:
       - postgres
   sheepdog:
-    image: "quay.io/cdis/sheepdog:chore_userdatamodel"
+    image: "quay.io/cdis/sheepdog:master"
     command: bash /sheepdog_setup.sh
     networks:
       - devnet
