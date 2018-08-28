@@ -122,7 +122,7 @@ users:
 Refer to [Setting up Users](#Setting-Up-Users) to review how to apply the changes made in the `user.yaml` file to the database
 
 ### Changing the data dictionary
-The data dictionary the commons uses is dictated by the `DICTIONARY_URL` environment variable in both sheepdog and peregrine. The default value for this variable is set to `https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json`, which is the developer test data dictionary. To override this default, edit the `environment` fields in the sheepdog and peregrine sections of the `docker-compose.yml` file. An example, where the `DICTIONARY_URL` environment variable is set to the url of the dev data dictionary, is provided in the docker-compose.yml. Another example is shown below:
+The data dictionary the commons uses is dictated by the `DICTIONARY_URL` environment variable in both sheepdog and peregrine. The default value for this variable is set to `https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json`, which is the developer test data dictionary. To override this default, edit the `environment` fields in the peregrine sections of the `docker-compose.yml` file. This will change the value of the environment variable in both sheepdog and peregrine. An example, where the `DICTIONARY_URL` environment variable is set to the url of the dev data dictionary, is provided in the docker-compose.yml. Another example is shown below:
 ```
 peregrine:
   image: "quay.io/cdis/peregrine:master"
@@ -130,7 +130,7 @@ peregrine:
   .
   .
   .
-  environment:
+  environment: &env
     DICTIONARY_URL: {YOUR_DICTIONARY_URL_GOES_HERE}
   depends_on:
     - postgres
