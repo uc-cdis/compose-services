@@ -75,7 +75,7 @@ services:
       - peregrine
       - sheepdog
   nginx:
-    image: "nginx:latest"
+    image: "nginx:1.14"
     networks:
       - devnet
     volumes:
