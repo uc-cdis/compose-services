@@ -40,8 +40,10 @@ services:
       - ./apis_configs/config_helper.py:/var/www/peregrine/config_helper.py 
       - ./temp_creds/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
+      - ./example-schemas:/schemas_dir
     environment: &env
       DICTIONARY_URL: https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
+      # PATH_TO_SCHEMA_DIR: /schemas_dir
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     depends_on:
       - postgres
@@ -55,6 +57,7 @@ services:
       - ./apis_configs/sheepdog_creds.json:/var/www/sheepdog/creds.json
       - ./apis_configs/config_helper.py:/var/www/sheepdog/config_helper.py 
       - ./scripts/sheepdog_setup.sh:/sheepdog_setup.sh
+      - ./example-schemas:/schemas_dir
     environment: *env
     depends_on:
       - postgres

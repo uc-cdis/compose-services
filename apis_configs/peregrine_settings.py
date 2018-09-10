@@ -31,7 +31,10 @@ config['HMAC_ENCRYPTION_KEY'] = conf_data.get( 'hmac_key', '{{hmac_key}}' )
 config['FLASK_SECRET_KEY'] = conf_data.get( 'gdcapi_secret_key', '{{gdcapi_secret_key}}' )
 config['PSQL_USER_DB_CONNECTION'] = 'postgresql://%s:%s@%s:5432/%s' % tuple([ conf_data.get(key, key) for key in ['fence_username', 'fence_password', 'fence_host', 'fence_database']])
 
-config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL','https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json')
+if environ.get('DICTIONARY_URL'):
+    config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL')
+else:
+    config['PATH_TO_SCHEMA_DIR'] = environ.get('PATH_TO_SCHEMA_DIR')
 
 config['OIDC_ISSUER'] = 'https://%s/user' % conf_data['hostname']
 
