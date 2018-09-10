@@ -49,7 +49,12 @@ config['OAUTH2'] = {
     'redirect_uri': 'https://%s/api/v0/oauth2/authorize'  % conf_data['hostname']
 }
 config['USER_API'] = 'http://fence/'
-config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL','https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json')
+
+if environ.get('DICTIONARY_URL'):
+    config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL')
+else:
+    config['PATH_TO_SCHEMA_DIR'] = environ.get('PATH_TO_SCHEMA_DIR')
+    
 config['FORCE_ISSUER'] = True
 
 app_init(app)

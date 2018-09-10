@@ -122,19 +122,12 @@ users:
 Refer to [Setting up Users](#Setting-Up-Users) to review how to apply the changes made in the `user.yaml` file to the database
 
 ### Changing the data dictionary
-The data dictionary the commons uses is dictated by the `DICTIONARY_URL` environment variable in both sheepdog and peregrine. The default value for this variable is set to `https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json`, which is the developer test data dictionary. To override this default, edit the `environment` fields in the peregrine sections of the `docker-compose.yml` file. This will change the value of the environment variable in both sheepdog and peregrine. An example, where the `DICTIONARY_URL` environment variable is set to the url of the dev data dictionary, is provided in the docker-compose.yml. Another example is shown below:
-```
-peregrine:
-  image: "quay.io/cdis/peregrine:master"
-  command: bash /peregrine_setup.sh
-  .
-  .
-  .
-  environment: &env
-    DICTIONARY_URL: {YOUR_DICTIONARY_URL_GOES_HERE}
-  depends_on:
-    - postgres
-```
-In addition to changing the `DICTIONARY_URL` field, it may also be necesary to change the `APP` environment variable in data-portal. This will only be the case if the alternate dictionary deviates too much from the default dev dictionary.
+The data dictionary the commons uses is dictated by either the `DICTIONARY_URL` or the `PATH_TO_SCHEMA_DIR` environment variable in both sheepdog and peregrine. 
+
+The default value for `DICTIONARY_URL` is set to `https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json` and the default value for `PATH_TO_SCHEMA_DIR` is set to the `example-schemas` directory which is downloaded as part of the compose-services repo. Both correspond to the developer test data dictionary, as one is on AWS and one is a local data dictionary setup. To override this default, edit the `environment` fields in the peregrine section of the `docker-compose.yml` file. This will change the value of the environment variable in both sheepdog and peregrine. An example, where the `DICTIONARY_URL` and `PATH_TO_SCHEMA_DIR` environment variables is set to the default values, is provided in the docker-compose.yml.
+
+**NOTE**: Only one of the two environment variables can be active at a time. The data commons will prefer `DICTIONARY_URL` over `PATH_TO_SCHEMA_DIR`. To reduce confusion, keep the variable you're not using commented out.
+
+In addition to changing the `DICTIONARY_URL` or `PATH_TO_SCHEMA_DIR` field, it may also be necesary to change the `APP` environment variable in data-portal. This will only be the case if the alternate dictionary deviates too much from the default dev dictionary.
 
 As this is a change to the Docker Compose configuration, you will need to restart the Docker Compose to apply the changes.
