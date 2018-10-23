@@ -15,7 +15,8 @@ openssl rsa -pubout -in temp_keys/${timestamp}/jwt_private_key.pem \
 
 
 # generate certs for nginx ssl
-SUBJ="/countryName=US/stateOrProvinceName=IL/localityName=Chicago/organizationName=CDIS/organizationalUnitName=PlanX/commonName=localhost/emailAddress=cdis@uchicago.edu"
+commonName=${1:-localhost}
+SUBJ="/countryName=US/stateOrProvinceName=IL/localityName=Chicago/organizationName=CDIS/organizationalUnitName=PlanX/commonName=$commonName/emailAddress=cdis@uchicago.edu"
 openssl req -new -x509 -nodes -extensions v3_ca -keyout temp_creds/ca-key.pem \
     -out temp_creds/ca.pem -days 365 -subj $SUBJ
 if [[ $? -eq 1 ]]; then    
