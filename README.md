@@ -36,11 +36,13 @@ The official Docker installation page can be found [here](https://docs.docker.co
 If you are using Linux, then the official Docker installation does not come with Docker Compose. The official Docker Compose installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information. Go through the steps of installing Docker Compose for your platform, then proceed to setting up credentials.
 
 ### Setting up Credentials
-Setup the credentials with the provided script by running:
+Setup credentials for fence, a custom root CA  and SSL certs with the provided script by running:
 ```
 bash creds_setup.sh
 ```
-This script will create `temp_creds` and `temp_keys` directories with the credential files in it. 
+This script will create `temp_creds` and `temp_keys` directories with the credential files in it.
+The script by default generate SSL cert for `localhost`, if you are running this in a remote server with an actual domain, you can run `bash creds_setup.sh YOUR_DOMAIN`. This will create SSL cert signed by the custom CA so that the microservices can talk to each other without bypassing SSL verification. You will still need to bypass SSL verification when you hit the services from the browser. If you have real certs for your domain, you can copy to `temp_creds/service.key` and `temp_creds/service.crt` to overwrite our dev certs.
+
 
 If you are using MacOS, you may run into an error with the default MacOS OpenSSL config not including the configuration for v3_ca certificate generation. You can refer to the solution on [this Github issue](https://github.com/jetstack/cert-manager/issues/279) on a related issue on Jetstack's cert-manager.
 
