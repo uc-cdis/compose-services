@@ -101,6 +101,19 @@ after you update some code in order to see changes without having to rebuild all
 To run Docker Compose on a remote machine, modify the `hostname` field in `fence_creds.json`, `peregrine_creds.json`, and `sheepdog_creds.json` in the `apis_configs` directory.
 
 * * *
+### Environent Details
+The sandbox ecosystem deployed thus architecturally looks as shown below:
+![Sandbox](SandboxContainers.jpg)
+
+
+All the microservices communicate with the Postgres Container based on the configuration specified above. Once the services are up and running, the environment can be visualized using the windmill microservice running on port 80 by typing the URL of the machine on which the containers are deployed. Please see example screenshot below as an example:
+
+![Launch Portal](LaunchPortal.jpg)
+
+Upon clicking 'Login from Google' and providing Google Credentials(if the same Google Account is used where the developer credentials came from), the system redirects the user to their landing page as shown below:
+
+
+![Logged Into Portal](LoggedInScreenshot.jpg)
 
 ## Using the Data Commons
 For some general information about Gen3 Data Commons and how they work (such as how to access and submit data), visit the [official site](https://gen3.org/). The section below will go over some useful technical aspects of Gen3.
@@ -112,7 +125,7 @@ To create a program, visit the url where your Gen3 Commons is hosted and append 
 
 To create a project, visit the url where your Gen3 Commons is hosted and append the name of the program you want to create the project under. For example, if you are running the Docker Compose setup locally and would like to create a project under the program "Program1", the url you will visit will be `localhost/Program1`. You will see the same options to use form submission or upload a file. This time, search for "project," and then fill in the fields and hit "Submit." Again, a green message indicates success while a grey message indicates failure, and more details can be viewed by clicking on the "DETAILS" button.
 
-Once you've created a program and a project, you're ready to start submitting data for that project!
+Once you've created a program and a project, you're ready to start submitting data for that project! Please note that Data Submission refers to meta data regarding the file(s) (Image, Sequencing files etc.)that are to be uploaded. Please refer to the [Gen3 website](https://gen3.org/resources/user/submit-data/) for additional details .
 
 ### Controlling access to data
 Access to data and admin privileges in Gen3 are controlled using fence through the `user.yaml` file found in the `apis_configs` directory. Admin privileges are required to create administrative nodes, which include programs and projects. For each user, you can control admin status as well as specific per-project permissions. The format of the `user.yaml` file is shown below:
