@@ -15,7 +15,7 @@ config["INTERNAL_AUTH"] = None
 
 # Signpost
 config['SIGNPOST'] = {
-    'host': environ.get('SIGNPOST_HOST', 'http://compose-services_indexd_1'),
+    'host': environ.get('SIGNPOST_HOST', 'http://composeservices_indexd_1'),
     'version': 'v0',
     'auth': (conf_data.get('indexd_client', '{{indexd_client}}'), conf_data.get('indexd_password', '{{indexd_password}}')),
 }
@@ -54,7 +54,7 @@ if environ.get('DICTIONARY_URL'):
     config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL')
 else:
     config['PATH_TO_SCHEMA_DIR'] = environ.get('PATH_TO_SCHEMA_DIR')
-    
+
 config['FORCE_ISSUER'] = True
 
 app_init(app)
