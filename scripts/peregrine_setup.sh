@@ -11,4 +11,4 @@ echo "postgres is ready"
 
 update-ca-certificates 
 
-bash /peregrine/dockerrun.bash
+/peregrine/dockerrun.sh

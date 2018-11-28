@@ -133,4 +133,4 @@ CIRRUS_CFG["GOOGLE_STORAGE_CREDS"] = (
 
 DEFAULT_LOGIN_URL_REDIRECT_PARAM = 'redirect'
 
-INDEXD = 'http://compose-services_indexd_1'
+INDEXD = 'http://indexd-service'
