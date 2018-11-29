@@ -13,12 +13,27 @@ openssl genpkey -algorithm RSA -out temp_keys/${timestamp}/jwt_private_key.pem \
 openssl rsa -pubout -in temp_keys/${timestamp}/jwt_private_key.pem \
     -out temp_keys/${timestamp}/jwt_public_key.pem
 
+OS=$(uname)
+OPTS=""
+if [[ $OS == "Darwin" ]]; then
+    cp /etc/ssl/openssl.cnf openssl-with-ca.cnf
+
+    __v3_ca="
+[ v3_ca ]
+basicConstraints = critical,CA:TRUE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer:always
+"
+
+    echo "$__v3_ca" >> openssl-with-ca.cnf
+    OPTS=" -extensions v3_ca -config openssl-with-ca.cnf"
+fi
 
 # generate certs for nginx ssl
 commonName=${1:-localhost}
 SUBJ="/countryName=US/stateOrProvinceName=IL/localityName=Chicago/organizationName=CDIS/organizationalUnitName=PlanX/commonName=$commonName/emailAddress=cdis@uchicago.edu"
 openssl req -new -x509 -nodes -extensions v3_ca -keyout temp_creds/ca-key.pem \
-    -out temp_creds/ca.pem -days 365 -subj $SUBJ
+    -out temp_creds/ca.pem -days 365 -subj $SUBJ $OPTS
 if [[ $? -eq 1 ]]; then    
     echo "problem with creds_setup.sh script, refer to compose-services wiki"
     rm -rf temp*

@@ -1,0 +1,77 @@
+mappings:
+  - name: etl
+    doc_type: case
+    type: aggregator
+    root: case
+    props:
+      - name: submitter_id
+      - name: project_id
+    flatten_props:
+      - path: demographics
+        props:
+          - name: gender
+            value_mappings:
+              - female: F
+              - male: M
+          - name: race
+            value_mappings:
+              - american indian or alaskan native: Indian
+          - name: ethnicity
+          - name: year_of_birth
+    aggregated_props:
+      - name: _samples_count
+        path: samples
+        fn: count
+      - name: _aliquots_count
+        path: samples.aliquots
+        fn: count
+      - name: _submitted_methylations_count
+        path: samples.aliquots.submitted_methylation_files
+        fn: count
+      - name: _submitted_copy_number_files_on_aliquots_count
+        path: samples.aliquots.submitted_copy_number_files
+        fn: count
+      - name: _read_groups_count
+        path: samples.aliquots.read_groups
+        fn: count
+      - name: _submitted_aligned_reads_count
+        path: samples.aliquots.read_groups.submitted_aligned_reads_files
+        fn: count
+      - name: _submitted_unaligned_reads_count
+        path: samples.aliquots.read_groups.submitted_unaligned_reads_files
+        fn: count
+      - name: _submitted_copy_number_files_on_read_groups_count
+        path: samples.aliquots.read_groups.submitted_copy_number_files
+        fn: count
+      - name: _submitted_somatic_mutations_count
+        path: samples.aliquots.read_groups.submitted_somatic_mutations
+        fn: count
+  - name: file
+    doc_type: file
+    type: collector
+    root: None
+    props:
+      - name: object_id
+      - name: md5sum
+      - name: file_name
+      - name: file_size
+      - name: state
+    injecting_props:
+      case:
+        props:
+          - name: case_id
+            src: id
+          - name: project_id
+    target_nodes:
+      - name: slide_image
+        path: slides.samples.cases
+      - name: submitted_methylation
+        path: aliquots.samples.cases
+      - name: submitted_copy_number
+        path: read_groups.aliquots.samples.cases
+      - name: submitted_aligned_reads
+        path: read_groups.aliquots.samples.cases
+      - name: submitted_unaligned_reads
+        path: read_groups.aliquots.samples.cases
+      - name: submitted_somatic_mutation
+        path: read_groups.aliquots.samples.cases

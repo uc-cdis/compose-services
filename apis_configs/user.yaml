@@ -5,12 +5,12 @@ groups: {}
 users:
   cdis:
     admin: True
-  scui729@uchicago.edu:
+  thanhnd@uchicago.edu:
     admin: True
     projects:
     - auth_id: DEV
       privilege: ['create', 'read', 'update', 'delete', 'upload']
     - auth_id: project1
       privilege: ['create', 'read', 'update', 'delete', 'upload']
-    
+
   

@@ -1,0 +1,7 @@
+{
+    "db_host": "postgres",
+    "db_username": "sheepdog_user",
+    "db_password": "sheepdog_pass",
+    "db_database": "metadata_db"
+  }
+  

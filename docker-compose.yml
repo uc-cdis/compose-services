@@ -1,8 +1,17 @@
 version: '3'
 services:
-  indexd:
+  postgres:
+    image: postgres:9.5
+    networks:
+      - devnet
+    volumes:
+      - "psqldata:/var/lib/postgresql/data"
+      - "./scripts/postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql"
+    restart: unless-stopped
+  indexd-service:
     image: "quay.io/cdis/indexd:master"
     command: bash indexd_setup.sh
+    container_name: indexd-service
     networks:
       - devnet
     volumes:
@@ -12,9 +21,10 @@ services:
       - ./scripts/indexd_setup.sh:/var/www/indexd/indexd_setup.sh
     depends_on:
       - postgres
-  fence:
+  fence-service:
     image: "quay.io/cdis/fence:master"
     command: bash /var/www/fence/fence_setup.sh
+    container_name: fence-service
     networks:
       - devnet
     volumes:
@@ -29,9 +39,11 @@ services:
       - PYTHONPATH=/var/www/fence
     depends_on:
       - postgres
-  peregrine:
+  peregrine-service:
     image: "quay.io/cdis/peregrine:master"
-    command: bash /peregrine_setup.sh
+    entrypoint: /bin/bash
+    command: "/peregrine_setup.sh"
+    container_name: peregrine-service
     networks:
       - devnet
     volumes:
@@ -47,9 +59,11 @@ services:
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     depends_on:
       - postgres
-  sheepdog:
+      - sheepdog-service
+  sheepdog-service:
     image: "quay.io/cdis/sheepdog:master"
     command: bash /sheepdog_setup.sh
+    container_name: sheepdog-service
     networks:
       - devnet
     volumes:
@@ -61,8 +75,9 @@ services:
     environment: *env
     depends_on:
       - postgres
-  dataportal:
+  portal-service:
     image: "quay.io/cdis/data-portal:master"
+    container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
       - devnet
@@ -72,13 +87,14 @@ services:
       - NODE_ENV=dev
       - MOCK_STORE=true
       - APP=dev
-      - GDC_SUBPATH=http://nginx/api/v0/submission/
+      - GDC_SUBPATH=http://revproxy-service/api/v0/submission/
     depends_on:
       - postgres
-      - peregrine
-      - sheepdog
-  nginx:
+      - peregrine-service
+      - sheepdog-service
+  revproxy-service:
     image: "nginx:1.14"
+    container_name: revproxy-service
     networks:
       - devnet
     volumes:
@@ -89,21 +105,73 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - indexd
-      - peregrine
-      - sheepdog
-      - fence
-      - dataportal
-  postgres:
-    image: postgres:9.5
+      - indexd-service
+      - peregrine-service
+      - sheepdog-service
+      - fence-service
+      - portal-service
+  esproxy-service:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.4.2
+    container_name: esproxy-service
+    environment:
+      - cluster.name=elasticsearch-cluster
+      - bootstrap.memory_lock=false
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
     networks:
       - devnet
+  kibana-service:
+    image: docker.elastic.co/kibana/kibana-oss:6.4.2
+    container_name: kibana-service
+    environment:
+      - SERVER_NAME=kibana-service
+      - ELASTICSEARCH_URL=http://esproxy-service:9200
+    ports:
+      - 5601:5601
+    networks:
+      - devnet
+    depends_on:
+      - esproxy-service
+  tube-service:
+    image: "quay.io/cdis/tube:master"
+    container_name: tube-service
+    command: bash -c "python run_config.py && sleep 50 && python run_import.py"
+    networks:
+      - devnet
+    environment:
+      - DICTIONARY_URL=https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
+      - ES_URL=esproxy-service
+      - ES_INDEX_NAME=etl
+      - HADOOP_URL=hdfs://spark-service:9000
+      - HADOOP_HOST=spark-service
     volumes:
-      - "psqldata:/var/lib/postgresql/data"
-      - "./scripts/postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql"
-    restart: unless-stopped
-    
-volumes:
-  psqldata:
+      - ./apis_configs/etl_creds.json:/usr/share/gen3/tube/creds.json
+      - ./apis_configs/etlMapping.yaml:/usr/share/gen3/tube/etlMapping.yaml
+    depends_on:
+      - spark-service
+      - sheepdog-service
+  spark-service:
+    image: "quay.io/cdis/gen3-spark:master"
+    container_name: spark-service
+    command: bash -c "python run_config.py && hdfs namenode -format && hdfs --daemon start namenode && hdfs --daemon start datanode && yarn --daemon start resourcemanager && yarn --daemon start nodemanager && hdfs dfsadmin -safemode leave &&  hdfs dfs -mkdir /result && while true; do sleep 5; done"
+    expose:
+      - 22
+      - 8030
+      - 8031
+      - 8032
+      - 9000
+    networks:
+      - devnet
+    environment:
+      - HADOOP_URL=hdfs://0.0.0.0:9000
+      - HADOOP_HOST=0.0.0.0
 networks:
   devnet:
+volumes:
+  psqldata:
