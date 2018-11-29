@@ -31,7 +31,8 @@ services:
       - postgres
   peregrine:
     image: "quay.io/cdis/peregrine:master"
-    command: bash /peregrine_setup.sh
+    entrypoint: /bin/bash
+    command: /peregrine_setup.sh
     networks:
       - devnet
     volumes:
