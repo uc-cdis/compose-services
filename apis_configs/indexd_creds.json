@@ -3,5 +3,5 @@
   "db_username": "indexd_user",
   "db_password": "indexd_pass",
   "db_database": "indexd_db",
-  "user_db": {}
+  "fence_database": "fence_db"
 }

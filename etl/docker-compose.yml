@@ -1,0 +1,65 @@
+version: '3'
+services:
+  esproxy-service:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.4.2
+    container_name: esproxy-service
+    environment:
+      - cluster.name=elasticsearch-cluster
+      - bootstrap.memory_lock=false
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - devnet
+  kibana-service:
+    image: docker.elastic.co/kibana/kibana-oss:6.4.2
+    container_name: kibana-service
+    environment:
+      - SERVER_NAME=kibana-service
+      - ELASTICSEARCH_URL=http://esproxy-service:9200
+    ports:
+      - 5601:5601
+    networks:
+      - devnet
+    depends_on:
+      - esproxy-service
+  tube-service:
+    image: "quay.io/cdis/tube:master"
+    container_name: tube-service
+    command: bash -c "python run_config.py && sleep 50 && python run_import.py"
+    networks:
+      - devnet
+    environment:
+      - DICTIONARY_URL=https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
+      - ES_URL=esproxy-service
+      - ES_INDEX_NAME=etl
+      - HADOOP_URL=hdfs://spark-service:9000
+      - HADOOP_HOST=spark-service
+    volumes:
+      - ./apis_configs/etl_creds.json:/usr/share/gen3/tube/creds.json
+      - ./apis_configs/etlMapping.yaml:/usr/share/gen3/tube/etlMapping.yaml
+    depends_on:
+      - spark-service
+      - sheepdog-service
+  spark-service:
+    image: "quay.io/cdis/gen3-spark:master"
+    container_name: spark-service
+    command: bash -c "python run_config.py && hdfs namenode -format && hdfs --daemon start namenode && hdfs --daemon start datanode && yarn --daemon start resourcemanager && yarn --daemon start nodemanager && hdfs dfsadmin -safemode leave &&  hdfs dfs -mkdir /result && while true; do sleep 5; done"
+    expose:
+      - 22
+      - 8030
+      - 8031
+      - 8032
+      - 9000
+    networks:
+      - devnet
+    environment:
+      - HADOOP_URL=hdfs://0.0.0.0:9000
+      - HADOOP_HOST=0.0.0.0
+networks:
+  devnet:
