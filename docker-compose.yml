@@ -9,7 +9,7 @@ services:
       - "./scripts/postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql"
     restart: unless-stopped
   indexd-service:
-    build: "../indexd/"
+    build: "quay.io/cdis/indexd:master"
     command: bash indexd_setup.sh
     container_name: indexd-service
     networks:
