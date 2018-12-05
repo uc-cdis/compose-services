@@ -8,8 +8,10 @@ services:
       - "psqldata:/var/lib/postgresql/data"
       - "./scripts/postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql"
     restart: unless-stopped
+    ports:
+      - 5432:5432
   indexd-service:
-    build: "quay.io/cdis/indexd:master"
+    image: "quay.io/cdis/indexd:master"
     command: bash indexd_setup.sh
     container_name: indexd-service
     networks:
@@ -50,7 +52,7 @@ services:
     volumes:
       - ./apis_configs/peregrine_settings.py:/var/www/peregrine/wsgi.py
       - ./apis_configs/peregrine_creds.json:/var/www/peregrine/creds.json
-      - ./apis_configs/config_helper.py:/var/www/peregrine/config_helper.py 
+      - ./apis_configs/config_helper.py:/var/www/peregrine/config_helper.py
       - ./temp_creds/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
       - ./example-schemas:/schemas_dir
@@ -70,7 +72,7 @@ services:
     volumes:
       - ./apis_configs/sheepdog_settings.py:/var/www/sheepdog/wsgi.py
       - ./apis_configs/sheepdog_creds.json:/var/www/sheepdog/creds.json
-      - ./apis_configs/config_helper.py:/var/www/sheepdog/config_helper.py 
+      - ./apis_configs/config_helper.py:/var/www/sheepdog/config_helper.py
       - ./scripts/sheepdog_setup.sh:/sheepdog_setup.sh
       - ./example-schemas:/schemas_dir
     environment: *env
