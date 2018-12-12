@@ -44,8 +44,6 @@ services:
       - postgres
   peregrine-service:
     image: "quay.io/cdis/peregrine:master"
-    entrypoint: /bin/bash
-    command: "/peregrine_setup.sh"
     container_name: peregrine-service
     networks:
       - devnet
