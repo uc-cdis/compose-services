@@ -17,9 +17,9 @@ services:
     networks:
       - devnet
     volumes:
-      - ./apis_configs/indexd_settings.py:/var/www/indexd/local_settings.py
-      - ./apis_configs/indexd_creds.json:/var/www/indexd/creds.json
-      - ./apis_configs/config_helper.py:/var/www/indexd/config_helper.py
+      - ./Secrets/indexd_settings.py:/var/www/indexd/local_settings.py
+      - ./Secrets/indexd_creds.json:/var/www/indexd/creds.json
+      - ./Secrets/config_helper.py:/var/www/indexd/config_helper.py
       - ./scripts/indexd_setup.sh:/var/www/indexd/indexd_setup.sh
     depends_on:
       - postgres
@@ -30,13 +30,14 @@ services:
     networks:
       - devnet
     volumes:
-      - ./apis_configs/fence_settings.py:/var/www/fence/local_settings.py
-      - ./apis_configs/fence_creds.json:/var/www/fence/creds.json
-      - ./apis_configs/config_helper.py:/var/www/fence/config_helper.py
-      - ./apis_configs/fence_credentials.json:/var/www/fence/fence_credentials.json
-      - ./apis_configs/user.yaml:/var/www/fence/user.yaml
-      - ./temp_creds/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
-      - ./temp_keys:/fence/keys
+      - ./Secrets/fence-config.yaml:/var/www/fence/fence-config.yaml
+      #- ./Secrets/fence_settings.py:/var/www/fence/local_settings.py
+      #- ./Secrets/fence_creds.json:/var/www/fence/creds.json
+      #- ./Secrets/config_helper.py:/var/www/fence/config_helper.py
+      #- ./Secrets/fence_credentials.json:/var/www/fence/fence_credentials.json
+      #- ./Secrets/user.yaml:/var/www/fence/user.yaml
+      - ./Secrets/TLS/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
+      - ./Secrets/fenceJwtKeys:/fence/keys
       - ./scripts/fence_setup.sh:/var/www/fence/fence_setup.sh
     environment:
       - PYTHONPATH=/var/www/fence
@@ -48,10 +49,10 @@ services:
     networks:
       - devnet
     volumes:
-      - ./apis_configs/peregrine_settings.py:/var/www/peregrine/wsgi.py
-      - ./apis_configs/peregrine_creds.json:/var/www/peregrine/creds.json
-      - ./apis_configs/config_helper.py:/var/www/peregrine/config_helper.py
-      - ./temp_creds/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
+      - ./Secrets/peregrine_settings.py:/var/www/peregrine/wsgi.py
+      - ./Secrets/peregrine_creds.json:/var/www/peregrine/creds.json
+      - ./Secrets/config_helper.py:/var/www/peregrine/config_helper.py
+      - ./Secrets/TLS/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
       - ./example-schemas:/schemas_dir
     environment: &env
@@ -68,9 +69,9 @@ services:
     networks:
       - devnet
     volumes:
-      - ./apis_configs/sheepdog_settings.py:/var/www/sheepdog/wsgi.py
-      - ./apis_configs/sheepdog_creds.json:/var/www/sheepdog/creds.json
-      - ./apis_configs/config_helper.py:/var/www/sheepdog/config_helper.py
+      - ./Secrets/sheepdog_settings.py:/var/www/sheepdog/wsgi.py
+      - ./Secrets/sheepdog_creds.json:/var/www/sheepdog/creds.json
+      - ./Secrets/config_helper.py:/var/www/sheepdog/config_helper.py
       - ./scripts/sheepdog_setup.sh:/sheepdog_setup.sh
       - ./example-schemas:/schemas_dir
     environment: *env
@@ -100,8 +101,8 @@ services:
       - devnet
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./temp_creds/service.crt:/etc/nginx/ssl/nginx.crt
-      - ./temp_creds/service.key:/etc/nginx/ssl/nginx.key
+      - ./Secrets/TLS/service.crt:/etc/nginx/ssl/nginx.crt
+      - ./Secrets/TLS/service.key:/etc/nginx/ssl/nginx.key
     ports:
       - "80:80"
       - "443:443"

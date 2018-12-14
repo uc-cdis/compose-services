@@ -1,17 +1,30 @@
 #!/bin/bash
 # Script to setup keys for fence as well as ssl credentials 
 
+if [[ -e ./Secrets ]]; then
+  echo "ERROR: Secrets/ folder already exists - bailing out"
+  exit 1
+fi
+
+if [[ ! -d ./apis_configs ]]; then
+  echo "ERROR: ./apis_configs not found - run in compose-services folder"
+  exit 1
+fi
+
+cp -r ./apis_configs ./Secrets
+cd Secrets
+
 # make directories for temporary credentials
 timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-mkdir -p temp_creds
-mkdir -p temp_keys
-mkdir -p temp_keys/${timestamp}
+mkdir -p TLS
+mkdir -p fenceJwtKeys
+mkdir -p fenceJwtKeys/${timestamp}
 
 # generate private and public key for fence
-openssl genpkey -algorithm RSA -out temp_keys/${timestamp}/jwt_private_key.pem \
+openssl genpkey -algorithm RSA -out fenceJwtKeys/${timestamp}/jwt_private_key.pem \
     -pkeyopt rsa_keygen_bits:2048
-openssl rsa -pubout -in temp_keys/${timestamp}/jwt_private_key.pem \
-    -out temp_keys/${timestamp}/jwt_public_key.pem
+openssl rsa -pubout -in fenceJwtKeys/${timestamp}/jwt_private_key.pem \
+    -out fenceJwtKeys/${timestamp}/jwt_public_key.pem
 
 OS=$(uname)
 OPTS=""
@@ -32,8 +45,8 @@ fi
 # generate certs for nginx ssl
 commonName=${1:-localhost}
 SUBJ="/countryName=US/stateOrProvinceName=IL/localityName=Chicago/organizationName=CDIS/organizationalUnitName=PlanX/commonName=$commonName/emailAddress=cdis@uchicago.edu"
-openssl req -new -x509 -nodes -extensions v3_ca -keyout temp_creds/ca-key.pem \
-    -out temp_creds/ca.pem -days 365 -subj $SUBJ $OPTS
+openssl req -new -x509 -nodes -extensions v3_ca -keyout TLS/ca-key.pem \
+    -out TLS/ca.pem -days 365 -subj $SUBJ $OPTS
 if [[ $? -eq 1 ]]; then    
     echo "problem with creds_setup.sh script, refer to compose-services wiki"
     rm -rf temp*
@@ -42,7 +55,7 @@ fi
 
 
 (
-    cd temp_creds
+    cd TLS
     mkdir -p CA/newcerts
     touch CA/index.txt
     echo 1000 > CA/serial
@@ -52,7 +65,7 @@ fi
 default_ca = CA_default
 [ CA_default ]
 # Directory and file locations.
-dir             = temp_creds              # Where everything is kept
+dir             = TLS              # Where everything is kept
 new_certs_dir   = \$dir/CA/newcerts
 database        = \$dir/CA/index.txt     # database index file.
 certificate     = \$dir/ca.pem           # The CA certificate
@@ -86,8 +99,8 @@ authorityKeyIdentifier=keyid:always
 EOM
 
   )
-openssl genrsa -out "temp_creds/service.key" 2048
-openssl req -new -key "temp_creds/service.key" \
-    -out "temp_creds/service.csr" -subj $SUBJ
-openssl ca -batch -in "temp_creds/service.csr" -config temp_creds/openssl.cnf \
-    -extensions server_cert -days 365 -notext -out "temp_creds/service.crt" 
+openssl genrsa -out "TLS/service.key" 2048
+openssl req -new -key "TLS/service.key" \
+    -out "TLS/service.csr" -subj $SUBJ
+openssl ca -batch -in "TLS/service.csr" -config TLS/openssl.cnf \
+    -extensions server_cert -days 365 -notext -out "TLS/service.crt" 

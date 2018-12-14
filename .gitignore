@@ -1,0 +1,12 @@
+Secrets/
+*.lock*
+*.env
+*.bak
+*.old
+*~
+*.swp
+.DS_Store
+*__pycache__
+*.pytest_cache
+*.cache
+*pyc
