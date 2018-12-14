@@ -5,7 +5,11 @@ groups: {}
 users:
   cdis:
     admin: True
-  thanhnd@uchicago.edu:
+  #
+  # Give yourself permissions to DEV, QA, and jnkns (JENKINS - for gen3 qa tests)
+  # programs - these won't exist until you create them
+  #
+  yourlogin@gmail.com:
     admin: True
     projects:
     - auth_id: jnkns
@@ -22,6 +26,11 @@ users:
       privilege: ['create', 'read', 'update', 'delete', 'upload', read-storage]
     - auth_id: project1
       privilege: ['create', 'read', 'update', 'delete', 'upload', read-storage]
+  #
+  # The integration test suite assumes this user exists - you can
+  # delete it if you don't want to run the test suite:
+  #    https://github.com/uc-cdis/gen3-qa
+  #
   cdis.autotest@gmail.com:
     admin: True
     projects:
