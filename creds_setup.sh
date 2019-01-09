@@ -25,6 +25,7 @@ openssl genpkey -algorithm RSA -out fenceJwtKeys/${timestamp}/jwt_private_key.pe
     -pkeyopt rsa_keygen_bits:2048
 openssl rsa -pubout -in fenceJwtKeys/${timestamp}/jwt_private_key.pem \
     -out fenceJwtKeys/${timestamp}/jwt_public_key.pem
+chmod -R a+rx fenceJwtKeys
 
 OS=$(uname)
 OPTS=""
