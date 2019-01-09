@@ -140,10 +140,10 @@ For some general information about Gen3 Data Commons and how they work (such as 
 
 ### Smoke test
 
-The `smoke_test.sh` script quries the health-check endpoints of each service
+The `smoke_test.sh` script queries the health-check endpoints of each service
 launched by `docker-compose.yml`.
 ```
-bash smoke_test.sh
+bash smoke_test.sh localhost
 ```
 
 ### Programs and Projects

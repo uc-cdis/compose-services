@@ -60,7 +60,7 @@ pipeline {
             def ipAddress = sh(script: "kubectl describe pod -l app=jenkins | grep Node: | sed 's@^.*/@@'", returnStdout: true)
             retry(10) { // retry smoke_test up to 10 times
               sleep(60) // give the services some time to start up
-              sh(script: "bash ./smoke_test.sh")
+              sh(script: "bash ./smoke_test.sh ${ipAddress}")
             }
           }
         }
