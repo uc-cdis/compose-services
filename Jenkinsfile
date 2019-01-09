@@ -4,10 +4,9 @@ pipeline {
   agent any
 
   environment {
-    QUAY_API = 'https://quay.io/api/v1/repository/cdis/'
+    KLOCK_USER = "jenkins" + new Random().nextInt()
   }
 
-  def klockId = "jenkins" + new Random().nextInt();
   stages {
     stage('FetchCode') {
       steps {
@@ -25,13 +24,15 @@ pipeline {
       }
     }
     stage('docker pull') {
-      sh('docker-compose pull')
+      steps {
+        sh('docker-compose pull')
+      }
     }
     stage('AcquireLock') {
       steps {
         script {
           // acquire global lock to launch docker services on Jenkins host node
-          lockStatus = sh( script: "bash cloud-automation/gen3/bin/klock.sh lock dockerTest ${klockId} 3600 -w 600", returnStatus: true)
+          lockStatus = sh( script: "bash cloud-automation/gen3/bin/klock.sh lock dockerTest ${env.KLOCK_USER} 3600 -w 600", returnStatus: true)
           if (lockStatus != 0) {
             error("unable to acquire dockerTest lock")
           }
@@ -45,12 +46,14 @@ pipeline {
       }
     }
     stage('smoke test') {
-      dir('testResults') {
-        // get the IP address of the node Jenkins is running on
-        def ipAddress = sh(script: "kubectl describe pod -l app=jenkins | grep Node: | sed 's@^.*/@@'", returnStdout: true)
-        retry(10) { // retry smoke_test up to 10 times
-          sleep 60 // give the services some time to start up
-          sh(script: "bash ./smoke_test.sh")
+      steps {
+        dir('testResults') {
+          // get the IP address of the node Jenkins is running on
+          def ipAddress = sh(script: "kubectl describe pod -l app=jenkins | grep Node: | sed 's@^.*/@@'", returnStdout: true)
+          retry(10) { // retry smoke_test up to 10 times
+            sleep 60 // give the services some time to start up
+            sh(script: "bash ./smoke_test.sh")
+          }
         }
       }
     }
@@ -72,7 +75,7 @@ pipeline {
       script {
         uid = env.service+"-"+env.quaySuffix+"-"+env.BUILD_NUMBER
         withEnv(['GEN3_NOPROXY=true', "GEN3_HOME=$env.WORKSPACE/cloud-automation"]) {         
-          sh("bash cloud-automation/gen3/bin/klock.sh unlock dockerTest ${klockId} || true")
+          sh("bash cloud-automation/gen3/bin/klock.sh unlock dockerTest ${env.KLOCK_USER} || true")
         }
       }
       echo "done"
