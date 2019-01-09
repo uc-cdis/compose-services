@@ -73,14 +73,6 @@ pipeline {
     }
     always {
       script {
-        def String prettyMs(long ms) {
-          int minutes = ms / 60000
-          int secs = ((ms / 1000) as int) % 60
-          int millis = ms % 1000
-          return "${minutes} ${secs} ${millis}"
-        }
-
-        println("" + prettyMs(35008))
         uid = env.service+"-"+env.quaySuffix+"-"+env.BUILD_NUMBER
         withEnv(['GEN3_NOPROXY=true', "GEN3_HOME=$env.WORKSPACE/cloud-automation"]) {         
           sh("bash cloud-automation/gen3/bin/klock.sh unlock dockerTest ${env.KLOCK_USER} || true")
