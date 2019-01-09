@@ -3,9 +3,6 @@
 pipeline {
   agent any
 
-  environment {
-    KLOCK_USER = "jenkins" + new Random().nextInt()
-  }
 
   stages {
     stage('FetchCode') {
@@ -20,6 +17,7 @@ pipeline {
         script {
           env.GEN3_HOME=env.WORKSPACE+'/cloud-automation'
           env.GEN3_NOPROXY='true'
+          env.KLOCK_USER = "jenkins" + new Random().nextInt()
         }
       }
     }
