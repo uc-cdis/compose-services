@@ -11,7 +11,7 @@ services:
     ports:
       - 5432:5432
   indexd-service:
-    image: "quay.io/cdis/indexd:master"
+    image: "quay.io/cdis/indexd:1.0.10"
     command: bash indexd_setup.sh
     container_name: indexd-service
     networks:
@@ -35,7 +35,7 @@ services:
       #- ./Secrets/fence_creds.json:/var/www/fence/creds.json
       #- ./Secrets/config_helper.py:/var/www/fence/config_helper.py
       #- ./Secrets/fence_credentials.json:/var/www/fence/fence_credentials.json
-      #- ./Secrets/user.yaml:/var/www/fence/user.yaml
+      - ./Secrets/user.yaml:/var/www/fence/user.yaml
       - ./Secrets/TLS/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
       - ./Secrets/fenceJwtKeys:/fence/keys
       - ./scripts/fence_setup.sh:/var/www/fence/fence_setup.sh
@@ -43,8 +43,17 @@ services:
       - PYTHONPATH=/var/www/fence
     depends_on:
       - postgres
+  arborist-service:
+    image: "quay.io/cdis/arborist:1.0.0"
+    container_name: arborist-service
+    networks:
+      - devnet
+    environment:
+      - JWKS_ENDPOINT="http://fence-service/.well-known/jwks"
+    depends_on:
+      - fence-service
   peregrine-service:
-    image: "quay.io/cdis/peregrine:master"
+    image: "quay.io/cdis/peregrine:1.0.5"
     container_name: peregrine-service
     networks:
       - devnet
@@ -56,14 +65,14 @@ services:
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
       - ./example-schemas:/schemas_dir
     environment: &env
-      DICTIONARY_URL: https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
+      DICTIONARY_URL: https://s3.amazonaws.com/dictionary-artifacts/datadictionary/0.2.1/schema.json
       # PATH_TO_SCHEMA_DIR: /schemas_dir
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     depends_on:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/cdis/sheepdog:master"
+    image: "quay.io/cdis/sheepdog:1.1.4"
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -77,8 +86,17 @@ services:
     environment: *env
     depends_on:
       - postgres
+  pidgin-service:
+    image: "quay.io/cdis/pidgin:1.0.0"
+    container_name: pidgin-service
+    networks:
+      - devnet
+    volumes:
+      - ./scripts/waitForContainers.sh:/var/www/data-portal/waitForContainers.sh
+    depends_on:
+      - peregrine-service
   portal-service:
-    image: "quay.io/cdis/data-portal:master"
+    image: "quay.io/cdis/data-portal:2.2.2"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
@@ -112,6 +130,7 @@ services:
       - sheepdog-service
       - fence-service
       - portal-service
+      - pidgin-service
 networks:
   devnet:
 volumes:
