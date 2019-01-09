@@ -32,7 +32,7 @@ pipeline {
       steps {
         script {
           // acquire global lock to launch docker services on Jenkins host node
-          lockStatus = sh( script: "bash cloud-automation/gen3/bin/klock.sh lock dockerTest ${env.KLOCK_USER} 3600 -w 600", returnStatus: true)
+          def lockStatus = sh( script: "bash cloud-automation/gen3/bin/klock.sh lock dockerTest ${env.KLOCK_USER} 3600 -w 600", returnStatus: true)
           if (lockStatus != 0) {
             error("unable to acquire dockerTest lock")
           }
@@ -48,11 +48,13 @@ pipeline {
     stage('smoke test') {
       steps {
         dir('testResults') {
-          // get the IP address of the node Jenkins is running on
-          def ipAddress = sh(script: "kubectl describe pod -l app=jenkins | grep Node: | sed 's@^.*/@@'", returnStdout: true)
-          retry(10) { // retry smoke_test up to 10 times
-            sleep 60 // give the services some time to start up
-            sh(script: "bash ./smoke_test.sh")
+          script {
+            // get the IP address of the node Jenkins is running on
+            def ipAddress = sh(script: "kubectl describe pod -l app=jenkins | grep Node: | sed 's@^.*/@@'", returnStdout: true)
+            retry(10) { // retry smoke_test up to 10 times
+              sleep(60) // give the services some time to start up
+              sh(script: "bash ./smoke_test.sh")
+            }
           }
         }
       }
