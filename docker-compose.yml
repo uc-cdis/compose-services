@@ -11,7 +11,7 @@ services:
     ports:
       - 5432:5432
   indexd-service:
-    image: "quay.io/cdis/indexd:1.0.10"
+    image: "quay.io/cdis/indexd:master"
     command: bash indexd_setup.sh
     container_name: indexd-service
     networks:
@@ -44,7 +44,7 @@ services:
     depends_on:
       - postgres
   arborist-service:
-    image: "quay.io/cdis/arborist:1.0.0"
+    image: "quay.io/cdis/arborist:master"
     container_name: arborist-service
     networks:
       - devnet
@@ -53,7 +53,7 @@ services:
     depends_on:
       - fence-service
   peregrine-service:
-    image: "quay.io/cdis/peregrine:1.0.5"
+    image: "quay.io/cdis/peregrine:master"
     container_name: peregrine-service
     networks:
       - devnet
@@ -65,14 +65,14 @@ services:
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
       - ./example-schemas:/schemas_dir
     environment: &env
-      DICTIONARY_URL: https://s3.amazonaws.com/dictionary-artifacts/datadictionary/0.2.1/schema.json
+      DICTIONARY_URL: https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
       # PATH_TO_SCHEMA_DIR: /schemas_dir
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     depends_on:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/cdis/sheepdog:1.1.4"
+    image: "quay.io/cdis/sheepdog:master"
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -87,7 +87,7 @@ services:
     depends_on:
       - postgres
   pidgin-service:
-    image: "quay.io/cdis/pidgin:1.0.0"
+    image: "quay.io/cdis/pidgin:master"
     container_name: pidgin-service
     networks:
       - devnet
@@ -96,7 +96,7 @@ services:
     depends_on:
       - peregrine-service
   portal-service:
-    image: "quay.io/cdis/data-portal:2.2.2"
+    image: "quay.io/cdis/data-portal:master"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
@@ -113,7 +113,7 @@ services:
       - peregrine-service
       - sheepdog-service
   revproxy-service:
-    image: "nginx:1.14"
+    image: "quay.io/cdis/nginx:1.15.5-ctds"
     container_name: revproxy-service
     networks:
       - devnet

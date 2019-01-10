@@ -10,7 +10,7 @@ Docker-compose setup for experimental commons, small commons, or local developme
 
 
 ## Introduction
-This setup uses Docker containers for postgres, indexd, fence, peregrine, sheepdog, data-portal and nginx. Images for the cdis microservices will be pulled from quay.io (master), while postgres (9.5) and nginx (1.14) images will be pulled from Docker Hub. Nginx will be used as a reverse proxy to each of the services. Config file formats were copied from [cloud-automation](https://github.com/uc-cdis/cloud-automation) and stored in the `api_configs` directory and modified for local use with Docker Compose. Setup scripts for some of the containers are kept in the `scripts` directory.
+This setup uses Docker containers for postgres, indexd, fence, peregrine, sheepdog, data-portal and nginx. Images for the cdis microservices and nginx will be pulled from quay.io (master), while postgres (9.5) images will be pulled from Docker Hub. Nginx will be used as a reverse proxy to each of the services. Config file formats were copied from [cloud-automation](https://github.com/uc-cdis/cloud-automation) and stored in the `api_configs` directory and modified for local use with Docker Compose. Setup scripts for some of the containers are kept in the `scripts` directory.
 
 ### Some Database Info
 Database setup only has to occur the very first time you setup your local gen3 Docker Compose environment, as this docker-compose environment is configured to create a persistent volume for postgres. The environment configuration is set up to automatically run setup scripts for the postgres container and set up the following:
@@ -106,10 +106,6 @@ docker logs -f portal-service
 ``` 
 
 ## Dev Tips
-
-The `docker-compose.yml` file references a stable versions of the dev data dictionary and each `gen3` service docker image.
-Run the latest - possibly unstable - `gen3` code and dictionary by changing the quay images to use the `:master` tag like `quay.io/cdis/peregrine:master`, and change the 
-dictionary to https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json 
 
 When developing, you can have local repositories of the services you are working on and use volumes to mount your local repository files onto the containers to override the containers' code (which is built from GitHub using quay.io). Then, you can restart a single container with
 ```
