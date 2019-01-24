@@ -1,7 +1,7 @@
 version: '3'
 services:
   esproxy-service:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.4.2
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.5.4
     container_name: esproxy-service
     environment:
       - cluster.name=elasticsearch-cluster
@@ -17,7 +17,7 @@ services:
     networks:
       - devnet
   kibana-service:
-    image: docker.elastic.co/kibana/kibana-oss:6.4.2
+    image: docker.elastic.co/kibana/kibana-oss:6.5.4
     container_name: kibana-service
     environment:
       - SERVER_NAME=kibana-service
