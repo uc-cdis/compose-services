@@ -65,6 +65,11 @@ config['OAUTH2'] = {
 }
 
 config['USER_API'] = 'http://fence-service/'
+# option to force authutils to prioritize USER_API setting over the issuer from
+# token when redirecting, used during local docker compose setup when the
+# services are on different containers but the hostname is still localhost
+config['FORCE_ISSUER'] = True
+
 app_init(app)
 application = app
 application.debug = (environ.get('GEN3_DEBUG') == "True")

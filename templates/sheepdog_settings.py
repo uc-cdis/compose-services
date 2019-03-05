@@ -49,6 +49,10 @@ config['OAUTH2'] = {
     'redirect_uri': 'https://%s/api/v0/oauth2/authorize'  % conf_data['hostname']
 }
 config['USER_API'] = 'http://fence-service/'
+# option to force authutils to prioritize USER_API setting over the issuer from
+# token when redirecting, used during local docker compose setup when the
+# services are on different containers but the hostname is still localhost
+config['FORCE_ISSUER'] = True
 config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL','https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json')
 
 app_init(app)
