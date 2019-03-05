@@ -31,10 +31,19 @@ config['HMAC_ENCRYPTION_KEY'] = conf_data.get( 'hmac_key', '{{hmac_key}}' )
 config['FLASK_SECRET_KEY'] = conf_data.get( 'gdcapi_secret_key', '{{gdcapi_secret_key}}' )
 config['PSQL_USER_DB_CONNECTION'] = 'postgresql://%s:%s@%s:5432/%s' % tuple([ conf_data.get(key, key) for key in ['fence_username', 'fence_password', 'fence_host', 'fence_database']])
 
-if environ.get('DICTIONARY_URL'):
-    config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL')
-else:
-    config['PATH_TO_SCHEMA_DIR'] = environ.get('PATH_TO_SCHEMA_DIR')
+config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL','https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json')
+
+config['SUBMISSION'] = {
+    'bucket': conf_data.get( 'bagit_bucket', '{{bagit_bucket}}' )
+}
+
+config['STORAGE'] = {
+    "s3":
+    {
+        "access_key": conf_data.get( 's3_access', '{{s3_access}}' ),
+        'secret_key': conf_data.get( 's3_secret', '{{s3_secret}}' )
+    }
+}
 
 config['OIDC_ISSUER'] = 'https://%s/user' % conf_data['hostname']
 
@@ -56,7 +65,6 @@ config['OAUTH2'] = {
 }
 
 config['USER_API'] = 'http://fence-service/'
-config['FORCE_ISSUER'] = True
-
 app_init(app)
 application = app
+application.debug = (environ.get('GEN3_DEBUG') == "True")

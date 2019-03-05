@@ -17,7 +17,7 @@ config["INTERNAL_AUTH"] = None
 config['SIGNPOST'] = {
     'host': environ.get('SIGNPOST_HOST', 'http://indexd-service'),
     'version': 'v0',
-    'auth': (conf_data.get('indexd_client', '{{indexd_client}}'), conf_data.get('indexd_password', '{{indexd_password}}')),
+    'auth': ('gdcapi', conf_data.get('indexd_password', '{{indexd_password}}')),
 }
 config["FAKE_AUTH"] = False
 config["PSQLGRAPH"] = {
@@ -49,13 +49,8 @@ config['OAUTH2'] = {
     'redirect_uri': 'https://%s/api/v0/oauth2/authorize'  % conf_data['hostname']
 }
 config['USER_API'] = 'http://fence-service/'
-
-if environ.get('DICTIONARY_URL'):
-    config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL')
-else:
-    config['PATH_TO_SCHEMA_DIR'] = environ.get('PATH_TO_SCHEMA_DIR')
-
-config['FORCE_ISSUER'] = True
+config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL','https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json')
 
 app_init(app)
 application = app
+application.debug = (environ.get('GEN3_DEBUG') == "True")

@@ -325,7 +325,7 @@ HTTP_PROXY:
 # url where indexd microservice is running (for signed urls primarily)
 # NOTE: Leaving as null will force fence to default to {{BASE_URL}}/index
 # example value: 'https://example.com/index'
-INDEXD: http://indexd
+INDEXD: http://indexd-service
 
 # this is the username which fence uses to make authenticated requests to indexd
 INDEXD_USERNAME: 'indexd_client'
@@ -403,6 +403,7 @@ WHITE_LISTED_SERVICE_ACCOUNT_EMAILS: []
 # to the project owners. These settings are for that email
 REMOVE_SERVICE_ACCOUNT_EMAIL_NOTIFICATION:
   # this domain MUST exist in GUN_MAIL config
+  enable: false
   domain: 'example.com'
   from: 'do-not-reply@example.com'
   subject: 'User service account removal notification'
