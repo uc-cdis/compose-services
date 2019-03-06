@@ -1,0 +1,50 @@
+cloud_providers: {}
+
+groups: {}
+
+users:
+  cdis:
+    admin: True
+  #
+  # Give yourself permissions to DEV, QA, and jnkns (JENKINS - for gen3 qa tests)
+  # programs - these wont exist until you create them
+  #
+  yourlogin@gmail.com:
+    admin: True
+    projects:
+    - auth_id: jnkns
+      privilege: [create, read, update, delete, upload, read-storage]
+    - auth_id: jenkins
+      privilege: [create, read, update, delete, upload, read-storage]
+    projects:
+    - auth_id: DEV
+      privilege: [create, read, update, delete, upload, read-storage]
+    - auth_id: project1
+      privilege: [create, read, update, delete, upload, read-storage]
+    projects:
+    - auth_id: QA
+      privilege: [create, read, update, delete, upload, read-storage]
+    - auth_id: project1
+      privilege: [create, read, update, delete, upload, read-storage]
+  #
+  # The integration test suite assumes this user exists - you can
+  # delete it if you dont want to run the test suite:
+  #    https://github.com/uc-cdis/gen3-qa
+  #
+  cdis.autotest@gmail.com:
+    admin: True
+    projects:
+    - auth_id: jnkns
+      privilege: [create, read, update, delete, upload, read-storage]
+    - auth_id: jenkins
+      privilege: [create, read, update, delete, upload, read-storage]
+    projects:
+    - auth_id: DEV
+      privilege: [create, read, update, delete, upload, read-storage]
+    - auth_id: project1
+      privilege: [create, read, update, delete, upload, read-storage]
+    projects:
+    - auth_id: QA
+      privilege: [create, read, update, delete, upload, read-storage]
+    - auth_id: project1
+      privilege: [create, read, update, delete, upload, read-storage]

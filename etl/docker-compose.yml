@@ -41,8 +41,8 @@ services:
       - HADOOP_URL=hdfs://spark-service:9000
       - HADOOP_HOST=spark-service
     volumes:
-      - ./apis_configs/etl_creds.json:/usr/share/gen3/tube/creds.json
-      - ./apis_configs/etlMapping.yaml:/usr/share/gen3/tube/etlMapping.yaml
+      - ./Secrets/etl_creds.json:/usr/share/gen3/tube/creds.json
+      - ./Secrets/etlMapping.yaml:/usr/share/gen3/tube/etlMapping.yaml
     depends_on:
       - spark-service
       - sheepdog-service
