@@ -15,7 +15,7 @@ services:
       - 9200:9200
       - 9300:9300
     networks:
-      - devnet
+      - compose-services_devnet
   kibana-service:
     image: docker.elastic.co/kibana/kibana-oss:6.5.4
     container_name: kibana-service
@@ -25,15 +25,15 @@ services:
     ports:
       - 5601:5601
     networks:
-      - devnet
+      - compose-services_devnet
     depends_on:
       - esproxy-service
   tube-service:
     image: "quay.io/cdis/tube:master"
     container_name: tube-service
-    command: bash -c "python run_config.py && sleep 50 && python run_import.py"
+    command: bash -c "while true; do sleep 5; done"
     networks:
-      - devnet
+      - compose-services_devnet
     environment:
       - DICTIONARY_URL=https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
       - ES_URL=esproxy-service
@@ -45,7 +45,6 @@ services:
       - ./Secrets/etlMapping.yaml:/usr/share/gen3/tube/etlMapping.yaml
     depends_on:
       - spark-service
-      - sheepdog-service
   spark-service:
     image: "quay.io/cdis/gen3-spark:master"
     container_name: spark-service
@@ -57,9 +56,10 @@ services:
       - 8032
       - 9000
     networks:
-      - devnet
+      - compose-services_devnet
     environment:
       - HADOOP_URL=hdfs://0.0.0.0:9000
       - HADOOP_HOST=0.0.0.0
 networks:
-  devnet:
+  compose-services_devnet:
+    external: true

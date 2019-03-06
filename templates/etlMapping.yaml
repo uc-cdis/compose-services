@@ -46,6 +46,16 @@ mappings:
       - name: _submitted_somatic_mutations_count
         path: samples.aliquots.read_groups.submitted_somatic_mutations
         fn: count
+    joining_props:
+      - index: file
+        join_on: subject_id
+        props:
+          - name: data_format
+            src: data_format
+            fn: set
+          - name: data_type
+            src: data_type
+            fn: set
   - name: file
     doc_type: file
     type: collector
@@ -65,13 +75,3 @@ mappings:
     target_nodes:
       - name: slide_image
         path: slides.samples.cases
-      - name: submitted_methylation
-        path: aliquots.samples.cases
-      - name: submitted_copy_number
-        path: read_groups.aliquots.samples.cases
-      - name: submitted_aligned_reads
-        path: read_groups.aliquots.samples.cases
-      - name: submitted_unaligned_reads
-        path: read_groups.aliquots.samples.cases
-      - name: submitted_somatic_mutation
-        path: read_groups.aliquots.samples.cases
