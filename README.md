@@ -31,7 +31,7 @@ This release may fail to run earlier versions of `gen3`.
     - `docker-compose pull` - pull the latest `gen3` Docker images
     - `bash ./creds_setup.sh`
     - edit the `postgres` service in `docker-compose.yaml` to stay on version `9.5` - a `9.6` server cannot read data saved by a `9.5` server.  If you want to erase the data currently in the commons, and proceed with postgres `9.6`, then `docker-compose down -v` clears the old data.
-    - verify the settings saved in `Secrets/fence-config.yaml` - be sure to set the the 'google_client_secret' and 'google_client_id' fields
+    - Set the settings in `Secrets/fence-config.yaml` - be sure to set the the `client_secret` and `client_id` fields under `OPENID_CONNECT`.
     - ready to go: `docker-compose up -d`
 
 ### Some Database Info
@@ -83,7 +83,7 @@ The script by default generates an SSL certificate to access the gen3 stack at `
 
 If you are using MacOS, you may run into an error with the default MacOS OpenSSL config not including the configuration for v3_ca certificate generation. You can refer to the solution on [this Github issue](https://github.com/jetstack/cert-manager/issues/279) on a related issue on Jetstack's cert-manager.
 
-This Docker Compose setup also requires Google API Credentials in order for the fence microservice to complete its authentication. If you have Google API credentials set up already that you would like to use with the local gen3 Docker Compose setup, simply add `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in your credentials and copy your client ID and client secret from your credentials to the 'google_client_secret' and 'google_client_id' fields in the `Secrets/fence-config.yaml` file.
+This Docker Compose setup also requires Google API Credentials in order for the fence microservice to complete its authentication. If you have Google API credentials set up already that you would like to use with the local gen3 Docker Compose setup, simply add `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in your credentials and copy your client ID and client secret from your credentials to the 'client_secret' and 'client_id' fields in the `Secrets/fence-config.yaml` under `OPENID_CONNECT` and `google`.
 
  If you do not already have Google API Credentials, follow the steps below to set them up. See image below for example on a sample Google account.
 
