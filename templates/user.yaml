@@ -7,8 +7,8 @@ users:
     admin: True
   #
   # Give yourself permissions to DEV, QA, and jnkns (JENKINS - for gen3 qa tests)
-  # programs - these wont exist until you create them
-  #
+  # programs - these wont exist until you create them.
+  # Also, grant yourself the data_upload policy for DEV  
   yourlogin@gmail.com:
     admin: True
     projects:
@@ -17,6 +17,7 @@ users:
     - auth_id: jenkins
       privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
     - auth_id: DEV
+      resource: /programs/DEV
       privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
     - auth_id: project1
       privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
@@ -24,6 +25,8 @@ users:
       privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
     - auth_id: project1
       privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
+    policies: ['data_upload']
+
   #
   # The integration test suite assumes this user exists - you can
   # delete it if you dont want to run the test suite:
@@ -44,3 +47,28 @@ users:
       privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
     - auth_id: project1
       privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
+
+# Define information used for role-based access control.
+# The information in the `rbac` section is sent to arborist to populate its
+# access control model.
+# see https://github.com/uc-cdis/fence/blob/88327870a5c35b13154a11408548cecb60a4945c/ua.yaml#L25
+rbac:
+    policies:
+        - id: 'data_upload'
+          description: 'upload raw data files to S3'
+          role_ids: ['file_uploader']
+          resource_paths: ['/data_file']
+    resources:
+        - name: 'data_file'
+          description: 'data files, stored in S3'
+        - name: 'programs'
+          subresources:
+              - name: 'DEV'
+    roles:
+        - id: 'file_uploader'
+          description: 'can upload data files'
+          permissions:
+              - id: 'file_upload'
+                action:
+                    service: 'fence'
+                    method: 'file_upload'

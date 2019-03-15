@@ -9,8 +9,8 @@ done
 
 echo "postgres is ready"
 
-update-ca-certificates 
+update-ca-certificates
 
-fence-create sync --yaml user.yaml
+fence-create sync --yaml user.yaml --arborist http://arborist-service
 
 rm -f /var/run/apache2/apache2.pid && /usr/sbin/apache2ctl -D FOREGROUND
