@@ -1,7 +1,7 @@
 Compose-Services
 ===
 
-Docker-compose setup for experimental commons, small commons, or local development of the Gen3 stack. Production use should use [cloud-automation](https://github.com/uc-cdis/cloud-automation). 
+Docker-compose setup for experimental commons, small commons, or local development of the Gen3 stack. Production use should use [cloud-automation](https://github.com/uc-cdis/cloud-automation).
 
 * [Introduction](#Introduction)
 * [Setup](#Setup)
@@ -48,7 +48,7 @@ Database setup only has to occur the very first time you setup your local gen3 D
 
 Configure the postgres database container to publish the db service port to the host machine by un-commenting the `ports` block under the `postgres` service in `docker-compose.yml`, then running `docker-compose up -d postgres`:
 ```
-    # 
+    #
     # uncomment this to make postgres available from the container host - ex:
     #    psql -h localhost -d fence -U fence_user
     ports:
@@ -65,7 +65,7 @@ psql -h localhost -U fence_user -d fence_db
   - Docker and Docker Compose
 
 ### Docker Setup
-The official Docker installation page can be found [here](https://docs.docker.com/install/#supported-platforms). If you've never used Docker before, it may be helpful to read some of the Docker documentation to familiarize yourself with containers. 
+The official Docker installation page can be found [here](https://docs.docker.com/install/#supported-platforms). If you've never used Docker before, it may be helpful to read some of the Docker documentation to familiarize yourself with containers.
 
 ### Docker Compose Setup
 If you are using Linux, then the official Docker installation does not come with Docker Compose. The official Docker Compose installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information. Go through the steps of installing Docker Compose for your platform, then proceed to setting up credentials.
@@ -108,11 +108,11 @@ Now that you are done with the setup, all Docker Compose features should be avai
 The basic command of Docker Compose is
 ```
 docker-compose up
-``` 
-which can be useful for debugging errors. To detach output from the containers, run 
+```
+which can be useful for debugging errors. To detach output from the containers, run
 ```
 docker-compose up -d
-``` 
+```
 When doing this, the logs for each service can be accessed using
 ```
 docker logs
@@ -133,7 +133,7 @@ so it may take several minutes for the portal to finally come up at https://loca
 Following the portal logs is one way to monitor its startup progress:
 ```
 docker logs -f portal-service
-``` 
+```
 
 ## Dev Tips
 
@@ -198,7 +198,7 @@ Refer to [Setting up Users](#Setting-Up-Users) to review how to apply the change
 ### Generating Test Metadata
 
 The `gen3` stack requires metadata submitted to the system to conform
-to a schema defined by the system's dictionary.  The `gen3` developers 
+to a schema defined by the system's dictionary.  The `gen3` developers
 use a tool to generate test data that conforms to a particular dictionary.
 For example - the following commands generate data files suitable to submit
 to a `gen3` stack running the default genomic dictionary at https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
@@ -220,3 +220,24 @@ The data dictionary the commons uses is dictated by either the `DICTIONARY_URL` 
 In addition to changing the `DICTIONARY_URL` or `PATH_TO_SCHEMA_DIR` field, it may also be necesary to change the `APP` environment variable in data-portal. This will only be the case if the alternate dictionary deviates too much from the default dev dictionary.
 
 As this is a change to the Docker Compose configuration, you will need to restart the Docker Compose to apply the changes.
+
+### Enabling data upload to s3
+
+The templates/user.yaml file has been configured to grant data_upload privileges to the `yourlogin@gmail.com` user.  Connect it to your s3 bucket by configuring access keys and bucket name in `fence-config.yaml`.
+
+```
+289,290c289,290
+<     aws_access_key_id: 'your-key'
+<     aws_secret_access_key: 'your-key'
+---
+>     aws_access_key_id: ''
+>     aws_secret_access_key: ''
+296c296
+<   your-bucket:
+---
+>   bucket1:
+309c309
+< DATA_UPLOAD_BUCKET: 'your-bucket'
+---
+> DATA_UPLOAD_BUCKET: 'bucket1'
+```

@@ -333,7 +333,7 @@ INDEXD_USERNAME: 'indexd_client'
 INDEXD_PASSWORD: 'indexd_client_pass'
 
 # url where role-based access control microservice is running
-ARBORIST: null
+ARBORIST: http://arborist-service
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # CLOUD API LIBRARY (CIRRUS) CONFIGURATION
