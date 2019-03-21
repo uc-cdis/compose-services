@@ -147,7 +147,7 @@ after you update some code in order to see changes without having to rebuild all
 To run Docker Compose on a remote machine, modify the `hostname` field in `fence-config.yaml`, `peregrine_creds.json`, and `sheepdog_creds.json` in the `Secrets` directory.
 
 * * *
-### Environent Details
+### Environment Details
 The sandbox ecosystem deployed thus architecturally looks as shown below:
 ![Sandbox](SandboxContainers.jpg)
 
