@@ -151,6 +151,20 @@ services:
       - postgres
       - peregrine-service
       - sheepdog-service
+  pelican-service:
+    image: "quay.io/cdis/pelican:feat_microservice"
+    container_name: pelican-service
+    networks:
+      - devnet
+    volumes:
+      - ./Secrets/pelican-config.py:/pelican/config.py
+#    healthcheck:
+#      test: ["CMD-SHELL", "curl -f http://localhost"]
+#      interval: 60s
+#      timeout: 5s
+#      retries: 3
+    depends_on:
+      - postgres
   revproxy-service:
     image: "quay.io/cdis/nginx:1.15.5-ctds"
     container_name: revproxy-service
