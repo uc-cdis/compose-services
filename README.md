@@ -10,8 +10,7 @@ Docker-compose setup for experimental commons, small commons, or local developme
 
 
 ## Introduction
-=======
-This setup uses Docker containers for postgres, indexd, fence, peregrine, sheepdog, data-portal, and nginx. Images for the cdis microservices and nginx will be pulled from quay.io (master), while postgres (9.5) images will be pulled from Docker Hub. Nginx will be used as a reverse proxy to each of the services. Below you will find information about [migrating existing](#Release-History-and-Migration-Instructions) and [setting up](#Setup) new compose services, some [tips](#Dev-Tips) and basic information about [using](#Using-the-data-commons) data commons. You can quickly find commonly used commands in our [cheat sheet](./docs/cheat_sheet.md). Config file formats were copied from [cloud-automation](https://github.com/uc-cdis/cloud-automation) and stored in the `Secrets` directory and modified for local use with Docker Compose. Setup scripts for some of the containers are kept in the `scripts` directory.
+This setup uses Docker containers for Postgres, IndexD, Fence, Peregrine, Sheepdog, Windmill (data-portal), and nginx. Images for the [CDIS microservices](https://github.com/uc-cdis/) and nginx will be pulled from quay.io (master), while Postgres (9.5) images will be pulled from Docker Hub. Nginx will be used as a reverse proxy to each of the services. Below you will find information about [migrating existing](#Release-History-and-Migration-Instructions) and [setting up](#Setup) new compose services, some [tips](#Dev-Tips) and basic information about [using](#Using-the-data-commons) data commons. You can quickly find commonly used commands in our [cheat sheet](./docs/cheat_sheet.md). Config file formats were copied from [cloud-automation](https://github.com/uc-cdis/cloud-automation) and stored in the `Secrets` directory and modified for local use with Docker Compose. Setup scripts for some of the containers are kept in the `scripts` directory.
 
 ### Release History and Migration Instructions
 
@@ -31,12 +30,12 @@ This release may fail to run earlier versions of `gen3`.
     - `git pull`
     - `docker-compose pull` - pull the latest `gen3` Docker images
     - `bash ./creds_setup.sh`
-    - edit the `postgres` service in `docker-compose.yaml` to stay on version `9.5` - a `9.6` server cannot read data saved by a `9.5` server.  If you want to erase the data currently in the commons, and proceed with postgres `9.6`, then `docker-compose down -v` clears the old data.
+    - edit the `postgres` service in `docker-compose.yaml` to stay on version `9.5` - a `9.6` server cannot read data saved by a `9.5` server.  If you want to erase the data currently in the commons, and proceed with Postgres `9.6`, then `docker-compose down -v` clears the old data.
     - Set the settings in `Secrets/fence-config.yaml` - be sure to set the `client_secret` and `client_id` fields under `OPENID_CONNECT`.
     - ready to go: `docker-compose up -d`
 
 ### Some Database Info
-Database setup only has to occur the very first time you set up your local gen3 Docker Compose environment, as this docker-compose environment is configured to create a persistent volume for postgres. The environment configuration is set up to automatically run setup scripts for the postgres container and set up the following:
+Database setup only has to occur the very first time you set up your local gen3 Docker Compose environment, as this docker-compose environment is configured to create a persistent volume for Postgres. The environment configuration is set up to automatically run setup scripts for the postgres container and set up the following:
   1. 3 databases  
       - `metadata_db`
       - `fence_db`
@@ -47,7 +46,7 @@ Database setup only has to occur the very first time you set up your local gen3 
       - `sheepdog_user`
       - `indexd_user`
 
-Configure the postgres database container to publish the db service port to the host machine by un-commenting the `ports` block under the `postgres` service in `docker-compose.yml`, then running `docker-compose up -d postgres`:
+Configure the Postgres database container to publish the db service port to the host machine by un-commenting the `ports` block under the `postgres` service in `docker-compose.yml`, then running `docker-compose up -d postgres`:
 ```
     #
     # uncomment this to make postgres available from the container host - ex:
@@ -72,7 +71,7 @@ The official Docker installation page can be found [here](https://docs.docker.co
 If you are using Linux, then the official Docker installation does not come with Docker Compose. The official Docker Compose installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information. Go through the steps of installing Docker Compose for your platform, then proceed to set up credentials.
 
 ### Setting up Credentials
-Setup credentials for the fence, a custom root CA  and SSL certs with the provided script by running either:
+Setup credentials for Fence, a custom root CA  and SSL certs with the provided script by running either:
 ```
 bash ./creds_setup.sh
 OR
@@ -84,7 +83,7 @@ The script by default generates an SSL certificate to access the gen3 stack at `
 
 If you are using MacOS, you may run into an error with the default MacOS OpenSSL config not including the configuration for v3_ca certificate generation. You can refer to the solution on [this Github issue](https://github.com/jetstack/cert-manager/issues/279) on a related issue on Jetstack's cert-manager.
 
-This Docker Compose setup also requires Google API Credentials in order for the fence microservice to complete its authentication. If you have Google API credentials set up already that you would like to use with the local gen3 Docker Compose setup, simply add `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in your credentials and copy your client ID and client secret from your credentials to the 'client_secret' and 'client_id' fields in the `Secrets/fence-config.yaml` under `OPENID_CONNECT` and `google`.
+This Docker Compose setup also requires Google API Credentials in order for Fence microservice to complete its authentication. If you have Google API credentials set up already that you would like to use with the local gen3 Docker Compose setup, simply add `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in your credentials and copy your client ID and client secret from your credentials to the 'client_secret' and 'client_id' fields in the `Secrets/fence-config.yaml` under `OPENID_CONNECT` and `google`.
 
  If you do not already have Google API Credentials, follow the steps below to set them up. See image below for an example on a sample Google account.
 
@@ -92,16 +91,16 @@ This Docker Compose setup also requires Google API Credentials in order for the 
 
 ### Setting up Google OAuth Client-Id for Fence
 
-Fence uses Google as an OAuth identity provider to authenticate users. In order for a fence to work properly, the Google+ API must be enabled for the Google Account your are creating Google API Credentials with. To enable the Google+ API, go [the library page of the Google Developer Console](https://console.developers.google.com/apis/library) and search for Google+ API. Click on the card and follow the instructions to enable it.
+Fence uses Google as an OAuth identity provider to authenticate users. In order for Fence to work properly, the Google+ API must be enabled for the Google Account your are creating Google API Credentials with. To enable the Google+ API, go [the library page of the Google Developer Console](https://console.developers.google.com/apis/library) and search for Google+ API. Click on the card and follow the instructions to enable it.
 
 To set up Google API Credentials, go to [the Credentials page of the Google Developer Console](https://console.developers.google.com/apis/credentials) and click the 'Create Credentials' button. Follow the prompts to create a new OAuth Client ID for a Web Application. Add  `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in the Credentials. Then copy your client ID and client secret and use them to fill in the 'google_client_secret' and 'google_client_id' fields in the `Secrets/fence-config.yaml` file.
 
 ### Setting up Users
-To set up user privileges for the services, please edit the `Secrets/user.yaml` file, following the example format shown in the file. The fence container will automatically sync this file to the `fence_db` database on startup. If you wish to update user privileges while the containers are running (without restarting the container), just edit the `Secrets/user.yaml` file and then run
+To set up user privileges for the services, please edit the `Secrets/user.yaml` file, following the example format shown in the file. Fence container will automatically sync this file to the `fence_db` database on startup. If you wish to update user privileges while the containers are running (without restarting the container), just edit the `Secrets/user.yaml` file and then run
 ```
 docker exec -it fence-service fence-create sync --arborist http://arborist-service --yaml user.yaml
 ```
-This command will enter the fence container to run the fence-create sync command, which will update your user privileges.
+This command will enter Fence container to run the fence-create sync command, which will update your user privileges.
 
 ### Start running your local gen3 Docker Compose environment
 Now that you are done with the setup, all Docker Compose features should be available. Here are some useful commands:
@@ -128,8 +127,8 @@ docker-compose pull
 docker image prune -f
 ```
 These commands may take a while, and they also may fail. If they do fail, simply rerun them, or just update/remove images one at a time manually.
-The sheepdog and peregrine services download the dictionary schema at startup, and the
-portal service runs a series of pre-launch compilations that depend on sheepdog and peregrine,
+Sheepdog and Peregrine services download the dictionary schema at startup, and the
+portal service runs a series of pre-launch compilations that depend on Sheepdog and Peregrine,
 so it may take several minutes for the portal to finally come up at https://localhost
 Following the portal logs is one way to monitor its startup progress:
 ```
@@ -186,7 +185,7 @@ Once you've created a program and a project, you're ready to start submitting da
 
 
 ### Controlling access to data
-Access to data and admin privileges in Gen3 is controlled using a fence through the `user.yaml` file found in the `Secrets` directory. Admin privileges are required to create administrative nodes, which include programs and projects. For each user, you can control admin status as well as specific per-project permissions. The format of the `user.yaml` file is shown below:
+Access to data and admin privileges in Gen3 is controlled using Fence through the `user.yaml` file found in the `Secrets` directory. Admin privileges are required to create administrative nodes, which include programs and projects. For each user, you can control admin status as well as specific per-project permissions. The format of the `user.yaml` file is shown below:
 ```
 users:
   user_email_1:
@@ -216,11 +215,11 @@ docker run -it -v "${TEST_DATA_PATH}:/mnt/data" --rm --name=dsim --entrypoint=da
 ### Changing the data dictionary
 For an introduction to the data model and some essential information for modifying a data dictionary, please read [this](https://gen3.org/docs/submitdata/) before proceeding.
 
-The data dictionary the commons uses is dictated by either the `DICTIONARY_URL` or the `PATH_TO_SCHEMA_DIR` environment variable in both sheepdog and peregrine. The default value for `DICTIONARY_URL` are set to `https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json` and the default value for `PATH_TO_SCHEMA_DIR` is set to the `example-schemas` directory which is downloaded as part of the compose-services repo (from [here](https://github.com/uc-cdis/datadictionary/tree/develop/gdcdictionary/schemas)). Both correspond to the developer test data dictionary, as one is on AWS and one is a local data dictionary setup. To override this default, edit the `environment` fields in the peregrine section of the `docker-compose.yml` file. This will change the value of the environment variable in both sheepdog and peregrine. An example, where the `DICTIONARY_URL` and `PATH_TO_SCHEMA_DIR` environment variables is set to the default values, is provided in the docker-compose.yml.
+The data dictionary the commons uses is dictated by either the `DICTIONARY_URL` or the `PATH_TO_SCHEMA_DIR` environment variable in both Sheepdog and Peregrine. The default value for `DICTIONARY_URL` are set to `https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json` and the default value for `PATH_TO_SCHEMA_DIR` is set to the `example-schemas` directory which is downloaded as part of the compose-services repo (from [here](https://github.com/uc-cdis/datadictionary/tree/develop/gdcdictionary/schemas)). Both correspond to the developer test data dictionary, as one is on AWS and one is a local data dictionary setup. To override this default, edit the `environment` fields in the `peregrine-service` section of the `docker-compose.yml` file. This will change the value of the environment variable in both Sheepdog and Peregrine. An example, where the `DICTIONARY_URL` and `PATH_TO_SCHEMA_DIR` environment variables is set to the default values, is provided in the docker-compose.yml.
 
 **NOTE**: Only one of the two environment variables can be active at a time. The data commons will prefer `DICTIONARY_URL` over `PATH_TO_SCHEMA_DIR`. To reduce confusion, keep the variable you're not using commented out.
 
-In addition to changing the `DICTIONARY_URL` or `PATH_TO_SCHEMA_DIR` field, it may also be necessary to change the `APP` environment variable in data-portal. This will only be the case if the alternate dictionary deviates too much from the default dev dictionary.
+In addition to changing the `DICTIONARY_URL` or `PATH_TO_SCHEMA_DIR` field, it may also be necessary to change the `APP` environment variable in `portal-service`. This will only be the case if the alternate dictionary deviates too much from the default dev dictionary.
 
 As this is a change to the Docker Compose configuration, you will need to restart the Docker Compose to apply the changes.
 
