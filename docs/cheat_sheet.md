@@ -47,7 +47,7 @@ Update in docker-compose.yml:
   * ndh (Niaid)
   * va
 
-**Use local code**
+**Use local code (example with fence)**
 
 Update in docker-compose.yml:
 ```
@@ -55,6 +55,6 @@ fence-service:
     image: "my-fence:latest"
 ```
 Rerun the following commands after changing the code:
-* docker build . -t my-fence -f Dockerfile ()
+* cd fence; docker build . -t my-fence -f Dockerfile
 * docker stop fence-service
 * docker-compose up -d fence-service
