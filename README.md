@@ -101,7 +101,8 @@ docker exec -it fence-service fence-create sync --arborist http://arborist-servi
 This command will enter Fence container to run the fence-create sync command, which will update your user privileges.
 
 ### Start running your local gen3 Docker Compose environment
-Now that you are done with the setup, all Docker Compose features should be available. Here are some useful commands:
+Now that you are done with the setup, all Docker Compose features should be available. If you are a non-root user you may need to add yourself to the 'docker' group: `sudo usermod -aG docker your-user`, and the log out and log back in. 
+Here are some useful commands:
 
 The basic command of Docker Compose is
 ```
