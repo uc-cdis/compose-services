@@ -53,7 +53,11 @@ config['USER_API'] = 'http://fence-service/'
 # token when redirecting, used during local docker compose setup when the
 # services are on different containers but the hostname is still localhost
 config['FORCE_ISSUER'] = True
-config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL','https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json')
+
+if environ.get('DICTIONARY_URL'):
+    config['DICTIONARY_URL'] = environ.get('DICTIONARY_URL')
+else:
+    config['PATH_TO_SCHEMA_DIR'] = environ.get('PATH_TO_SCHEMA_DIR')
 
 app_init(app)
 application = app
