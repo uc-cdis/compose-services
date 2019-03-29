@@ -94,11 +94,13 @@ This Docker Compose setup also requires Google API Credentials in order for Fenc
 To set up Google API Credentials, go to [the Credentials page of the Google Developer Console](https://console.developers.google.com/apis/credentials) and click the 'Create Credentials' button. Follow the prompts to create a new OAuth Client ID for a Web Application. Add  `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in the Credentials. Then copy your client ID and client secret and use them to fill in the 'google.client_secret' and 'google.client_id' fields in the `Secrets/fence-config.yaml` file.
 
 ### Setting up Users
-To set up user privileges for the services, please edit the `Secrets/user.yaml` file, following the example format shown in the file. Fence container will automatically sync this file to the `fence_db` database on startup. If you wish to update user privileges while the containers are running (without restarting the container), just edit the `Secrets/user.yaml` file and then run
+To set up user privileges for the services, please edit the `Secrets/user.yaml` file, following the example format shown in the file. In particular, you should change `yourlogin@gmail.com` to the email you intend to log in with, so that you can create administrative nodes later on.
+
+Fence container will automatically sync this file to the `fence_db` database on startup. If you wish to update user privileges while the containers are running (without restarting the container), just edit the `Secrets/user.yaml` file and then run
 ```
 docker exec -it fence-service fence-create sync --arborist http://arborist-service --yaml user.yaml
 ```
-This command will enter Fence container to run the fence-create sync command, which will update your user privileges.
+This command will enter Fence container to run the fence-create sync command, which will update your user privileges. If you are logged in to your commons on a browser, you may need to log out and log back in again or clear your cookies in order to see the changes.
 
 ### Start running your local gen3 Docker Compose environment
 Now that you are done with the setup, all Docker Compose features should be available. If you are a non-root user you may need to add yourself to the 'docker' group: `sudo usermod -aG docker your-user`, and the log out and log back in. 
