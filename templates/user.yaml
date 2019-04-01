@@ -5,10 +5,11 @@ groups: {}
 users:
   cdis:
     admin: True
-  #
+
   # Give yourself permissions to DEV, QA, and jnkns (JENKINS - for gen3 qa tests)
   # programs - these wont exist until you create them.
-  # Also, grant yourself the data_upload policy for DEV  
+  # For program or project auth_id field use value from dbgap_accession_number.
+  # Also, grant yourself the data_upload policy for DEV.
   yourlogin@gmail.com:
     admin: True
     projects:
@@ -27,11 +28,9 @@ users:
       privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
     policies: ['data_upload']
 
-  #
   # The integration test suite assumes this user exists - you can
   # delete it if you dont want to run the test suite:
   #    https://github.com/uc-cdis/gen3-qa
-  #
   cdis.autotest@gmail.com:
     admin: True
     projects:
