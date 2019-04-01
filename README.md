@@ -187,10 +187,10 @@ Once you've created a program and a project, you're ready to start submitting da
 Access to data and admin privileges in Gen3 is controlled using Fence through the `user.yaml` file found in the `Secrets` directory. Admin privileges are required to create administrative nodes, which include programs and projects. For each user, you can control admin status as well as specific per-project permissions. The format of the `user.yaml` file is shown below:
 ```
 users:
-  user_email_1:
+  user_email:
     admin: True
     projects:
-    - auth_id: project1
+    - auth_id: project_dbgap_accession_number
       privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
 ```
 
