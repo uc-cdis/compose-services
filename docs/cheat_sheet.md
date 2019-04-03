@@ -44,6 +44,7 @@ Update in docker-compose.yml:
   * gdc
   * gtex (DCP)
   * kf (Kids First)
+  * ncrdc-demo (DCF sandbox)
   * ndh (Niaid)
   * va
 
