@@ -33,19 +33,9 @@
 
 Update in docker-compose.yml:
 * DICTIONARY_URL
-* APP (to get the corresponding portal setup):
-  * default (Dev data commons)
-  * acct (ACCOuNT)
-  * bhc (Brain)
-  * bpa (BloodPAC)
-  * dcf
-  * edc (Environmental DC)
-  * genomel
-  * gdc
-  * gtex (DCP)
-  * kf (Kids First)
-  * ndh (Niaid)
-  * va
+* APP (to get the [corresponding portal setup](https://github.com/uc-cdis/data-portal/tree/master/data/config)), for example:
+  * dev (goes to "default" config -> Dev data commons)
+  * edc (Environmental data commons)
 
 **Use local code (example with fence)**
 
@@ -58,3 +48,7 @@ Rerun the following commands after changing the code:
 * cd fence; docker build . -t my-fence -f Dockerfile
 * docker stop fence-service
 * docker-compose up -d fence-service
+
+**Dump logs and config in a zip file**
+
+* bash dump.sh
