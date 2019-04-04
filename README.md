@@ -157,6 +157,13 @@ bash dump.sh
 ```
 Note that if docker-compose is not running, the logs will be empty.
 
+The following configuration files will be included:
+* docker-compose.yml
+* user.yaml
+* any file ending with "settings" or "config"
+
+Make sure to **remove sensitive credentials** that should not be shared.
+
 ### Environment Details
 The sandbox ecosystem deployed thus architecturally looks as shown below:
 ![Sandbox](SandboxContainers.jpg)
