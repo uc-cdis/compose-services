@@ -33,20 +33,7 @@
 
 Update in docker-compose.yml:
 * DICTIONARY_URL
-* APP (to get the corresponding portal setup):
-  * default (Dev data commons)
-  * acct (ACCOuNT)
-  * bhc (Brain)
-  * bpa (BloodPAC)
-  * dcf
-  * edc (Environmental DC)
-  * genomel
-  * gdc
-  * gtex (DCP)
-  * kf (Kids First)
-  * ncrdc-demo (DCF sandbox)
-  * ndh (Niaid)
-  * va
+* APP - set corresponding [portal setup](https://github.com/uc-cdis/data-portal/tree/master/data/config)
 
 **Use local code (example with fence)**
 
