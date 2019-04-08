@@ -51,4 +51,4 @@ Rerun the following commands after changing the code:
 
 **Dump logs and config in a zip file**
 
-* bash dump.sh (after removing sensitive credentials that should not be shared)
+* bash dump.sh
