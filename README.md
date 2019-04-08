@@ -149,7 +149,22 @@ after you update some code in order to see changes without having to rebuild all
 ### Running Docker Compose on a Remote Machine
 To run Docker Compose on a remote machine, modify the `hostname` field in `fence-config.yaml`, `peregrine_creds.json`, and `sheepdog_creds.json` in the `Secrets` directory.
 
-* * *
+### Dumping config files and logs (MacOS/Linux)
+
+If you are encountering difficulties while setting up Docker Compose and need help from the Gen3 team, you can use the `dump.sh` script to create a zip file of your configuration and current logs, which you can share to get help.
+```
+bash dump.sh
+```
+Note that if docker-compose is not running, the logs will be empty.
+
+The following configuration files will be included:
+* docker-compose.yml
+* user.yaml
+* any file ending with "settings" or "config"
+
+Credentials files are NOT included and lines containing "password", "secret" or "key" are removed from other files.
+If your files contain other kinds of sensitive credentials, make sure to remove them before running the script.
+
 ### Environment Details
 The sandbox ecosystem deployed thus architecturally looks as shown below:
 ![Sandbox](SandboxContainers.jpg)
