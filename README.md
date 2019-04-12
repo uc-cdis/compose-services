@@ -136,6 +136,9 @@ Following the portal logs is one way to monitor its startup progress:
 docker logs -f portal-service
 ```
 
+### Update tips
+You should of course `git pull` compose-services if you have not done so for a while. You also need to `docker-compose pull` new images from Quay--this will not happen automatically. If your git pull pulled new commits, and you already have a `Secrets` folder, you may also need to delete your old `Secrets` and rerun `creds_setup.sh` (see [Setting up Credentials](#Setting-up-Credentials)) to recreate it. 
+
 ## Dev Tips
 
 You can quickly find commonly used commands for compose services in our [cheat sheet](./docs/cheat_sheet.md).
