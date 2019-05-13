@@ -11,4 +11,4 @@ done
 echo "postgres is ready"
 
 python /indexd/bin/index_admin.py create --username indexd_client --password indexd_client_pass
-rm -f /var/run/apache2/apache2.pid && /indexd/dockerrun.bash
+rm -f /var/run/apache2/apache2.pid && /dockerrun.sh
