@@ -67,7 +67,7 @@ services:
     networks:
       - devnet
     environment:
-      - JWKS_ENDPOINT="http://fence-service/.well-known/jwks"
+      - JWKS_ENDPOINT=http://fence-service/.well-known/jwks
     depends_on:
       - fence-service
   peregrine-service:
