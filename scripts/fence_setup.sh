@@ -13,4 +13,4 @@ update-ca-certificates
 
 fence-create sync --yaml user.yaml --arborist http://arborist-service
 
-rm -f /var/run/apache2/apache2.pid && /dockerrun.sh
+/dockerrun.sh
