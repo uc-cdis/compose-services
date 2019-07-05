@@ -13,9 +13,14 @@ config["AUTH"] = 'https://auth.service.consul:5000/v3/'
 config["AUTH_ADMIN_CREDS"] = None
 config["INTERNAL_AUTH"] = None
 
-# Signpost - coordinate auth with values in indexd_setup.sh
+# SIGNPOST is deprecated, replaced by INDEX_CLIENT (sheepdog>=1.1.12)
 config['SIGNPOST'] = {
     'host': environ.get('SIGNPOST_HOST', 'http://indexd-service'),
+    'version': 'v0',
+    'auth': ('indexd_client', conf_data.get('indexd_password', '{{indexd_password}}')),
+}
+config["INDEX_CLIENT"] = {
+    'host': environ.get('INDEX_CLIENT_HOST', 'http://indexd-service'),
     'version': 'v0',
     'auth': ('indexd_client', conf_data.get('indexd_password', '{{indexd_password}}')),
 }
