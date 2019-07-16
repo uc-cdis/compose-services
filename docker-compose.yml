@@ -44,10 +44,6 @@ services:
       - devnet
     volumes:
       - ./Secrets/fence-config.yaml:/var/www/fence/fence-config.yaml
-      #- ./Secrets/fence_settings.py:/var/www/fence/local_settings.py
-      #- ./Secrets/fence_creds.json:/var/www/fence/creds.json
-      #- ./Secrets/config_helper.py:/var/www/fence/config_helper.py
-      #- ./Secrets/fence_credentials.json:/var/www/fence/fence_credentials.json
       - ./Secrets/user.yaml:/var/www/fence/user.yaml
       - ./Secrets/TLS/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
       - ./Secrets/fenceJwtKeys:/fence/keys
