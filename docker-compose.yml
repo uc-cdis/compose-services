@@ -79,7 +79,7 @@ services:
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
       - ./datadictionary/gdcdictionary/schemas:/schemas_dir
     environment: &env
-      DICTIONARY_URL: https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
+      DICTIONARY_URL: https://s3.amazonaws.com/dictionary-artifacts/ndhdictionary/3.5.4/schema.json
       # PATH_TO_SCHEMA_DIR: /schemas_dir
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     healthcheck:
@@ -111,6 +111,36 @@ services:
       retries: 5
     depends_on:
       - postgres
+  guppy-service:
+    image: "quay.io/cdis/guppy:master"
+    container_name: guppy-service
+    networks:
+      - devnet
+    volumes:
+      - ./Secrets/guppy_config.json:/guppy/guppy_config.json
+    environment:
+      - GUPPY_CONFIG_FILEPATH=/guppy/guppy_config.json
+      - GEN3_ARBORIST_ENDPOINT=http://arborist-service
+      - GEN3_ES_ENDPOINT=http://esproxy-service:9200
+    depends_on:
+      - arborist-service
+      - esproxy-service
+  esproxy-service:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.5.4
+    container_name: esproxy-service
+    environment:
+      - cluster.name=elasticsearch-cluster
+      - bootstrap.memory_lock=false
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - devnet
   pidgin-service:
     image: "quay.io/cdis/pidgin:master"
     container_name: pidgin-service
@@ -133,11 +163,15 @@ services:
       - devnet
     volumes:
       - ./scripts/waitForContainers.sh:/var/www/data-portal/waitForContainers.sh
+      - ./Secrets/gitops.json:/data-portal/data/config/gitops.json
+      - ./Secrets/gitops-logo.png:/data-portal/custom/logo/gitops-logo.png
+      - ./Secrets/gitops.png:/data-portal/custom/createdby/gitops.png
     environment:
       - NODE_ENV=dev
       #- MOCK_STORE=true
-      - APP=dev
+      - APP=gitops
       - GDC_SUBPATH=http://revproxy-service/api/v0/submission/
+
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost"]
       interval: 60s
