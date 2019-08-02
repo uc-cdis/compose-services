@@ -1,39 +1,11 @@
 version: '3'
 services:
-  esproxy-service:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.5.4
-    container_name: esproxy-service
-    environment:
-      - cluster.name=elasticsearch-cluster
-      - bootstrap.memory_lock=false
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    ports:
-      - 9200:9200
-      - 9300:9300
-    networks:
-      - compose-services_devnet
-  kibana-service:
-    image: docker.elastic.co/kibana/kibana-oss:6.5.4
-    container_name: kibana-service
-    environment:
-      - SERVER_NAME=kibana-service
-      - ELASTICSEARCH_URL=http://esproxy-service:9200
-    ports:
-      - 5601:5601
-    networks:
-      - compose-services_devnet
-    depends_on:
-      - esproxy-service
   tube-service:
     image: "quay.io/cdis/tube:master"
     container_name: tube-service
     command: bash -c "while true; do sleep 5; done"
     networks:
-      - compose-services_devnet
+      - devnet
     environment:
       - DICTIONARY_URL=https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
       - ES_URL=esproxy-service
@@ -56,10 +28,9 @@ services:
       - 8032
       - 9000
     networks:
-      - compose-services_devnet
+      - devnet
     environment:
       - HADOOP_URL=hdfs://0.0.0.0:9000
       - HADOOP_HOST=0.0.0.0
 networks:
-  compose-services_devnet:
-    external: true
+  devnet:

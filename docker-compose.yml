@@ -213,6 +213,41 @@ services:
       - fence-service
       - portal-service
       - pidgin-service
+  tube-service:
+    image: "quay.io/cdis/tube:master"
+    container_name: tube-service
+    command: bash -c "while true; do sleep 5; done"
+    networks:
+      - devnet
+    environment:
+      - DICTIONARY_URL=https://s3.amazonaws.com/dictionary-artifacts/ndhdictionary/3.5.4/schema.json
+      - ES_URL=esproxy-service
+      - ES_INDEX_NAME=etl
+      - HADOOP_URL=hdfs://spark-service:9000
+      - HADOOP_HOST=spark-service
+    volumes:
+      - ./Secrets/etl_creds.json:/usr/share/gen3/tube/creds.json
+      - ./Secrets/etlMapping.yaml:/usr/share/gen3/tube/etlMapping.yaml
+    command: bash -c "python run_config.py && python run_etl.py"
+    depends_on:
+      - postgres
+      - esproxy-service
+      - spark-service
+  spark-service:
+    image: "quay.io/cdis/gen3-spark:master"
+    container_name: spark-service
+    command: bash -c "python run_config.py && hdfs namenode -format && hdfs --daemon start namenode && hdfs --daemon start datanode && yarn --daemon start resourcemanager && yarn --daemon start nodemanager && hdfs dfsadmin -safemode leave &&  hdfs dfs -mkdir /result && while true; do sleep 5; done"
+    expose:
+      - 22
+      - 8030
+      - 8031
+      - 8032
+      - 9000
+    networks:
+      - devnet
+    environment:
+      - HADOOP_URL=hdfs://0.0.0.0:9000
+      - HADOOP_HOST=0.0.0.0
 networks:
   devnet:
 volumes:
