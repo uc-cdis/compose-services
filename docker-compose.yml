@@ -142,7 +142,7 @@ services:
     networks:
       - devnet
   pidgin-service:
-    image: "quay.io/cdis/pidgin:master"
+    image: "quay.io/cdis/pidgin:1.0.0"
     container_name: pidgin-service
     networks:
       - devnet
@@ -228,7 +228,7 @@ services:
     volumes:
       - ./Secrets/etl_creds.json:/usr/share/gen3/tube/creds.json
       - ./Secrets/etlMapping.yaml:/usr/share/gen3/tube/etlMapping.yaml
-    command: bash -c "python run_config.py && python run_etl.py"
+    #command: bash -c "python run_config.py && python run_etl.py"
     depends_on:
       - postgres
       - esproxy-service
@@ -248,6 +248,18 @@ services:
     environment:
       - HADOOP_URL=hdfs://0.0.0.0:9000
       - HADOOP_HOST=0.0.0.0
+  kibana-service:
+    image: docker.elastic.co/kibana/kibana-oss:6.5.4
+    container_name: kibana-service
+    environment:
+      - SERVER_NAME=kibana-service
+      - ELASTICSEARCH_URL=http://esproxy-service:9200
+    ports:
+      - 5601:5601
+    networks:
+      - devnet
+    depends_on:
+      - esproxy-service
 networks:
   devnet:
 volumes:
