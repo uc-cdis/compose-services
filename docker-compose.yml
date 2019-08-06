@@ -13,7 +13,7 @@ services:
         interval: 60s
         timeout: 5s
         retries: 3
-    # 
+    #
     # uncomment this to make postgres available from the container host - ex:
     #    psql -h localhost -d fence -U fence_user
     #ports:
@@ -59,13 +59,23 @@ services:
       - postgres
   arborist-service:
     image: "quay.io/cdis/arborist:master"
+    command: bash /go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     container_name: arborist-service
     networks:
       - devnet
+    volumes:
+      - ./scripts/arborist_setup.sh:/go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     environment:
       - JWKS_ENDPOINT=http://fence-service/.well-known/jwks
+      - PGDATABASE=arborist_db
+      - PGUSER=arborist_user
+      - PGPASSWORD=arborist_pass
+      - PGHOST=postgres
+      - PGPORT=5432
+      - PGSSLMODE=disable
     depends_on:
       - fence-service
+      - postgres
   peregrine-service:
     image: "quay.io/cdis/peregrine:master"
     container_name: peregrine-service
@@ -79,7 +89,7 @@ services:
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
       - ./datadictionary/gdcdictionary/schemas:/schemas_dir
     environment: &env
-      DICTIONARY_URL: https://s3.amazonaws.com/dictionary-artifacts/ndhdictionary/3.5.4/schema.json
+      DICTIONARY_URL: https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
       # PATH_TO_SCHEMA_DIR: /schemas_dir
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
     healthcheck:
@@ -220,7 +230,7 @@ services:
     networks:
       - devnet
     environment:
-      - DICTIONARY_URL=https://s3.amazonaws.com/dictionary-artifacts/ndhdictionary/3.5.4/schema.json
+      - DICTIONARY_URL=https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json
       - ES_URL=esproxy-service
       - ES_INDEX_NAME=etl
       - HADOOP_URL=hdfs://spark-service:9000

@@ -1,0 +1,107 @@
+{
+  "gaTrackingId": "UA-119127212-1",
+  "dataExplorerConfig": {
+    "charts": {
+      "project_id": {
+        "chartType": "count",
+        "title": "Projects"
+      },
+      "case_id": {
+        "chartType": "count",
+        "title": "Cases"
+      },
+      "gender": {
+        "chartType": "pie",
+        "title": "Gender"
+      },
+      "race": {
+        "chartType": "bar",
+        "title": "Race"
+      }
+    },
+    "filters": {
+      "tabs": [
+        {
+          "title": "Case",
+          "fields":[
+            "project_id",
+            "gender",
+            "race",
+            "ethnicity"
+          ]
+        }
+      ]
+    },
+    "table": {
+      "enabled": false
+    },
+    "dropdowns": {},
+    "buttons": [],
+    "guppyConfig": {
+      "dataType": "case",
+      "nodeCountTitle": "Cases",
+      "fieldMapping": [
+        { "field": "disease_type", "name": "Disease type" },
+        { "field": "primary_site", "name": "Site where samples were collected"}
+      ],
+      "manifestMapping": {
+        "resourceIndexType": "file",
+        "resourceIdField": "object_id",
+        "referenceIdFieldInResourceIndex": "case_id",
+        "referenceIdFieldInDataIndex": "node_id"
+      },
+      "accessibleFieldCheckList": ["case_id"],
+      "accessibleValidationField": "case_id"
+    }
+  },
+  "fileExplorerConfig": {
+    "charts": {
+      "data_type": {
+        "chartType": "stackedBar",
+        "title": "File Type"
+      },
+      "data_format": {
+        "chartType": "stackedBar",
+        "title": "File Format"
+      }
+    },
+    "filters": {
+      "tabs": [
+        {
+          "title": "File",
+          "fields": [
+            "project_id",
+            "data_type",
+            "data_format"
+          ]
+        }
+      ]
+    },
+    "table": {
+      "enabled": true,
+      "fields": [
+        "project_id",
+        "file_name",
+        "file_size",
+        "object_id"
+      ]
+    },
+    "dropdowns": {},
+    "guppyConfig": {
+      "dataType": "file",
+      "fieldMapping": [
+        { "field": "object_id", "name": "GUID" }
+      ],
+      "nodeCountTitle": "Files",
+      "manifestMapping": {
+        "resourceIndexType": "case",
+        "resourceIdField": "case_id",
+        "referenceIdFieldInResourceIndex": "object_id",
+        "referenceIdFieldInDataIndex": "object_id"
+      },
+      "accessibleFieldCheckList": ["case_id"],
+      "accessibleValidationField": "case_id",
+      "downloadAccessor": "object_id"
+    }
+  }
+}

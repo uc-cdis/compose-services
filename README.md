@@ -244,6 +244,12 @@ There are 3 nodes that are required for the dev (default) portal--`case`, `exper
 
 As this is a change to the Docker Compose configuration, you will need to restart the Docker Compose (`docker-compose restart`) to apply the changes.
 
+### Configuring guppy for exploration page 
+In order to enable guppy for exploration page, the `gitops.json`, `etlMapping.yaml` and `guppy_config.json` need to be configured. There are some examples of configurations located at `https://github.com/uc-cdis/cdis-manifest`. It is worth to mentioning that the index and type in `guppy_config.json` need to be matched with the index in `etlMpping.json`.
+ 
+ When the data dictionary is changed, those files are also configured accordingly so that the exploration page can work.
+
+
 ### Enabling data upload to s3
 
 The templates/user.yaml file has been configured to grant data_upload privileges to the `yourlogin@gmail.com` user.  Connect it to your s3 bucket by configuring access keys and bucket name in `fence-config.yaml`.

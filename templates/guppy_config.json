@@ -1,0 +1,1 @@
+{ "indices": [ { "index": "etl", "type": "case" }, { "index": "file", "type": "file" } ], "config_index": "etl_array-config", "auth_filter_field": "auth_resource_path" }
