@@ -59,8 +59,8 @@ services:
       - postgres
   arborist-service:
     image: "quay.io/cdis/arborist:master"
-    command: bash /go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     container_name: arborist-service
+    entrypoint: bash /go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     networks:
       - devnet
     volumes:
@@ -73,8 +73,12 @@ services:
       - PGHOST=postgres
       - PGPORT=5432
       - PGSSLMODE=disable
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/health"]
+      interval: 60s
+      timeout: 5s
+      retries: 10
     depends_on:
-      - fence-service
       - postgres
   peregrine-service:
     image: "quay.io/cdis/peregrine:master"
@@ -224,7 +228,7 @@ services:
       - portal-service
       - pidgin-service
   tube-service:
-    image: "quay.io/cdis/tube:master"
+    image: "quay.io/cdis/tube:feat_sync_user_yaml"
     container_name: tube-service
     command: bash -c "while true; do sleep 5; done"
     networks:
@@ -238,7 +242,7 @@ services:
     volumes:
       - ./Secrets/etl_creds.json:/usr/share/gen3/tube/creds.json
       - ./Secrets/etlMapping.yaml:/usr/share/gen3/tube/etlMapping.yaml
-    #command: bash -c "python run_config.py && python run_etl.py"
+      - ./Secrets/user.yaml:/usr/share/gen3/tube/user.yaml
     depends_on:
       - postgres
       - esproxy-service

@@ -249,6 +249,8 @@ In order to enable guppy for exploration page, the `gitops.json`, `etlMapping.ya
  
  When the data dictionary is changed, those files are also configured accordingly so that the exploration page can work.
 
+ Run `bash ./guppy_setup.sh` to create/re-create ES indices
+
 
 ### Enabling data upload to s3
 

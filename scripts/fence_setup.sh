@@ -11,6 +11,11 @@ echo "postgres is ready"
 
 update-ca-certificates
 
+until curl -f -s -o /dev/null http://arborist-service/policy; do
+    echo "arborist not ready, waiting..."
+    sleep 10
+done
+
 fence-create sync --yaml user.yaml --arborist http://arborist-service
 
 /dockerrun.sh
