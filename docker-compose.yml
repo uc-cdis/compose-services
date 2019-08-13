@@ -156,7 +156,7 @@ services:
     networks:
       - devnet
   pidgin-service:
-    image: "quay.io/cdis/pidgin:1.0.0"
+    image: "quay.io/cdis/pidgin:master"
     container_name: pidgin-service
     networks:
       - devnet
@@ -228,7 +228,7 @@ services:
       - portal-service
       - pidgin-service
   tube-service:
-    image: "quay.io/cdis/tube:feat_sync_user_yaml"
+    image: "quay.io/cdis/tube:master"
     container_name: tube-service
     command: bash -c "while true; do sleep 5; done"
     networks:
