@@ -33,8 +33,8 @@ done
 
 cd Secrets
 
-if [ !-z $2 ]; then
-  yq w -i fence-config.yaml BASE_URL https://$2/user
+if [ ! -z $1 ]; then
+  yq write --inplace fence-config.yaml BASE_URL https://$1/user
 fi
 
 # make directories for temporary credentials
