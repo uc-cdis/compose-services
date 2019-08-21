@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script to setup keys for fence as well as ssl credentials 
+# Script to setup keys for fence as well as ssl credentials
 
 if [[ ! -d ./templates ]]; then
   echo "ERROR: ./templates not found - run in compose-services folder"
@@ -32,6 +32,10 @@ for path in templates/*; do
 done
 
 cd Secrets
+
+if [ ! -z $1 ]; then
+  yq write --inplace fence-config.yaml BASE_URL https://$1/user
+fi
 
 # make directories for temporary credentials
 timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -78,7 +82,7 @@ authorityKeyIdentifier = keyid:always,issuer:always
       SUBJ="/countryName=US/stateOrProvinceName=IL/localityName=Chicago/organizationName=CDIS/organizationalUnitName=PlanX/commonName=$commonName/emailAddress=cdis@uchicago.edu"
       openssl req -new -x509 -nodes -extensions v3_ca -keyout ca-key.pem \
           -out ca.pem -days 365 -subj $SUBJ $OPTS
-      if [[ $? -eq 1 ]]; then    
+      if [[ $? -eq 1 ]]; then
           echo "problem with creds_setup.sh script, refer to compose-services wiki"
           rm -rf temp*
           exit 1
@@ -134,7 +138,7 @@ EOM
       openssl req -new -key "service.key" \
           -out "service.csr" -subj $SUBJ
       openssl ca -batch -in "service.csr" -config openssl.cnf \
-          -extensions server_cert -days 365 -notext -out "service.crt" 
+          -extensions server_cert -days 365 -notext -out "service.crt"
     else
       echo "Looks like Secrets/TLS/service.key and service.crt already exist"
     fi
