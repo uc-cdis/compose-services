@@ -3,12 +3,11 @@ services:
 
   # over ride fence to use our fork which supports non aws url signing
   fence-service:
-    image: "ohsu/fence"
-
+    image: "onprem/fence"
 
   # replacement for SQS S3 Job Dispatcher https://github.com/uc-cdis/ssjdispatcher
   s3indexer-service:
-    image: "ohsu/s3indexer"
+    image: "onprem/s3indexer"
     container_name: s3indexer-service
     volumes:
       - ./Secrets/s3indexer-state:/var/s3indexer/state  # store re-try info
