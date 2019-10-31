@@ -272,3 +272,8 @@ The templates/user.yaml file has been configured to grant data_upload privileges
 ---
 > DATA_UPLOAD_BUCKET: 'bucket1'
 ```
+
+### Working with on premises data and servers.
+
+The gen3 system is optimized to deploy on cloud systems and work with cloud buckets.  OHSU has developed [a collection of extensions](https://github.com/ohsu-comp-bio/compose-services/tree/onprem) to enable gen3 to work in a non aws environment.  Read this [overview](https://github.com/ohsu-comp-bio/compose-services/blob/onprem/onprem/README.md) for more information.
+
