@@ -248,7 +248,7 @@ services:
       - esproxy-service
       - spark-service
   spark-service:
-    image: "quay.io/cdis/gen3-spark:master"
+    image: "quay.io/cdis/gen3-spark:2020.03"
     container_name: spark-service
     command: bash -c "python run_config.py && hdfs namenode -format && hdfs --daemon start namenode && hdfs --daemon start datanode && yarn --daemon start resourcemanager && yarn --daemon start nodemanager && hdfs dfsadmin -safemode leave &&  hdfs dfs -mkdir /result && while true; do sleep 5; done"
     expose:
