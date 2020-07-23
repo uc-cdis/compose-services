@@ -19,7 +19,7 @@ services:
     #ports:
     #  - 5432:5432
   indexd-service:
-    image: "quay.io/cdis/indexd:2020.03"
+    image: "quay.io/cdis/indexd:2020.07"
     command: bash indexd_setup.sh
     container_name: indexd-service
     networks:
@@ -37,7 +37,7 @@ services:
     depends_on:
       - postgres
   fence-service:
-    image: "quay.io/cdis/fence:2020.03"
+    image: "quay.io/cdis/fence:2020.07"
     command: bash /var/www/fence/fence_setup.sh
     container_name: fence-service
     networks:
@@ -58,7 +58,7 @@ services:
     depends_on:
       - postgres
   arborist-service:
-    image: "quay.io/cdis/arborist:2020.03"
+    image: "quay.io/cdis/arborist:2020.07"
     container_name: arborist-service
     entrypoint: bash /go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     networks:
@@ -81,7 +81,7 @@ services:
     depends_on:
       - postgres
   peregrine-service:
-    image: "quay.io/cdis/peregrine:2020.03"
+    image: "quay.io/cdis/peregrine:2020.07"
     container_name: peregrine-service
     networks:
       - devnet
@@ -106,7 +106,7 @@ services:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/cdis/sheepdog:2020.03"
+    image: "quay.io/cdis/sheepdog:2020.07"
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -126,7 +126,7 @@ services:
     depends_on:
       - postgres
   guppy-service:
-    image: "quay.io/cdis/guppy:2020.03"
+    image: "quay.io/cdis/guppy:2020.07"
     container_name: guppy-service
     networks:
       - devnet
@@ -156,7 +156,7 @@ services:
     networks:
       - devnet
   pidgin-service:
-    image: "quay.io/cdis/pidgin:2020.03"
+    image: "quay.io/cdis/pidgin:2020.07"
     container_name: pidgin-service
     networks:
       - devnet
@@ -170,7 +170,7 @@ services:
     depends_on:
       - peregrine-service
   portal-service:
-    image: "quay.io/cdis/data-portal:2020.03"
+    image: "quay.io/cdis/data-portal:2020.07"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
@@ -228,7 +228,7 @@ services:
       - portal-service
       - pidgin-service
   tube-service:
-    image: "quay.io/cdis/tube:2020.03"
+    image: "quay.io/cdis/tube:2020.07"
     container_name: tube-service
     command: bash -c "while true; do sleep 5; done"
     networks:
@@ -248,7 +248,7 @@ services:
       - esproxy-service
       - spark-service
   spark-service:
-    image: "quay.io/cdis/gen3-spark:2020.03"
+    image: "quay.io/cdis/gen3-spark:2020.07"
     container_name: spark-service
     command: bash -c "python run_config.py && hdfs namenode -format && hdfs --daemon start namenode && hdfs --daemon start datanode && yarn --daemon start resourcemanager && yarn --daemon start nodemanager && hdfs dfsadmin -safemode leave &&  hdfs dfs -mkdir /result && while true; do sleep 5; done"
     expose:
