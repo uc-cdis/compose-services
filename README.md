@@ -36,15 +36,17 @@ This release may fail to run earlier versions of `gen3`.
 
 ### Some Database Info
 Database setup only has to occur the very first time you set up your local gen3 Docker Compose environment, as this docker-compose environment is configured to create a persistent volume for Postgres. The environment configuration is set up to automatically run setup scripts for the postgres container and set up the following:
-  1. 3 databases  
+  1. 4 databases  
       - `metadata_db`
       - `fence_db`
       - `indexd_db`
-  2. 4 users with passwords and superuser access
+      - `arborist_db`
+  2. 5 users with passwords and superuser access
       - `fence_user`
       - `peregrine_user`
       - `sheepdog_user`
       - `indexd_user`
+      - `arborist_user`
 
 Configure the Postgres database container to publish the db service port to the host machine by un-commenting the `ports` block under the `postgres` service in `docker-compose.yml`, then running `docker-compose up -d postgres`:
 ```
