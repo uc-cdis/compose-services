@@ -1,4 +1,4 @@
-!/usr/bin/env bash#!/bin/bash
+#!/bin/bash
 # entrypoint script for arborist to setup db
 
 sleep 2
@@ -11,8 +11,5 @@ echo "postgres is ready"
 
 update-ca-certificates
 
-psql -U postgres -H postgres -c "CREATE ROLE $PGUSER SUPERUSER LOGIN";
-
-createdb
 ./migrations/latest
 ./bin/arborist

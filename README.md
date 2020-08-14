@@ -36,15 +36,17 @@ This release may fail to run earlier versions of `gen3`.
 
 ### Some Database Info
 Database setup only has to occur the very first time you set up your local gen3 Docker Compose environment, as this docker-compose environment is configured to create a persistent volume for Postgres. The environment configuration is set up to automatically run setup scripts for the postgres container and set up the following:
-  1. 3 databases  
+  1. 4 databases  
       - `metadata_db`
       - `fence_db`
       - `indexd_db`
-  2. 4 users with passwords and superuser access
+      - `arborist_db`
+  2. 5 users with passwords and superuser access
       - `fence_user`
       - `peregrine_user`
       - `sheepdog_user`
       - `indexd_user`
+      - `arborist_user`
 
 Configure the Postgres database container to publish the db service port to the host machine by un-commenting the `ports` block under the `postgres` service in `docker-compose.yml`, then running `docker-compose up -d postgres`:
 ```
@@ -66,6 +68,13 @@ psql -h localhost -U fence_user -d fence_db
 
 ### Docker Setup
 The official Docker installation page can be found [here](https://docs.docker.com/install/#supported-platforms). If you've never used Docker before, it may be helpful to read some of the Docker documentation to familiarize yourself with containers.
+
+### Docker ElasticSearch
+If you are running on AWS EC2 instance (Amazon Linux), consider setup [Docker ElasticSearch prerequisites](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-prod-prerequisites). The following are known to be required to set on Docker host:
+```
+grep vm.max_map_count /etc/sysctl.conf
+vm.max_map_count=262144
+```
 
 ### Docker Compose Setup
 If you are using Linux, then the official Docker installation does not come with Docker Compose. The official Docker Compose installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information. Go through the steps of installing Docker Compose for your platform, then proceed to set up credentials.
