@@ -159,7 +159,7 @@ docker-compose restart [CONTAINER_NAME]
 after you update some code in order to see changes without having to rebuild all the microservices. Keep in mind that running `docker-compose restart` does not apply changes you make in the docker-compose file. Look up the Docker documentation for more information about [volumes](https://docs.docker.com/storage/).
 
 ### Running Docker Compose on a Remote Machine
-To run Docker Compose on a remote machine, modify the `hostname` field in `fence-config.yaml`, `peregrine_creds.json`, and `sheepdog_creds.json` in the `Secrets` directory.
+To run Docker Compose on a remote machine, modify the `BASE_URL` field in `fence-config.yaml`, and the `hostname` field in `peregrine_creds.json` and `sheepdog_creds.json` in the `Secrets` directory.
 
 ### Dumping config files and logs (MacOS/Linux)
 
@@ -281,3 +281,7 @@ The templates/user.yaml file has been configured to grant data_upload privileges
 ---
 > DATA_UPLOAD_BUCKET: 'bucket1'
 ```
+
+### Working with on premises data and servers.
+
+The gen3 system is optimized to deploy on cloud systems and work with cloud buckets.  OHSU has developed [a collection of extensions](https://github.com/ohsu-comp-bio/compose-services/tree/onprem) to enable gen3 to work in a non aws environment.  Read this [overview](https://github.com/ohsu-comp-bio/compose-services/blob/onprem/onprem/README.md) for more information.
