@@ -7,6 +7,7 @@ Docker-compose setup for experimental commons, small commons, or local developme
 * [Setup](#Setup)
 * [Dev Tips](#Dev-Tips)
 * [Using the Data Commons](#Using-the-data-commons)
+* [Useful links](#Useful-links)
 
 
 ## Introduction
@@ -77,7 +78,7 @@ vm.max_map_count=262144
 ```
 
 ### Docker Compose Setup
-If you are using Linux, then the official Docker installation does not come with Docker Compose. The official Docker Compose installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information. Go through the steps of installing Docker Compose for your platform, then proceed to set up credentials.
+The official Docker Compose installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). Go through the steps of installing Docker Compose for your platform, then proceed to set up credentials. You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information. If you are using Linux, then the official Docker installation does not come with Docker Compose; you will need to install Docker Engine before installing Docker Compose.  
 
 ### Setting up Credentials
 Setup credentials for Fence, a custom root CA  and SSL certs with the provided script by running either:
@@ -87,23 +88,25 @@ OR
 bash ./creds_setup.sh YOUR CUSTOM DOMAIN
 ```
 This script will create a `Secrets` folder that holds various secrets and configuration files.
-The script by default generates an SSL certificate to access the gen3 stack at `https://localhost`.  If you are running this in a remote server with an actual domain, you can run `bash creds_setup.sh YOUR_DOMAIN`.  This will create SSL cert signed by the custom CA so that the microservices can talk to each other without bypassing SSL verification. If you are setting this up on AWS, ensure that you use an Elastic IP address BEFORE you set up and use that as your domain. On an EC2 instance, for example, this would be your ec2-YOUR-Elastic-IP-Addr.us-region-number.compute.amazonaws.com. This will save a lot of time and avoid editing the individual files to set up the hostname(`fence-config.yaml`, `peregrine_creds.json`, and `sheepdog_creds.json`) when the machine is rebooted. This is because each of the microservices can be configured to run on separate machines and thus have their respective configuration files. You will still need to bypass SSL verification when you hit the services from the browser. If you have real certs for your domain, you can copy to `Secrets/TLS/service.key` and `Secrets/TLS/service.crt` to overwrite our dev certs.
+The script by default generates an SSL certificate to access the gen3 stack at `https://localhost`.  If you are running this in a remote server with an actual domain, you can run `bash creds_setup.sh YOUR_DOMAIN`.  This will create SSL cert signed by the custom CA so that the microservices can talk to each other without bypassing SSL verification. If you are setting this up on AWS, ensure that you use an Elastic IP address BEFORE you set up and use that as your domain. On an EC2 instance, for example, this would be your ec2-YOUR-Elastic-IP-Addr.us-region-number.compute.amazonaws.com. This will save a lot of time and avoid [editing the individual files](#Running-Docker-Compose-on-a-Remote-Machine) to set up the hostname(`fence-config.yaml`, `peregrine_creds.json`, and `sheepdog_creds.json`) when the machine is rebooted. This is because each of the microservices can be configured to run on separate machines and thus have their respective configuration files. You will still need to bypass SSL verification when you hit the services from the browser. If you have real certs for your domain, you can copy to `Secrets/TLS/service.key` and `Secrets/TLS/service.crt` to overwrite our dev certs.
 
 
 If you are using MacOS, you may run into an error with the default MacOS OpenSSL config not including the configuration for v3_ca certificate generation. You can refer to the solution on [this Github issue](https://github.com/jetstack/cert-manager/issues/279) on a related issue on Jetstack's cert-manager.
 
-This Docker Compose setup also requires Google API Credentials in order for Fence microservice to complete its authentication. If you have Google API credentials set up already that you would like to use with the local gen3 Docker Compose setup, simply add `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in your credentials and copy your client ID and client secret from your credentials to the 'client_secret' and 'client_id' fields in the `Secrets/fence-config.yaml` under `OPENID_CONNECT` and `google`.
-
- If you do not already have Google API Credentials, follow the steps below to set them up. See image below for an example on a sample Google account.
-
-![Redirection Set up](Authorized%20URL.jpg)
+Support for multi-tenant (another fence is this fence's IDP) is available and can be edited in the `fence-config.yaml`. If this is not the case, we recommend removing the [relevant section](https://github.com/uc-cdis/compose-services/blob/fa3dcc95a4244805c7a02f315cd330447e189945/templates/fence-config.yaml#L81).
 
 ### Setting up Google OAuth Client-Id for Fence
 
-To set up Google API Credentials, go to [the Credentials page of the Google Developer Console](https://console.developers.google.com/apis/credentials) and click the 'Create Credentials' button. Follow the prompts to create a new OAuth Client ID for a Web Application. Add  `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in the Credentials. Then copy your client ID and client secret and use them to fill in the 'google.client_secret' and 'google.client_id' fields in the `Secrets/fence-config.yaml` file.
+This Docker Compose setup requires Google API Credentials in order for Fence microservice to complete its authentication. 
+To set up Google API Credentials, go to [the Credentials page of the Google Developer Console](https://console.developers.google.com/apis/credentials) and click the 'Create Credentials' button. Follow the prompts to create a new OAuth Client ID for a Web Application. Add  `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in the Credentials and click 'Create'. Then copy your client ID and client secret and use them to fill in the 'google.client_secret' and 'google.client_id' fields in the `Secrets/fence-config.yaml` file. 
+See image below for an example on a sample Google account.
+
+![Redirection Set up](Authorization_URL_2020.jpg)
+
+If you have Google API credentials set up already that you would like to use with the local gen3 Docker Compose setup, simply add `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in your credentials and copy your client ID and client secret from your credentials to the 'client_secret' and 'client_id' fields in the `Secrets/fence-config.yaml` under `OPENID_CONNECT` and `google`.
 
 ### Setting up Users
-To set up user privileges for the services, please edit the `Secrets/user.yaml` file, following the example format shown in the file. In particular, you should change `yourlogin@gmail.com` to the email you intend to log in with, so that you can create administrative nodes later on.
+To set up user privileges for the services, please edit the `Secrets/user.yaml` file, following the example format shown in [this file](https://github.com/uc-cdis/fence/blob/master/docs/base_user.yaml). In particular, you should change all occurrences of `yourlogin@gmail.com` to the email you intend to log in with, so that you can create administrative nodes later on.
 
 Fence container will automatically sync this file to the `fence_db` database on startup. If you wish to update user privileges while the containers are running (without restarting the container), just edit the `Secrets/user.yaml` file and then run
 ```
@@ -159,7 +162,7 @@ docker-compose restart [CONTAINER_NAME]
 after you update some code in order to see changes without having to rebuild all the microservices. Keep in mind that running `docker-compose restart` does not apply changes you make in the docker-compose file. Look up the Docker documentation for more information about [volumes](https://docs.docker.com/storage/).
 
 ### Running Docker Compose on a Remote Machine
-To run Docker Compose on a remote machine, modify the `hostname` field in `fence-config.yaml`, `peregrine_creds.json`, and `sheepdog_creds.json` in the `Secrets` directory.
+To run Docker Compose on a remote machine, modify the `BASE_URL` field in `fence-config.yaml`, and the `hostname` field in `peregrine_creds.json` and `sheepdog_creds.json` in the `Secrets` directory.
 
 ### Dumping config files and logs (MacOS/Linux)
 
@@ -281,3 +284,9 @@ The templates/user.yaml file has been configured to grant data_upload privileges
 ---
 > DATA_UPLOAD_BUCKET: 'bucket1'
 ```
+## Useful links 
+These links show insightful work conducted by other users in the Gen3 community and may be of help to new and experienced users/operators alike of a Gen3 data commons. 
+We emphasize that we are not responsible for the content and opinions on the third-party webpages listed below.
+1. Working with on premises data and servers: 
+The gen3 system is optimized to deploy on cloud systems and work with cloud buckets. The Oregon Health & Science University (OHSU) has developed [a collection of extensions](https://github.com/ohsu-comp-bio/compose-services/tree/onprem) to enable gen3 to work in a non aws environment.  Read this [overview](https://github.com/ohsu-comp-bio/compose-services/blob/onprem/onprem/README.md) for more information.
+2. A group of users shared their experiences with setting up their first program and project on a local desktop using Compose Services in August 2020 in form of two videos: [Gen3 Data Commons Setup Part 1](https://www.youtube.com/watch?v=xM54O4aMpWY) and [Gen3 Data Commons Setup Part 2](https://www.youtube.com/watch?v=iMmCxnbHpGo).
