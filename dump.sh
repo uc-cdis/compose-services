@@ -38,6 +38,8 @@ fi
 if $get_config; then
 	echo "Copying config files"
 	cp docker-compose.yml $dirname/config/
+	cp Secrets/etlMapping.yaml $dirname/config/
+	cp Secrets/gitops.json $dirname/config/
 	cp Secrets/user.yaml $dirname/config/
 	cp Secrets/*config.* $dirname/config/
 	cp Secrets/*settings.* $dirname/config/
