@@ -206,15 +206,33 @@ bash smoke_test.sh localhost
 ```
 
 ### Programs and Projects
-In a Gen3 Data Commons, programs and projects are two administrative nodes in the graph database that serve as the most upstream nodes. A program must be created first, followed by a project. Any subsequent data submission and data access, along with control of access to data, is done through the project scope.   
+In a Gen3 Data Commons, programs and projects are two administrative nodes in the graph database that serve as the most upstream nodes. A program must be created first, followed by a project. Any subsequent data submission and data access, along with control of access to data, is done through the project scope.
 
-To create a program, visit the URL where your Gen3 Commons is hosted and append `/_root`. If you are running the Docker Compose setup locally, then this will be `localhost/_root`. Otherwise, this will be whatever you set the `hostname` field to in the creds files for the services with `/_root` added to the end. Here, you can choose to either use form submission or upload a file. I will go through the process of using form submission here, as it will show you what your file would need to look like if you were using file upload. Search for "program," and then fill in the "dbgap_accession_number" and "name" fields, and hit "Upload submission json from form" followed by "Submit". If the message is green ("succeeded:200"), that indicates success, while a grey message indicates failure. More details can be viewed by clicking on the "DETAILS" button.
+In order to create a program or a project, you need administrator privileges. If not done before, edit the `Secrets/user.yaml` file and set up your privileges for the services, programs, and projects following the example format shown in the file or [here](https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md#programs-and-projects-crud-access).
 
-To create a project, visit the URL where your Gen3 Commons is hosted and append the name of the program you want to create the project under. For example, if you are running the Docker Compose setup locally and would like to create a project under the program "Program1", the URL you will visit will be `localhost/Program1`. You will see the same options to use form submission or upload a file. This time, search for "project," and then fill in the fields and hit "Submit." Make a note of the `dbgap_accession_number` for later. Again, a green message indicates success while a grey message indicates failure, and more details can be viewed by clicking on the "DETAILS" button.
+To create a program, visit the URL where your Gen3 Commons is hosted and append `/_root`. If you are running the Docker Compose setup locally, then this will be `localhost/_root`. Otherwise, this will be whatever you set the `hostname` field to in the creds files for the services with `/_root` added to the end. Here, you can choose to either use form submission or upload a file.  I will go through the process of using form submission here, as it will show you what your file would need to look like if you were using file upload. Choose form submission, search for "program" and then fill in the "dbgap_accession_number" and "name" fields.
+The resource tree contains, among other resources, the programs and projects created via Sheepdog. If you created a program `{ "name": "program1" }` and a project `{ "name": "project1", "dbgap_accession_number": "phs1", "code": "P1" }`, your resource tree should contain the following:
+```
+  resources:
+  - name: programs
+    subresources:
+    - name: program1
+      subresources:
+      - name: projects
+        subresources:
+        - name: P1
+```
+Policies would refer to this resource as /programs/program1/projects/P1.
 
-Once you've created a program and a project, you need to grant yourself permissions on your new project in order to submit data (unless you created a project for which you already had permissions--for example, if you used the template under `youruser@gmail.com` in the `user.yaml` and created a project called "Program1", then you can skip this step). See [Controlling access to data](#Controlling-access-to-data) for an example. The `auth_id` should be a string containing the `dbgap_accession_number` of your project.
+Click 'Upload submission json from form' and then 'Submit'. If the message is green ("succeeded:200"), that indicates success, while a grey message indicates failure. More details can be viewed by clicking on the "DETAILS" button. If you don't see the green message, control the sheepdog logs in case errors have occurred, make sure that [you have program/project submission access](https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md#programs-and-projects-crud-access), or look into the Sheepdog database (`/datadictionary`), where programs and projects are stored. If you see your program in the data dictionary, neglect the fact that at this time the green message does not appear and continue to create a project.
 
-After that, you're ready to start submitting data for that project! Please note that Data Submission refers to metadata regarding the file(s) (Image, Sequencing files etc.) that are to be uploaded. Please refer to the [Gen3 website](https://gen3.org/resources/user/submit-data/) for additional details.
+To create a project, visit the URL where your Gen3 Commons is hosted and append the name of the program you want to create the project under. For example, if you are running the Docker Compose setup locally and would like to create a project under the program "Program1", the URL you will visit will be `localhost/Program1`. You will see the same options to use form submission or upload a file. This time, search for "project" and then fill in the fields. Using the example above, you can use "P1" as "code", "phs1" as "dbgap_accession_number", and "project1" as "name". If you use different entries, make a note of the dbgap_accession_number for later. Click 'Upload submission json from form' and then 'Submit'. Again, a green message indicates success while a grey message indicates failure, and more details can be viewed by clicking on the "DETAILS" button. You should also see the program and project in the data dictionary.
+
+Once you've created a program and a project, you need to grant yourself permissions on your new project in order to submit data. You can edit the `user.yaml` according to the above shown resource tree. Also, insert under `/resource_paths` in policies the path mentioned above. If you created a project for which you already had permissions--for example, if you used the template under `youruser@gmail.com` in the `user.yaml` and created a project called "Program1", then you can skip this step. See [Controlling access to data](#Controlling-access-to-data) for an example. The `auth_id` should be a string containing the `dbgap_accession_number` of your project. Make sure to update user privileges:
+```
+docker exec -it fence-service fence-create sync --arborist http://arborist-service --yaml user.yaml
+```
+After that, you're ready to start submitting data for that project! Please note that Data Submission refers to metadata regarding the file(s) (Image, Sequencing files, etc.) that are to be uploaded. Please refer to the [Gen3 website](https://gen3.org/resources/user/submit-data/) for additional details.
 
 
 ### Controlling access to data
