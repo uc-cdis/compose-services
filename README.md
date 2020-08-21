@@ -114,7 +114,10 @@ docker exec -it fence-service fence-create sync --arborist http://arborist-servi
 ```
 This command will enter Fence container to run the fence-create sync command, which will update your user privileges. If you are logged in to your commons on a browser, you may need to log out and log back in again or clear your cookies in order to see the changes.
 
+
 ### Start running your local gen3 Docker Compose environment
+If your Gen3 data commons does not host any data, yet, we recommend commenting out the kibana-service section in the `docker-compose.yaml` and the guppy section in the `ninx.conf` file. After having setup the first program/project and uploaded the first data, we recommend enabling these sections. 
+
 Now that you are done with the setup, all Docker Compose features should be available. If you are a non-root user you may need to add yourself to the 'docker' group: `sudo usermod -aG docker your-user`, and the log out and log back in. 
 Here are some useful commands:
 
