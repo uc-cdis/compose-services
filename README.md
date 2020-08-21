@@ -67,8 +67,11 @@ psql -h localhost -U fence_user -d fence_db
   - openssl
   - Docker and Docker Compose
 
-### Docker Setup
-The official Docker installation page can be found [here](https://docs.docker.com/install/#supported-platforms). If you've never used Docker before, it may be helpful to read some of the Docker documentation to familiarize yourself with containers.
+### Docker and Docker Compose Setup
+If you've never used Docker before, it may be helpful to read some of the Docker documentation to familiarize yourself with containers. You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information. 
+
+The official *Docker* installation page can be found [here](https://docs.docker.com/install/#supported-platforms). The official *Docker Compose* installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). For Windows and Mac, Docker Compose is included into Docker Desktop. If you are using Linux, then the official Docker installation does not come with Docker Compose; you will need to install Docker Engine before installing Docker Compose. 
+Go through the steps of installing Docker Compose for your platform, then proceed to set up credentials. 
 
 ### Docker ElasticSearch
 If you are running on AWS EC2 instance (Amazon Linux), consider setup [Docker ElasticSearch prerequisites](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-prod-prerequisites). The following are known to be required to set on Docker host:
@@ -76,9 +79,6 @@ If you are running on AWS EC2 instance (Amazon Linux), consider setup [Docker El
 grep vm.max_map_count /etc/sysctl.conf
 vm.max_map_count=262144
 ```
-
-### Docker Compose Setup
-The official Docker Compose installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). Go through the steps of installing Docker Compose for your platform, then proceed to set up credentials. You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information. If you are using Linux, then the official Docker installation does not come with Docker Compose; you will need to install Docker Engine before installing Docker Compose.  
 
 ### Setting up Credentials
 Setup credentials for Fence, a custom root CA  and SSL certs with the provided script by running either:
