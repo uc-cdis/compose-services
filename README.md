@@ -242,7 +242,9 @@ Click 'Upload submission json from form' and then 'Submit'. If the message is gr
 
 To create a project, visit the URL where your Gen3 Commons is hosted and append the name of the program you want to create the project under. For example, if you are running the Docker Compose setup locally and would like to create a project under the program "Program1", the URL you will visit will be `localhost/Program1`. You will see the same options to use form submission or upload a file. This time, search for "project" and then fill in the fields. Using the example above, you can use "P1" as "code", "phs1" as "dbgap_accession_number", and "project1" as "name". If you use different entries, make a note of the dbgap_accession_number for later. Click 'Upload submission json from form' and then 'Submit'. Again, a green message indicates success while a grey message indicates failure, and more details can be viewed by clicking on the "DETAILS" button. You should also see the program and project in the data dictionary.
 
-Once you've created a program and a project, you need to grant yourself permissions on your new project in order to submit data. You can edit the `user.yaml` according to the above shown resource tree. Also, insert under `/resource_paths` in policies the path mentioned above. If you created a project for which you already had permissions--for example, if you used the template under `youruser@gmail.com` in the `user.yaml` and created a project called "Program1", then you can skip this step. See [Controlling access to data](#Controlling-access-to-data) for an example. The `auth_id` should be a string containing the `dbgap_accession_number` of your project. Make sure to update user privileges:
+Once you've created a program and a project, you need to grant yourself permissions on your new project in order to submit data. You can edit the `user.yaml` according to the above shown resource tree. Also, insert under `/resource_paths` in policies the path mentioned above. If you created a project for which you already had permissions--for example, if you used the template under `youruser@gmail.com` in the `user.yaml` and created a project called "Program1", then you can skip this step. See [programs and projects CRUD access](https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md#programs-and-projects-crud-access) for an example. The `auth_id` should be a string containing the `dbgap_accession_number` of your project. 
+
+Make sure to update user privileges:
 ```
 docker exec -it fence-service fence-create sync --arborist http://arborist-service --yaml user.yaml
 ```
@@ -250,17 +252,11 @@ After that, you're ready to start submitting data for that project! Please note 
 
 
 ### Controlling access to data
-Access to data and admin privileges in Gen3 is controlled using Fence through the `user.yaml` file found in the `Secrets` directory. Admin privileges are required to create administrative nodes, which include programs and projects. For each user, you can control admin status as well as specific per-project permissions. The format of the `user.yaml` file is shown below:
+Access to data and admin privileges in Gen3 is controlled using Fence through the `user.yaml` file found in the `Secrets` directory. We use `users.policies` for individual access and `groups` for group access. Please refer to the [user.yaml_guide](https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md) to add/subtract users and policies. Make sure to update user privileges with
 ```
-users:
-  user_email:
-    admin: True
-    projects:
-    - auth_id: project_dbgap_accession_number
-      privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
+docker exec -it fence-service fence-create sync --arborist http://arborist-service --yaml user.yaml
 ```
-
-Refer to [Setting up Users](#Setting-Up-Users) to review how to apply the changes made in the `user.yaml` file to the database
+or review how to apply the changes made in the `user.yaml` file to the database in the section [Setting up Users](#Setting-Up-Users).
 
 ### Generating Test Metadata
 
