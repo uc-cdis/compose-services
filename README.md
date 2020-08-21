@@ -116,7 +116,7 @@ This command will enter Fence container to run the fence-create sync command, wh
 
 
 ### Start running your local gen3 Docker Compose environment
-If your Gen3 data commons does not host any data, yet, we recommend commenting out the [kibana-service section](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L270-L281) in the `docker-compose.yaml` and the [guppy section](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L120-L124) in the `ninx.conf` file. After having setup the first program/project and uploaded the first data, we recommend enabling these sections. 
+If your Gen3 Data Commons does not host any data, yet, we recommend commenting out the [kibana-service section](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L270-L281) in the `docker-compose.yaml` and the [guppy section](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L120-L124) in the `ninx.conf` file. After having setup the first program/project and uploaded the first data, we recommend enabling these sections. 
 
 Now that you are done with the setup, all Docker Compose features should be available. If you are a non-root user you may need to add yourself to the 'docker' group: `sudo usermod -aG docker your-user`, and the log out and log back in. 
 Here are some useful commands:
@@ -192,10 +192,21 @@ All the microservices communicate with the Postgres Container based on the confi
 
 ![Launch Portal](LaunchPortal.jpg)
 
-Upon clicking 'Login from Google' and providing Google Credentials(if the same Google Account is used where the developer credentials came from), the system redirects the user to their landing page as shown below:
+Upon clicking 'Login from Google' and providing Google Credentials (if the same Google Account is used where the developer credentials came from), the system redirects the user to their landing page as shown below:
 
 
 ![Logged Into Portal](LoggedInScreenshot.jpg)
+
+
+### Revproxy-service cannot start
+If revproxy-service cannot start an error occurs. It may be useful to 
+```
+docker-compose down
+docker-compose up -d
+```
+If the error still occurs, it is possible that apache2 uses the same port as revproxy-service. You can change the port for revproxy service and any other service in the `docker-compose.yaml` [file](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L215). For revproxy you would also need to change the port in the nginx.conf [here](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L29).
+
+
 
 ## Using the Data Commons
 For some general information about Gen3 Data Commons and how they work (such as how to access and submit data), visit the [official site](https://gen3.org/). The section below will go over some useful technical aspects of Gen3.
@@ -306,8 +317,8 @@ The templates/user.yaml file has been configured to grant data_upload privileges
 > DATA_UPLOAD_BUCKET: 'bucket1'
 ```
 ## Useful links 
-These links show insightful work conducted by other users in the Gen3 community and may be of help to new and experienced users/operators alike of a Gen3 data commons. 
+These links show insightful work conducted by other users in the Gen3 community and may be of help to new and experienced users/operators alike of a Gen3 Data Commons. 
 We emphasize that we are not responsible for the content and opinions on the third-party webpages listed below.
 1. Working with on premises data and servers: 
 The gen3 system is optimized to deploy on cloud systems and work with cloud buckets. The Oregon Health & Science University (OHSU) has developed [a collection of extensions](https://github.com/ohsu-comp-bio/compose-services/tree/onprem) to enable gen3 to work in a non aws environment.  Read this [overview](https://github.com/ohsu-comp-bio/compose-services/blob/onprem/onprem/README.md) for more information.
-2. A group of users shared their experiences with setting up their gen3 data commons on a local desktop using Compose Services in August 2020 in form of two videos: [Gen3 Data Commons Setup Part 1](https://www.youtube.com/watch?v=xM54O4aMpWY) and [Gen3 Data Commons Setup Part 2](https://www.youtube.com/watch?v=iMmCxnbHpGo). Please note, that the content in these videos might not reflect the current status of the Compose-Services repository. Referring to the video part I, the following is outdated: the format of the `user.yaml` reflects the one shown in the Fence repository and the Arborist DB setup is up to date.
+2. A group of users shared their experiences with setting up their Gen3 Data Commons on a local desktop using Compose Services in August 2020 in form of two videos: [Gen3 Data Commons Setup Part 1](https://www.youtube.com/watch?v=xM54O4aMpWY) and [Gen3 Data Commons Setup Part 2](https://www.youtube.com/watch?v=iMmCxnbHpGo). Please note, that the content in these videos might not reflect the current status of the Compose-Services repository. Referring to the video part I, the following is outdated: the format of the `user.yaml` reflects the one shown in the Fence repository and the arborist DB setup is up to date.
