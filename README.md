@@ -204,7 +204,7 @@ If revproxy-service cannot start an error occurs. It may be useful to
 docker-compose down
 docker-compose up -d
 ```
-If the error still occurs, it is possible that apache2 uses the same port as revproxy-service. You can change the port for revproxy service and any other service in the `docker-compose.yaml` [file](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L215). For revproxy you would also need to change the port in the nginx.conf [here](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L29).
+If the error still occurs, make sure that apache2 and revproxy-service do not share the same port. You can change the port for revproxy-service and any other service in the `docker-compose.yaml` [file](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L215). For revproxy you would also need to change the port in the nginx.conf [here](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L29).
 
 
 
