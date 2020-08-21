@@ -146,10 +146,13 @@ These commands may take a while, and they also may fail. If they do fail, simply
 Sheepdog and Peregrine services download the dictionary schema at startup, and the
 portal service runs a series of pre-launch compilations that depend on Sheepdog and Peregrine,
 so it may take several minutes for the portal to finally come up at https://localhost
+
 Following the portal logs is one way to monitor its startup progress:
 ```
 docker logs -f portal-service
 ```
+When you see that `bundle.js` and `index.html` were successfully built in the logs, you should be able to log into https://localhost and see the data commons. You are now ready to setup the [first program and project](#-Using-the-Data-Commons).
+
 
 ### Update tips
 You should of course `git pull` compose-services if you have not done so for a while. You also need to `docker-compose pull` new images from Quay--this will not happen automatically. If your git pull pulled new commits, and you already have a `Secrets` folder, you may also need to delete your old `Secrets` and rerun `creds_setup.sh` (see [Setting up Credentials](#Setting-up-Credentials)) to recreate it. 
