@@ -225,20 +225,8 @@ bash smoke_test.sh localhost
 ### Programs and Projects
 In a Gen3 Data Commons, programs and projects are two administrative nodes in the graph database that serve as the most upstream nodes. A program must be created first, followed by a project. Any subsequent data submission and data access, along with control of access to data, is done through the project scope.
 
-Before you create a program and a project or submit any data, you need to grant yourself permissions. If you created a project for which you already had permissions--for example, if you used the template under `youruser@gmail.com` in the `user.yaml` and created a project called "Program1", then you can skip this step. If not done before, edit the `Secrets/user.yaml` file and set up your privileges for the services, programs, and projects following the example format shown [here](https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md#programs-and-projects-crud-access) or below:
-
-The resource tree contains, among other resources, the programs and projects created via Sheepdog. If you created a program `{ "name": "program1" }` and a project `{ "name": "project1", "dbgap_accession_number": "phs1", "code": "P1" }`, your resource tree should contain the following:
-```
-  resources:
-  - name: programs
-    subresources:
-    - name: program1
-      subresources:
-      - name: projects
-        subresources:
-        - name: P1
-```
-Then, under policies, insert /programs/program1/projects/P1 as `/resource_paths`, following the example above.
+Before you create a program and a project or submit any data, you need to grant yourself permissions. First, you will need to grant yourself access to **create** a program and second, you need to grant yourself access to *see* the program. You can **create** the program before or after having access to *see* it.
+For this, you will need to edit the `Secrets/user.yaml` file following the docs shown [here]. (https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md#programs-and-projects-crud-access). 
 
 Make sure to update user privileges:
 ```
