@@ -93,7 +93,7 @@ If you are running this in a remote server with an actual domain, you can run `b
 
 If you are using MacOS, you may run into an error with the default MacOS OpenSSL config not including the configuration for v3_ca certificate generation. OpenSSL should create the `jwt_private_key.pem` and `jwt_public_key.pem` in the `Secrets/fenceJwtKeys/{dateTtimeZ}` folder. If you do not see them, control whether your version of OpenSSL is correct.  You can refer to the solution on [this Github issue](https://github.com/jetstack/cert-manager/issues/279) on a related issue on Jetstack's cert-manager. 
 
-Support for multi-tenant (another fence is this fence's IDP) is available and can be edited in the `fence-config.yaml`. If this is not the case, we recommend removing the [relevant section](https://github.com/uc-cdis/compose-services/blob/fa3dcc95a4244805c7a02f315cd330447e189945/templates/fence-config.yaml#L81).
+Support for multi-tenant fence (configure another fence as an IDP for this fence) is available and can be edited in the `fence-config.yaml`. If this is not the case, we recommend removing the [relevant section](https://github.com/uc-cdis/compose-services/blob/fa3dcc95a4244805c7a02f315cd330447e189945/templates/fence-config.yaml#L81).
 
 ### Setting up Google OAuth Client-Id for Fence
 
