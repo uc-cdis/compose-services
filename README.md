@@ -116,7 +116,7 @@ This command will enter Fence container to run the fence-create sync command, wh
 
 
 ### Start running your local gen3 Docker Compose environment
-If your Gen3 Data Commons does not host any data, yet, we recommend commenting out the [kibana-service section](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L270-L281) in the `docker-compose.yaml` and the [guppy section](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L120-L124) in the `ninx.conf` file. After having setup the first program/project and uploaded the first data, we recommend enabling these sections. 
+If your Gen3 Data Commons does not host any data, yet, we recommend commenting out the [kibana-service section](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L270-L281) in the `docker-compose.yaml` and the [guppy section](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L120-L124) in the `nginx.conf` file. After having setup the first program/project and uploaded the first data, we recommend enabling these sections. 
 
 Now that you are done with the setup, all Docker Compose features should be available. If you are a non-root user you may need to add yourself to the 'docker' group: `sudo usermod -aG docker your-user`, and the log out and log back in. 
 Here are some useful commands:
