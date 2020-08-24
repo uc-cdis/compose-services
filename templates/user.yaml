@@ -1,104 +1,181 @@
-cloud_providers: {}
-groups: {}
-#
-# Define information used for role-based access control.
-# The information in the `rbac` section is sent to arborist to populate its
-# access control model.
-# see https://github.com/uc-cdis/fence/blob/88327870a5c35b13154a11408548cecb60a4945c/ua.yaml#L25
-#
-rbac:
-    policies:
-        - id: 'data_upload'
-          description: 'upload raw data files to S3'
-          resource_paths: ['/data_file']
-          role_ids: ['file_uploader']
-        - id: workspace
-          description: be able to use workspace
-          resource_paths: [/workspace]
-          role_ids: [workspace_user]
+authz:
+  # policies automatically given to anyone, even if they are not authenticated
+  anonymous_policies:
+  - open_data_reader
 
-    resources:
-        - name: 'data_file'
-          description: 'data files, stored in S3'
-        - name: programs
-          subresources:
-          - name: QA
-            subresources:
-            - name: projects
-              subresources:
-              - name: test
-          - name: DEV
-            subresources:
-            - name: projects
-              subresources:
-              - name: test
-          - name: jnkns
-            subresources:
-            - name: projects
-              subresources:
-              - name: jenkins
-        - name: workspace
-          description: jupyter notebooks
- 
-    roles:
-        - id: 'file_uploader'
-          description: 'can upload data files'
-          permissions:
-              - id: 'file_upload'
-                action:
-                    service: 'fence'
-                    method: 'file_upload'
-        - id: workspace_user
-          permissions:
-          - action: {method: access, service: jupyterhub}
-            id: workspace_access
+  # policies automatically given to authenticated users (in addition to their other policies)
+  all_users_policies: []
+
+  groups:
+  # can CRUD programs and projects and upload data files
+  - name: data_submitters
+    policies:
+    - services.sheepdog-admin
+    - data_upload
+    - MyFirstProject_submitter
+    users:
+    - username1@gmail.com
+
+  # can create/update/delete indexd records
+  - name: indexd_admins
+    policies:
+    - indexd_admin
+    users:
+    - username1@gmail.com
+
+  resources:
+  - name: workspace
+  - name: data_file
+  - name: services
+    subresources:
+    - name: sheepdog
+      subresources:
+      - name: submission
+        subresources:
+        - name: program
+        - name: project
+  - name: open
+  - name: programs
+    subresources:
+    - name: MyFirstProgram
+      subresources:
+      - name: projects
+        subresources:
+        - name: MyFirstProject
+
+  policies:
+  - id: workspace
+    description: be able to use workspace
+    resource_paths:
+    - /workspace
+    role_ids:
+    - workspace_user
+  - id: data_upload
+    description: upload raw data files to S3
+    role_ids:
+    - file_uploader
+    resource_paths:
+    - /data_file
+  - id: services.sheepdog-admin
+    description: CRUD access to programs and projects
+    role_ids:
+      - sheepdog_admin
+    resource_paths:
+      - /services/sheepdog/submission/program
+      - /services/sheepdog/submission/project
+  - id: indexd_admin
+    description: full access to indexd API
+    role_ids:
+      - indexd_admin
+    resource_paths:
+      - /programs
+  - id: open_data_reader
+    role_ids:
+      - reader
+      - storage_reader
+    resource_paths:
+    - /open
+  - id: all_programs_reader
+    role_ids:
+    - reader
+    - storage_reader
+    resource_paths:
+    - /programs
+  - id: MyFirstProject_submitter
+    role_ids:
+    - reader
+    - creator
+    - updater
+    - deleter
+    - storage_reader
+    - storage_writer
+    resource_paths:
+    - /programs/MyFirstProgram/projects/MyFirstProject
+
+  roles:
+  - id: file_uploader
+    permissions:
+    - id: file_upload
+      action:
+        service: fence
+        method: file_upload
+  - id: workspace_user
+    permissions:
+    - id: workspace_access
+      action:
+        service: jupyterhub
+        method: access
+  - id: sheepdog_admin
+    description: CRUD access to programs and projects
+    permissions:
+    - id: sheepdog_admin_action
+      action:
+        service: sheepdog
+        method: '*'
+  - id: indexd_admin
+    description: full access to indexd API
+    permissions:
+    - id: indexd_admin
+      action:
+        service: indexd
+        method: '*'
+  - id: admin
+    permissions:
+      - id: admin
+        action:
+          service: '*'
+          method: '*'
+  - id: creator
+    permissions:
+      - id: creator
+        action:
+          service: '*'
+          method: create
+  - id: reader
+    permissions:
+      - id: reader
+        action:
+          service: '*'
+          method: read
+  - id: updater
+    permissions:
+      - id: updater
+        action:
+          service: '*'
+          method: update
+  - id: deleter
+    permissions:
+      - id: deleter
+        action:
+          service: '*'
+          method: delete
+  - id: storage_writer
+    permissions:
+      - id: storage_creator
+        action:
+          service: '*'
+          method: write-storage
+  - id: storage_reader
+    permissions:
+      - id: storage_reader
+        action:
+          service: '*'
+          method: read-storage
+
+clients:
+  wts:
+    policies:
+    - all_programs_reader
+    - open_data_reader
 
 users:
-  cdis:
-    admin: True
+  username1@gmail.com: {}
+  username2:
+    tags:
+      name: John Doe
+      email: johndoe@gmail.com
+    policies:
+    - MyFirstProject_submitter
 
-  # Give yourself permissions to DEV, QA, and jnkns (JENKINS - for gen3 qa tests)
-  # programs - these wont exist until you create them.
-  # For program or project auth_id field use value from dbgap_accession_number.
-  # Also, grant yourself the data_upload policy for DEV.
-  yourlogin@gmail.com:
-    admin: True
-    policies: ['data_upload', 'workspace']
-    projects:
-    - auth_id: jnkns
-      privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
-      resource: /programs/jnkns
-    - auth_id: jenkins
-      privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
-      resource: /programs/jnkns/projects/jenkins
-    - auth_id: DEV
-      privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
-      resource: /programs/DEV
-    - auth_id: test
-      privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
-      resource: /programs/DEV/projects/test
-    - auth_id: QA
-      privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
-      resource: /programs/QA
-
-  # The integration test suite assumes this user exists - you can
-  # delete it if you dont want to run the test suite:
-  #    https://github.com/uc-cdis/gen3-qa
-  cdis.autotest@gmail.com:
-    admin: True
-    projects:
-    - auth_id: jnkns
-      privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
-      resource: /programs/jnkns
-    - auth_id: jenkins
-      privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
-      resource: /programs/jnkns/projects/jenkins
-    - auth_id: DEV
-      privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
-      resource: /programs/DEV
-    - auth_id: test
-      privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
-      resource: /programs/DEV/projects/test
-    - auth_id: QA
-      privilege: ['create', 'read', 'update', 'delete', 'upload', 'read-storage']
-      resource: /programs/QA
+cloud_providers: {}
+groups: {}
