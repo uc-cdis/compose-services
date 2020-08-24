@@ -226,7 +226,7 @@ bash smoke_test.sh localhost
 In a Gen3 Data Commons, programs and projects are two administrative nodes in the graph database that serve as the most upstream nodes. A program must be created first, followed by a project. Any subsequent data submission and data access, along with control of access to data, is done through the project scope.
 
 Before you create a program and a project or submit any data, you need to grant yourself permissions. First, you will need to grant yourself access to **create** a program and second, you need to grant yourself access to *see* the program. You can **create** the program before or after having access to *see* it.
-For this, you will need to edit the `Secrets/user.yaml` file following the docs shown [here]. (https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md#programs-and-projects-crud-access). 
+For this, you will need to edit the `Secrets/user.yaml` file following the docs shown [here](https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md#programs-and-projects-crud-access). 
 
 Make sure to update user privileges:
 ```
