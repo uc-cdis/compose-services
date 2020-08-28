@@ -27,7 +27,7 @@
 
 **Sync users**
 
-* docker exec -it fence-service fence-create sync --yaml user.yaml
+* docker exec -it fence-service fence-create sync --arborist http://arborist-service --yaml user.yaml
 
 **Change dictionary**
 
