@@ -120,23 +120,39 @@ DEFAULT_LOGIN_URL: '{{BASE_URL}}/login/google'
 # See ``fence/blueprints/login/__init__.py`` for which identity providers can
 # be loaded.
 #
-ENABLED_IDENTITY_PROVIDERS:
-  # ID for which of the providers to default to
-  default: 'google'
-  # Information for identity providers
-  providers:
-    google:
-      name: 'Google Login'
-#    fence:
-#      name: 'Fence Multi-Tenant Login'
-# The following can be used for shibboleth login, simply uncomment.
-#
-# NOTE: Don't enable shibboleth if the deployment is not protected by
-# shibboleth module, the shib module takes care of preventing header
-# spoofing.
-#
-#    shibboleth:
-#      name: 'NIH Login'
+LOGIN_OPTIONS:
+   - name: 'Login from Google'
+     desc: 'description'
+     idp: google
+
+  #   secondary: True
+  # - name: 'ORCID Login'
+  #   idp: orcid
+  # - name: 'Microsoft Login'
+  #   idp: microsoft
+  # # Cognito login: You may want to edit the name to reflect Cognito's IdP,
+  # # especially if Cognito is only using one IdP
+  # - name: 'Login from Cognito'
+  #   desc: 'Amazon Cognito login'
+  #   idp: cognito
+  # - name: 'Login from RAS'
+  #   idp: ras
+  # - name: 'NIH Login'
+  #   idp: fence
+  #   fence_idp: shibboleth
+  # - name: 'ORCID Login through other Fence'
+  #   idp: fence
+  #   fence_idp: orcid
+  # - name: 'InCommon Login'
+  #   idp: fence
+  #   fence_idp: shibboleth
+  #   # "shib_idps" can be '*' or a list of one or more entity IDs
+  #   shib_idps:
+  #     - urn:mace:incommon:nih.gov
+  #     - urn:mace:incommon:uchicago.edu
+
+
+DEFAULT_LOGIN_IDP: google
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # LIBRARY CONFIGURATION (authlib & flask)
@@ -311,7 +327,8 @@ S3_BUCKETS: {}
 # `DATA_UPLOAD_BUCKET` specifies an S3 bucket to which data files are uploaded,
 # using the `/data/upload` endpoint. This must be one of the first keys under
 # `S3_BUCKETS` (since these are the buckets fence has credentials for).
-DATA_UPLOAD_BUCKET: 'bucket1'
+#DATA_UPLOAD_BUCKET: 'bucket1'
+DATA_UPLOAD_BUCKET: null
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # PROXY
@@ -448,3 +465,5 @@ GOOGLE_MANAGED_SERVICE_ACCOUNT_DOMAINS:
   - 'compute-system.iam.gserviceaccount.com'
   - 'gcp-sa-websecurityscanner.iam.gserviceaccount.com'
   - 'storage-transfer-service.iam.gserviceaccount.com'
+
+ENABLE_DB_MIGRATION: true
