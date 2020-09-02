@@ -31,11 +31,19 @@ for path in templates/*; do
   fi
 done
 
-cd Secrets
-
 if [ ! -z $1 ]; then
-  yq write --inplace fence-config.yaml BASE_URL https://$1/user
+  customHost="$1"
+  shift
+  sed -i "s/localhost/$customHost/g" Secrets/fence-config.yaml Secrets/*_creds.json
 fi
+
+configFile=./Secrets/fence-config.yaml
+if grep "^ENCRYPTION_KEY: ''" "$configFile" > /dev/null; then
+  key="$(python ./scripts/fence_key_helper.py)" && \
+     sed -i "s/^ENCRYPTION_KEY: ''/ENCRYPTION_KEY: '$key'/" "$configFile"
+fi
+
+cd Secrets
 
 # make directories for temporary credentials
 timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
