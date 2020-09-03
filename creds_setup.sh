@@ -31,17 +31,25 @@ for path in templates/*; do
   fi
 done
 
+tempFile="gen3scratch.tmp"
 if [ ! -z $1 ]; then
   customHost="$1"
   shift
-  sed -i "s/localhost/$customHost/g" Secrets/fence-config.yaml Secrets/*_creds.json
+  # be careful with sed -i on Mac: https://stackoverflow.com/questions/19456518/invalid-command-code-despite-escaping-periods-using-sed
+  for name in Secrets/fence-config.yaml Secrets/*_creds.json; do
+    sed "s/localhost/$customHost/g" "$name" > "$tempFile" && \
+      cp "$tempFile" "$name"
+  done
 fi
 
 configFile=./Secrets/fence-config.yaml
 if grep "^ENCRYPTION_KEY: ''" "$configFile" > /dev/null; then
+  # be careful with sed on Mac: https://stackoverflow.com/questions/19456518/invalid-command-code-despite-escaping-periods-using-sed
   key="$(python ./scripts/fence_key_helper.py)" && \
-     sed -i "s/^ENCRYPTION_KEY: ''/ENCRYPTION_KEY: '$key'/" "$configFile"
+     sed "s/^ENCRYPTION_KEY: ''/ENCRYPTION_KEY: '$key'/" "$configFile" > "$tempFile" && \
+     cp "$tempFile" "$configFile"
 fi
+rm "$tempFile"
 
 cd Secrets
 
