@@ -76,7 +76,7 @@ psql -h localhost -U fence_user -d fence_db
 If you've never used Docker before, it may be helpful to read some of the Docker documentation to familiarize yourself with containers. You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information. 
 
 The official *Docker* installation page can be found [here](https://docs.docker.com/install/#supported-platforms). The official *Docker Compose* installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). For Windows and Mac, Docker Compose is included into Docker Desktop. If you are using Linux, then the official Docker installation does not come with Docker Compose; you will need to install Docker Engine before installing Docker Compose. 
-Go through the steps of installing Docker Compose for your platform, then proceed to set up credentials. 
+Go through the steps of installing Docker Compose for your platform, then proceed to set up credentials. Note, that Docker Desktop is set to use 2 GB runtime memory by default. Make sure to increase the size of the memory to 6 GB as described [here](https://docs.docker.com/docker-for-mac/#resources). 
 
 ### Docker ElasticSearch
 
