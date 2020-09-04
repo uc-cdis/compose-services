@@ -150,6 +150,12 @@ services:
       - cluster.name=elasticsearch-cluster
       - bootstrap.memory_lock=false
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    entrypoint:
+      - /bin/bash
+    # mmapfs requires systemctl update - see https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-store.html#mmapfs
+    command:
+      - -c
+      - "echo -e 'cluster.name: docker-cluster\nhttp.host: 0.0.0.0\nindex.store.type: niofs' > /usr/share/elasticsearch/config/elasticsearch.yml && /usr/local/bin/docker-entrypoint.sh eswrapper"
     ulimits:
       memlock:
         soft: -1
