@@ -175,6 +175,7 @@ users:
       name: John Doe
       email: johndoe@gmail.com
     policies:
+    - workspace
     - MyFirstProject_submitter
 
 cloud_providers: {}

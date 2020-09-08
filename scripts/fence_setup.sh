@@ -18,4 +18,5 @@ done
 
 fence-create sync --yaml user.yaml --arborist http://arborist-service
 
+cd /fence
 /dockerrun.sh
