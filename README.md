@@ -160,7 +160,7 @@ Following the portal logs is one way to monitor its startup progress:
 ```
 docker logs -f portal-service
 ```
-When you see that `bundle.js` and `index.html` were successfully built in the logs, you should be able to log into https://localhost and see the data commons. You are now ready to setup the [first program and project](#-Using-the-Data-Commons).
+When you see that `bundle.js` and `index.html` were successfully built in the logs, you should be able to log into https://localhost and see the data commons. You are now ready to setup the [first program and project](#Using-the-Data-Commons).
 
 
 ### Update tips
