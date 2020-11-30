@@ -45,12 +45,15 @@ CONFIG['ALIAS'] = {
 )),
 }
 
-AUTH = SQLAlchemyAuthDriver('postgresql+psycopg2://{usr}:{psw}@{pghost}:{pgport}/{db}'.format(
-    usr=usr,
-    psw=psw,
-    pghost=pghost,
-    pgport=pgport,
-    db=db,
-))
+AUTH = SQLAlchemyAuthDriver(
+  'postgresql+psycopg2://{usr}:{psw}@{pghost}:{pgport}/{db}'.format(
+      usr=usr,
+      psw=psw,
+      pghost=pghost,
+      pgport=pgport,
+      db=db,
+  ),
+  arborist="http://arborist-service/",
+)
 
 settings = {'config': CONFIG, 'auth': AUTH}
