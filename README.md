@@ -123,7 +123,7 @@ docker exec -it fence-service fence-create sync --arborist http://arborist-servi
 This command will enter Fence container to run the fence-create sync command, which will update your user privileges. If you are logged in to your commons on a browser, you may need to log out and log back in again or clear your cookies in order to see the changes.
 
 
-### Start running your local gen3 Docker Compose environment
+### Start running your local Gen3 Docker Compose environment
 
 If your Gen3 Data Commons does not host any data, yet, we recommend commenting out the [kibana-service section](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L270-L281) in the `docker-compose.yaml` and the [guppy section](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L120-L124) in the `nginx.conf` file. After having setup the first program/project and uploaded the first data, we recommend enabling these sections. 
 
@@ -323,8 +323,8 @@ The templates/user.yaml file has been configured to grant data_upload privileges
 ### Uploaded data file in "Generating..." status
 It is important to note that Gen3 Compose-Services use AWS Simple Notification System (SNS) to get notifications when objects are uploaded to a bucket. These notifications are then stored in an AWS Simple Queue System (SQS). The Gen3 [job dispatcher service](https://github.com/uc-cdis/ssjdispatcher) watches the SQS and spins up an [indexing job](https://github.com/uc-cdis/indexs3client) to update indexd with the file information (size, hash). During this process, the UI shows the file status as "Generating..." until indexd is updated.
 
-If one or multiple data files have been submitted to an S3 bucket and you do not want to set up automation through an SNS and SQS, a simple alternative is to index the data files manually after the upload. The upload command creates a "blank" record in indexd, which should be then updated by adding the file's size and hash. This can be done with a PUT request to [index](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/uc-cdis/Indexd/master/openapis/swagger.yaml#/index/updateBlankEntry). 
-Only once the uplpoaded data file is indexed, graph metadata can be submitted to it. 
+If one or multiple data files have been submitted to an S3 bucket and you do not want to set up automation through an SNS and SQS, a simple alternative is to index the data files manually after the upload. The upload command creates a "blank" record in indexd, which should be then updated by adding the file's size and hash. This can be done with a PUT request to [index](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/uc-cdis/Indexd/master/openapis/swagger.yaml#/index/updateBlankEntry), where the base URL is `https://your-commons.org/index/index/blank/{GUID}`. A list of URLS to reach other services from the Gen3 Framework is shown [here](https://gen3.org/resources/developer/microservice/#microservice-nginx-route-table). 
+Only once the uploaded data file is indexed, graph metadata can be submitted to it. 
 
 ## Useful links 
 
