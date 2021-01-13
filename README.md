@@ -324,7 +324,7 @@ The templates/user.yaml file has been configured to grant data_upload privileges
 It is important to note that Gen3 Compose-Services use AWS Simple Notification System (SNS) to get notifications when objects are uploaded to a bucket. These notifications are then stored in an AWS Simple Queue System (SQS). The Gen3 [job dispatcher service](https://github.com/uc-cdis/ssjdispatcher) watches the SQS and spins up an [indexing job](https://github.com/uc-cdis/indexs3client) to update indexd with the file information (size, hash). During this process, the UI shows the file status as "Generating..." until indexd is updated.
 
 If one or multiple data files have been submitted to an S3 bucket and you do not want to set up automation through an SNS and SQS, a simple alternative is to index the data files manually after the upload. The upload command creates a "blank" record in indexd, which should be then updated by adding the file's size and hash. This can be done with a PUT request to [index](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/uc-cdis/Indexd/master/openapis/swagger.yaml#/index/updateBlankEntry), where the base URL is `https://your-commons.org/index/index/blank/{GUID}`. A list of URLS to reach other services from the Gen3 Framework is shown [here](https://gen3.org/resources/developer/microservice/#microservice-nginx-route-table). 
-Only once the uplpoaded data file is indexed, graph metadata can be submitted to it. 
+Only once the uploaded data file is indexed, graph metadata can be submitted to it. 
 
 ## Useful links 
 
