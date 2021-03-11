@@ -40,8 +40,8 @@ This release may fail to run earlier versions of `gen3`.
 
 Database setup only has to occur the very first time you set up your local gen3 Docker Compose environment, as this docker-compose environment is configured to create a persistent volume for Postgres. The environment configuration is set up to automatically run setup scripts for the postgres container and set up the following:
   1. 5 databases
-      - `metadata`
-      - `metadata_db`
+      - `metadata` (Used by `metadata-service`)
+      - `metadata_db` (Used by `sheepdog` and `peregrine`)
       - `fence_db`
       - `indexd_db`
       - `arborist_db`
