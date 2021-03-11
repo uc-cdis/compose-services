@@ -235,7 +235,7 @@ services:
       - peregrine-service
       - sheepdog-service
   jupyter-service:
-    image: "quay.io/cdis/jupyter-slim:jupyter-covid1.1.12"
+    image: "quay.io/cdis/jupyter-slim:latest"
     container_name: jupyter-service
     entrypoint:
       - "start-notebook.sh"
