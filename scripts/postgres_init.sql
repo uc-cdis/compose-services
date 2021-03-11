@@ -7,9 +7,9 @@ CREATE DATABASE fence_db;
 CREATE DATABASE indexd_db;
 CREATE DATABASE arborist_db;
 
-CREATE USER metdata_user;
-ALTER USER metdata_user WITH PASSWORD 'metdata_pass';
-ALTER USER metdata_user WITH SUPERUSER;
+CREATE USER metadata_user;
+ALTER USER metadata_user WITH PASSWORD 'metadata_pass';
+ALTER USER metadata_user WITH SUPERUSER;
 
 CREATE USER fence_user;
 ALTER USER fence_user WITH PASSWORD 'fence_pass';
