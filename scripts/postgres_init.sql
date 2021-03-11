@@ -1,10 +1,15 @@
-/* Entrypoint script for postgres container to set up databases and users for 
+/* Entrypoint script for postgres container to set up databases and users for
 docker-compose setup */
 
-CREATE DATABASE metadata_db;
+CREATE DATABASE metadata; -- Used by metdata-service (called "metdata" in cloud-automation)
+CREATE DATABASE metadata_db; -- Used by sheepdog and peregrine (called "sheepdog" in cloud-automation)
 CREATE DATABASE fence_db;
 CREATE DATABASE indexd_db;
 CREATE DATABASE arborist_db;
+
+CREATE USER metdata_user;
+ALTER USER metdata_user WITH PASSWORD 'metdata_pass';
+ALTER USER metdata_user WITH SUPERUSER;
 
 CREATE USER fence_user;
 ALTER USER fence_user WITH PASSWORD 'fence_pass';

@@ -90,9 +90,9 @@ services:
       - postgres
     environment:
       - DB_HOST=postgres
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - DB_DATABASE=metadata_db
+      - DB_USER=metdata_user
+      - DB_PASSWORD=metdata_pass
+      - DB_DATABASE=metadata
     command: >
       sh -c "/env/bin/alembic upgrade head && /env/bin/uvicorn --host 0.0.0.0 --port 80 mds.asgi:app --reload"
     networks:
