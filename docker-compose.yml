@@ -21,7 +21,7 @@ services:
     #ports:
     #  - 5432:5432
   indexd-service:
-    image: "quay.io/cdis/indexd:2020.09"
+    image: "quay.io/cdis/indexd:2021.03"
     command: bash indexd_setup.sh
     container_name: indexd-service
     networks:
@@ -39,7 +39,7 @@ services:
     depends_on:
       - postgres
   fence-service:
-    image: "quay.io/cdis/fence:2020.09"
+    image: "quay.io/cdis/fence:2021.03"
     command: bash /var/www/fence/fence_setup.sh
     container_name: fence-service
     networks:
@@ -62,7 +62,7 @@ services:
       - postgres
       - arborist-service
   arborist-service:
-    image: "quay.io/cdis/arborist:2020.09"
+    image: "quay.io/cdis/arborist:2021.03"
     container_name: arborist-service
     entrypoint: bash /go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     networks:
@@ -84,8 +84,21 @@ services:
       retries: 10
     depends_on:
       - postgres
+  metadata-service:
+    image: "quay.io/cdis/metadata-service:2021.03"
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=metadata_user
+      - DB_PASSWORD=metadata_pass
+      - DB_DATABASE=metadata
+    command: >
+      sh -c "/env/bin/alembic upgrade head && /env/bin/uvicorn --host 0.0.0.0 --port 80 mds.asgi:app --reload"
+    networks:
+      - devnet
   peregrine-service:
-    image: "quay.io/cdis/peregrine:2020.09"
+    image: "quay.io/cdis/peregrine:2021.03"
     container_name: peregrine-service
     networks:
       - devnet
@@ -110,7 +123,7 @@ services:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/cdis/sheepdog:2020.09"
+    image: "quay.io/cdis/sheepdog:2021.03"
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -130,12 +143,15 @@ services:
     depends_on:
       - postgres
   guppy-service:
-    image: "quay.io/cdis/guppy:2020.09"
+    image: "quay.io/cdis/guppy:2021.03"
     container_name: guppy-service
     networks:
       - devnet
     volumes:
       - ./Secrets/guppy_config.json:/guppy/guppy_config.json
+      - ./scripts/wait_for_esproxy.sh:/usr/bin/wait_for_esproxy.sh:ro
+    entrypoint: /usr/bin/wait_for_esproxy.sh
+    command: node --max-http-header-size 16000 dist/server/server.js
     environment:
       - GUPPY_CONFIG_FILEPATH=/guppy/guppy_config.json
       - GEN3_ARBORIST_ENDPOINT=http://arborist-service
@@ -156,6 +172,14 @@ services:
     command:
       - -c
       - "echo -e 'cluster.name: docker-cluster\nhttp.host: 0.0.0.0\nindex.store.type: niofs' > /usr/share/elasticsearch/config/elasticsearch.yml && /usr/local/bin/docker-entrypoint.sh eswrapper"
+    volumes:
+      - ./scripts/wait_for_esproxy.sh:/usr/bin/wait_for_esproxy.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wait_for_esproxy.sh"]
+      interval: 60s
+      timeout: 5s
+      # give peregrine some extra time to startup
+      retries: 10
     ulimits:
       memlock:
         soft: -1
@@ -169,7 +193,7 @@ services:
     networks:
       - devnet
   pidgin-service:
-    image: "quay.io/cdis/pidgin:2020.09"
+    image: "quay.io/cdis/pidgin:2021.03"
     container_name: pidgin-service
     networks:
       - devnet
@@ -183,7 +207,7 @@ services:
     depends_on:
       - peregrine-service
   portal-service:
-    image: "quay.io/cdis/data-portal:2020.09"
+    image: "quay.io/cdis/data-portal:2021.03"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
@@ -211,18 +235,18 @@ services:
       - peregrine-service
       - sheepdog-service
   jupyter-service:
-    image: "quay.io/cdis/jupyter-slim:jupyter-covid1.1.3"
+    image: "quay.io/cdis/jupyter-slim:latest"
     container_name: jupyter-service
     entrypoint:
       - "start-notebook.sh"
     command:
       - "--NotebookApp.base_url=/lw-workspace/proxy"
       - "--NotebookApp.password=''"
-      - "--NotebookApp.token=''" 
+      - "--NotebookApp.token=''"
     networks:
       - devnet
   revproxy-service:
-    image: "quay.io/cdis/nginx:1.17.6-ctds-1.0.1"
+    image: "quay.io/cdis/nginx:2021.03"
     container_name: revproxy-service
     networks:
       - devnet
@@ -247,7 +271,7 @@ services:
       - portal-service
       - pidgin-service
   tube-service:
-    image: "quay.io/cdis/tube:2020.09"
+    image: "quay.io/cdis/tube:2021.03"
     container_name: tube-service
     command: bash -c "while true; do sleep 5; done"
     networks:
@@ -267,7 +291,7 @@ services:
       - esproxy-service
       - spark-service
   spark-service:
-    image: "quay.io/cdis/gen3-spark:2020.09"
+    image: "quay.io/cdis/gen3-spark:2021.03"
     container_name: spark-service
     command: bash -c "python run_config.py && hdfs namenode -format && hdfs --daemon start namenode && hdfs --daemon start datanode && yarn --daemon start resourcemanager && yarn --daemon start nodemanager && hdfs dfsadmin -safemode leave &&  hdfs dfs -mkdir /result && while true; do sleep 5; done"
     expose:

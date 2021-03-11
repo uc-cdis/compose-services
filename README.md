@@ -39,12 +39,14 @@ This release may fail to run earlier versions of `gen3`.
 ### Some Database Info
 
 Database setup only has to occur the very first time you set up your local gen3 Docker Compose environment, as this docker-compose environment is configured to create a persistent volume for Postgres. The environment configuration is set up to automatically run setup scripts for the postgres container and set up the following:
-  1. 4 databases  
-      - `metadata_db`
+  1. 5 databases
+      - `metadata` (Used by `metadata-service`)
+      - `metadata_db` (Used by `sheepdog` and `peregrine`)
       - `fence_db`
       - `indexd_db`
       - `arborist_db`
-  2. 5 users with passwords and superuser access
+  2. 6 users with passwords and superuser access
+      - `metadata_user`
       - `fence_user`
       - `peregrine_user`
       - `sheepdog_user`
@@ -73,10 +75,10 @@ psql -h localhost -U fence_user -d fence_db
 
 ### Docker and Docker Compose Setup
 
-If you've never used Docker before, it may be helpful to read some of the Docker documentation to familiarize yourself with containers. You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information. 
+If you've never used Docker before, it may be helpful to read some of the Docker documentation to familiarize yourself with containers. You can also read an overview of what Docker Compose is [here](https://docs.docker.com/compose/overview/) if you want some extra background information.
 
-The official *Docker* installation page can be found [here](https://docs.docker.com/install/#supported-platforms). The official *Docker Compose* installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). For Windows and Mac, Docker Compose is included into Docker Desktop. If you are using Linux, then the official Docker installation does not come with Docker Compose; you will need to install Docker Engine before installing Docker Compose. 
-Go through the steps of installing Docker Compose for your platform, then proceed to set up credentials. Note, that Docker Desktop is set to use 2 GB runtime memory by default. Make sure to increase the size of the memory to 6 GB as described [here](https://docs.docker.com/docker-for-mac/#resources). 
+The official *Docker* installation page can be found [here](https://docs.docker.com/install/#supported-platforms). The official *Docker Compose* installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). For Windows and Mac, Docker Compose is included into Docker Desktop. If you are using Linux, then the official Docker installation does not come with Docker Compose; you will need to install Docker Engine before installing Docker Compose.
+Go through the steps of installing Docker Compose for your platform, then proceed to set up credentials. Note, that Docker Desktop is set to use 2 GB runtime memory by default. Make sure to increase the size of the memory to 6 GB as described [here](https://docs.docker.com/docker-for-mac/#resources).
 
 ### Docker ElasticSearch
 
@@ -95,17 +97,17 @@ OR
 bash ./creds_setup.sh YOUR-CUSTOM-DOMAIN
 ```
 This script will create a `Secrets` folder that holds various secrets and configuration files.
-The script by default generates an SSL certificate to access the gen3 stack at `https://localhost`. 
+The script by default generates an SSL certificate to access the gen3 stack at `https://localhost`.
 If you are running this in a remote server with an actual domain, you can run `bash creds_setup.sh YOUR_DOMAIN`.  This will create SSL cert signed by the custom CA so that the microservices can talk to each other without bypassing SSL verification. If you are setting this up on AWS, ensure that you use an Elastic IP address BEFORE you set up and use that as your domain. On an EC2 instance, for example, this would be your ec2-YOUR-Elastic-IP-Addr.us-region-number.compute.amazonaws.com. This will save a lot of time and avoid [editing the individual files](#Running-Docker-Compose-on-a-Remote-Machine) to set up the hostname(`fence-config.yaml`, `peregrine_creds.json`, and `sheepdog_creds.json`) when the machine is rebooted. This is because each of the microservices can be configured to run on separate machines and thus have their respective configuration files. You will still need to bypass SSL verification when you hit the services from the browser. If you have real certs for your domain, you can copy to `Secrets/TLS/service.key` and `Secrets/TLS/service.crt` to overwrite our dev certs.
 
-If you are using MacOS, you may run into an error with the default MacOS OpenSSL config not including the configuration for v3_ca certificate generation. OpenSSL should create the `jwt_private_key.pem` and `jwt_public_key.pem` in the `Secrets/fenceJwtKeys/{dateTtimeZ}` folder. If you do not see them, control whether your version of OpenSSL is correct.  You can refer to the solution on [this Github issue](https://github.com/jetstack/cert-manager/issues/279) on a related issue on Jetstack's cert-manager. 
+If you are using MacOS, you may run into an error with the default MacOS OpenSSL config not including the configuration for v3_ca certificate generation. OpenSSL should create the `jwt_private_key.pem` and `jwt_public_key.pem` in the `Secrets/fenceJwtKeys/{dateTtimeZ}` folder. If you do not see them, control whether your version of OpenSSL is correct.  You can refer to the solution on [this Github issue](https://github.com/jetstack/cert-manager/issues/279) on a related issue on Jetstack's cert-manager.
 
 Support for multi-tenant fence (configure another fence as an IDP for this fence) is available and can be edited in the `fence-config.yaml`. If this is not the case, we recommend removing the [relevant section](https://github.com/uc-cdis/compose-services/blob/fa3dcc95a4244805c7a02f315cd330447e189945/templates/fence-config.yaml#L81).
 
 ### Setting up Google OAuth Client-Id for Fence
 
-This Docker Compose setup requires Google API Credentials in order for Fence microservice to complete its authentication. 
-To set up Google API Credentials, go to [the Credentials page of the Google Developer Console](https://console.developers.google.com/apis/credentials) and click the 'Create Credentials' button. Follow the prompts to create a new OAuth Client ID for a Web Application. Add  `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in the Credentials and click 'Create'. Then copy your client ID and client secret and use them to fill in the 'google.client_secret' and 'google.client_id' fields in the `Secrets/fence-config.yaml` file. 
+This Docker Compose setup requires Google API Credentials in order for Fence microservice to complete its authentication.
+To set up Google API Credentials, go to [the Credentials page of the Google Developer Console](https://console.developers.google.com/apis/credentials) and click the 'Create Credentials' button. Follow the prompts to create a new OAuth Client ID for a Web Application. Add  `https://localhost/user/login/google/login/` OR `https://YOUR_REMOTE_MACHINE_DOMAIN/user/login/google/login/` to your Authorized redirect URIs in the Credentials and click 'Create'. Then copy your client ID and client secret and use them to fill in the 'google.client_secret' and 'google.client_id' fields in the `Secrets/fence-config.yaml` file.
 See image below for an example on a sample Google account.
 
 ![Redirection Set up](Authorization_URL_2020.jpg)
@@ -125,9 +127,9 @@ This command will enter Fence container to run the fence-create sync command, wh
 
 ### Start running your local Gen3 Docker Compose environment
 
-If your Gen3 Data Commons does not host any data, yet, we recommend commenting out the [kibana-service section](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L270-L281) in the `docker-compose.yaml` and the [guppy section](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L120-L124) in the `nginx.conf` file. After having setup the first program/project and uploaded the first data, we recommend enabling these sections. 
+If your Gen3 Data Commons does not host any data, yet, we recommend commenting out the [kibana-service section](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L270-L281) in the `docker-compose.yaml` and the [guppy section](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L120-L124) in the `nginx.conf` file. After having setup the first program/project and uploaded the first data, we recommend enabling these sections.
 
-Now that you are done with the setup, all Docker Compose features should be available. If you are a non-root user you may need to add yourself to the 'docker' group: `sudo usermod -aG docker your-user`, and the log out and log back in. 
+Now that you are done with the setup, all Docker Compose features should be available. If you are a non-root user you may need to add yourself to the 'docker' group: `sudo usermod -aG docker your-user`, and the log out and log back in.
 Here are some useful commands:
 
 The basic command of Docker Compose is
@@ -165,7 +167,7 @@ When you see that `bundle.js` and `index.html` were successfully built in the lo
 
 ### Update tips
 
-You should of course `git pull` compose-services if you have not done so for a while. You also need to `docker-compose pull` new images from Quay--this will not happen automatically. If your git pull pulled new commits, and you already have a `Secrets` folder, you may also need to delete your old `Secrets` and rerun `creds_setup.sh` (see [Setting up Credentials](#Setting-up-Credentials)) to recreate it. 
+You should of course `git pull` compose-services if you have not done so for a while. You also need to `docker-compose pull` new images from Quay--this will not happen automatically. If your git pull pulled new commits, and you already have a `Secrets` folder, you may also need to delete your old `Secrets` and rerun `creds_setup.sh` (see [Setting up Credentials](#Setting-up-Credentials)) to recreate it.
 
 ## Dev Tips
 
@@ -215,12 +217,12 @@ Upon clicking 'Login from Google' and providing Google Credentials (if the same 
 
 ### Revproxy-service cannot start
 
-If revproxy-service cannot start an error will occur. It may be useful to 
+If revproxy-service cannot start an error will occur. It may be useful to
 ```
 docker-compose down
 docker-compose up -d
 ```
-If the error still occurs, make sure that apache2 and revproxy-service do not share the same port. You can change the port for revproxy-service and any other service in the `docker-compose.yaml` [file](https://github.com/uc-cdis/compose-services/blob/bf1dbc0f43519c1d6bc25d9cb331b78c3b35ecca/docker-compose.yml#L215). For revproxy you would also need to change the port in the `nginx.conf` [here](https://github.com/uc-cdis/compose-services/blob/bf1dbc0f43519c1d6bc25d9cb331b78c3b35ecca/nginx.conf#L29). 
+If the error still occurs, make sure that apache2 and revproxy-service do not share the same port. You can change the port for revproxy-service and any other service in the `docker-compose.yaml` [file](https://github.com/uc-cdis/compose-services/blob/bf1dbc0f43519c1d6bc25d9cb331b78c3b35ecca/docker-compose.yml#L215). For revproxy you would also need to change the port in the `nginx.conf` [here](https://github.com/uc-cdis/compose-services/blob/bf1dbc0f43519c1d6bc25d9cb331b78c3b35ecca/nginx.conf#L29).
 
 
 
@@ -241,7 +243,7 @@ bash smoke_test.sh localhost
 In a Gen3 Data Commons, programs and projects are two administrative nodes in the graph database that serve as the most upstream nodes. A program must be created first, followed by a project. Any subsequent data submission and data access, along with control of access to data, is done through the project scope.
 
 Before you create a program and a project or submit any data, you need to grant yourself permissions. First, you will need to grant yourself access to **create** a program and second, you need to grant yourself access to *see* the program. You can **create** the program before or after having access to *see* it.
-For this, you will need to edit the `Secrets/user.yaml` file following the docs shown [here](https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md#programs-and-projects-crud-access). 
+For this, you will need to edit the `Secrets/user.yaml` file following the docs shown [here](https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md#programs-and-projects-crud-access).
 
 Make sure to update user privileges:
 ```
@@ -290,10 +292,10 @@ There are 3 nodes that are required for the dev (default) portal--`case`, `exper
 
 As this is a change to the Docker Compose configuration, you will need to restart the Docker Compose (`docker-compose restart`) to apply the changes.
 
-### Configuring guppy for exploration page 
+### Configuring guppy for exploration page
 
-In order to enable guppy for exploration page, the `gitops.json`, `etlMapping.yaml` and `guppy_config.json` need to be configured. There are some examples of configurations located at `https://github.com/uc-cdis/cdis-manifest`. It is worth to mentioning that the index and type in `guppy_config.json` need to be matched with the index in `etlMpping.json`.
- 
+In order to enable guppy for exploration page, the `gitops.json`, `etlMapping.yaml` and `guppy_config.json` need to be configured. There are some examples of configurations located at `https://github.com/uc-cdis/cdis-manifest`. It is worth to mentioning that the index and type in `guppy_config.json` need to be matched with the index in `etlMapping.json`.
+
  When the data dictionary is changed, those files are also configured accordingly so that the exploration page can work.
 
  Run `bash ./guppy_setup.sh` to create/re-create ES indices
@@ -323,14 +325,14 @@ The templates/user.yaml file has been configured to grant data_upload privileges
 ### Uploaded data file in "Generating..." status
 It is important to note that Gen3 Compose-Services use AWS Simple Notification System (SNS) to get notifications when objects are uploaded to a bucket. These notifications are then stored in an AWS Simple Queue System (SQS). The Gen3 [job dispatcher service](https://github.com/uc-cdis/ssjdispatcher) watches the SQS and spins up an [indexing job](https://github.com/uc-cdis/indexs3client) to update indexd with the file information (size, hash). During this process, the UI shows the file status as "Generating..." until indexd is updated.
 
-If one or multiple data files have been submitted to an S3 bucket and you do not want to set up automation through an SNS and SQS, a simple alternative is to index the data files manually after the upload. The upload command creates a "blank" record in indexd, which should be then updated by adding the file's size and hash. This can be done with a PUT request to [index](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/uc-cdis/Indexd/master/openapis/swagger.yaml#/index/updateBlankEntry), where the base URL is `https://your-commons.org/index/index/blank/{GUID}`. A list of URLS to reach other services from the Gen3 Framework is shown [here](https://gen3.org/resources/developer/microservice/#microservice-nginx-route-table). 
-Only once the uploaded data file is indexed, graph metadata can be submitted to it. 
+If one or multiple data files have been submitted to an S3 bucket and you do not want to set up automation through an SNS and SQS, a simple alternative is to index the data files manually after the upload. The upload command creates a "blank" record in indexd, which should be then updated by adding the file's size and hash. This can be done with a PUT request to [index](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/uc-cdis/Indexd/master/openapis/swagger.yaml#/index/updateBlankEntry), where the base URL is `https://your-commons.org/index/index/blank/{GUID}`. A list of URLS to reach other services from the Gen3 Framework is shown [here](https://gen3.org/resources/developer/microservice/#microservice-nginx-route-table).
+Only once the uploaded data file is indexed, graph metadata can be submitted to it.
 
-## Useful links 
+## Useful links
 
-These links show insightful work conducted by other users in the Gen3 community and may be of help to new and experienced users/operators alike of a Gen3 Data Commons. 
+These links show insightful work conducted by other users in the Gen3 community and may be of help to new and experienced users/operators alike of a Gen3 Data Commons.
 We emphasize that we are not responsible for the content and opinions on the third-party webpages listed below.
-1. Working with on premises data and servers: 
+1. Working with on premises data and servers:
 The gen3 system is optimized to deploy on cloud systems and work with cloud buckets. The Oregon Health & Science University (OHSU) has developed [a collection of extensions](https://github.com/ohsu-comp-bio/compose-services/tree/onprem) to enable gen3 to work in a non aws environment.  Read this [overview](https://github.com/ohsu-comp-bio/compose-services/blob/onprem/onprem/README.md) for more information.
 2. A group of users shared their experiences with setting up their Gen3 Data Commons on a local desktop using Compose Services in August 2020 in form of three videos: [Gen3 Data Commons Setup Part 1](https://www.youtube.com/watch?v=xM54O4aMpWY), [Gen3 Data Commons Setup Part 2](https://www.youtube.com/watch?v=iMmCxnbHpGo), and [Data Upload](https://www.youtube.com/watch?v=F2EOtHPg6g8&feature=youtu.be). Please note, that the content in these videos might not reflect the current status of the Compose-Services repository. Referring to the video part 1, the following is outdated: the format of the `user.yaml` reflects the one shown in the Fence repository and the arborist DB setup is up to date.
 3. A stand-alone data dictionary viewer for schema.json artifacts was published [here](https://github.com/bioteam/dictionary-visualizer).
