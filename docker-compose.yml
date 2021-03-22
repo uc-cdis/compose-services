@@ -296,7 +296,17 @@ services:
   spark-service:
     image: "quay.io/cdis/gen3-spark:2021.03"
     container_name: spark-service
-    command: bash -c "python run_config.py && hdfs namenode -format && hdfs --daemon start namenode && hdfs --daemon start datanode && yarn --daemon start resourcemanager && yarn --daemon start nodemanager && hdfs dfsadmin -safemode leave &&  hdfs dfs -mkdir /result && while true; do sleep 5; done"
+    command: >
+      bash -c "
+      python run_config.py
+      && ([ -f /hadoop/hdfs/data/dfs/namenode/current/VERSION ] || hdfs namenode -format)
+      && hdfs --daemon start namenode
+      && hdfs --daemon start datanode
+      && yarn --daemon start resourcemanager
+      && yarn --daemon start nodemanager
+      && hdfs dfsadmin -safemode leave
+      && hdfs dfs -mkdir -p /result
+      && while true; do sleep 5; done"
     expose:
       - 22
       - 8030
