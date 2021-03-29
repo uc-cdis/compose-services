@@ -19,6 +19,10 @@ END
 EOF
 }
 
+# The metadata DB and user are here to backfill for installations that did not
+# have them originally. These entities did not always exist in compose-services.
+# New compose-services users would get them via the standard postgres init
+# script, but existing users would need to get them through this mechanism.
 create_db_idempotent "metadata"
 create_user_idempotent "metadata_user"
 

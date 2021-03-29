@@ -9,7 +9,7 @@ set -e
 # Initialize the DB, but don't allow outside connections yet.
 docker-entrypoint.sh postgres -c listen_addresses='127.0.0.1' &
 # Wait until the server is out of initialization mode and online.
-while ! psql -U postgres -h localhost -c 'SELECT 1;' 2>/dev/null; do sleep 1; done
+while ! psql -U postgres -h localhost -c 'SELECT 1;' 2>/dev/null; do echo "waiting for postgres init..."; sleep 1; done
 # Stop the server.
 gosu postgres pg_ctl stop
 
