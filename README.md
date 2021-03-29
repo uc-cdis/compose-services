@@ -116,7 +116,7 @@ If you have Google API credentials set up already that you would like to use wit
 
 ### Setting up Users
 
-To set up user privileges for the services, please edit the `Secrets/user.yaml` file, following the example format shown in [this file](https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md). In particular, you should change all occurrences of `yourlogin@gmail.com` to the email you intend to log in with, so that you can create administrative nodes later on.
+To set up user privileges for the services, please edit the `Secrets/user.yaml` file, following the example format shown in [this file](https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md). In particular, you should change all occurrences of `username1@gmail.com` to the email you intend to log in with, so that you can create administrative nodes later on.
 
 Fence container will automatically sync this file to the `fence_db` database on startup. If you wish to update user privileges while the containers are running (without restarting the container), just edit the `Secrets/user.yaml` file and then run
 ```
