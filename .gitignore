@@ -10,3 +10,4 @@ Secrets/
 *.pytest_cache
 *.cache
 *pyc
+docker-compose.override.yml

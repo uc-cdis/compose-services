@@ -6,7 +6,7 @@
         "chartType": "count",
         "title": "Projects"
       },
-      "case_id": {
+      "node_id": {
         "chartType": "count",
         "title": "Cases"
       },
@@ -47,11 +47,11 @@
       "manifestMapping": {
         "resourceIndexType": "file",
         "resourceIdField": "object_id",
-        "referenceIdFieldInResourceIndex": "case_id",
-        "referenceIdFieldInDataIndex": "node_id"
+        "referenceIdFieldInResourceIndex": "_case_id",
+        "referenceIdFieldInDataIndex": "_case_id"
       },
-      "accessibleFieldCheckList": ["case_id"],
-      "accessibleValidationField": "case_id"
+      "accessibleFieldCheckList": ["project_id"],
+      "accessibleValidationField": "project_id"
     }
   },
   "fileExplorerConfig": {
@@ -95,12 +95,12 @@
       "nodeCountTitle": "Files",
       "manifestMapping": {
         "resourceIndexType": "case",
-        "resourceIdField": "case_id",
+        "resourceIdField": "_case_id",
         "referenceIdFieldInResourceIndex": "object_id",
         "referenceIdFieldInDataIndex": "object_id"
       },
-      "accessibleFieldCheckList": ["case_id"],
-      "accessibleValidationField": "case_id",
+      "accessibleFieldCheckList": ["project_id"],
+      "accessibleValidationField": "project_id",
       "downloadAccessor": "object_id"
     }
   }

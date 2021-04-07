@@ -42,6 +42,16 @@ authz:
       - name: projects
         subresources:
         - name: MyFirstProject
+    - name: jnkns
+      subresources:
+        - name: projects
+          subresources:
+            - name: jenkins
+    - name: program1
+      subresources:
+      - name: projects
+        subresources:
+        - name: P1
 
   policies:
   - id: workspace
@@ -91,6 +101,28 @@ authz:
     - storage_writer
     resource_paths:
     - /programs/MyFirstProgram/projects/MyFirstProject
+  - id: jnkns
+    role_ids:
+    - reader
+    - creator
+    - updater
+    - deleter
+    - storage_reader
+    - storage_writer
+    resource_paths:
+    - /programs/jnkns
+    - /programs/jnkns/projects/jenkins
+  - id: program1
+    role_ids:
+    - reader
+    - creator
+    - updater
+    - deleter
+    - storage_reader
+    - storage_writer
+    resource_paths:
+    - /programs/program1
+    - /programs/program1/projects/P1
 
   roles:
   - id: file_uploader
@@ -169,14 +201,20 @@ clients:
     - open_data_reader
 
 users:
-  username1@gmail.com: {}
+  username1@gmail.com:
+    tags:
+      name: User One
+#      email: mustbe@differentemail.com
+    policies:
+    - workspace
+    - data_upload
+    - MyFirstProject_submitter
+    - jnkns
+    - program1
   username2:
     tags:
       name: John Doe
       email: johndoe@gmail.com
-    policies:
-    - workspace
-    - MyFirstProject_submitter
 
 cloud_providers: {}
 groups: {}

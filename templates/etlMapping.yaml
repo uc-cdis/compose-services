@@ -50,7 +50,7 @@ mappings:
         fn: count
     joining_props:
       - index: file
-        join_on: case_id
+        join_on: _case_id
         props:
           - name: data_format
             src: data_format
@@ -58,7 +58,7 @@ mappings:
           - name: data_type
             src: data_type
             fn: set
-          - name: file_id
+          - name: _file_id
             src: file_id
             fn: set
   - name: file
@@ -77,7 +77,7 @@ mappings:
     injecting_props:
       case:
         props:
-          - name: case_id
+          - name: _case_id
             src: id
             fn: set
           - name: project_id
