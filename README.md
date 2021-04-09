@@ -53,7 +53,7 @@ Database setup only has to occur the very first time you set up your local gen3 
       - `indexd_user`
       - `arborist_user`
 
-> 🙋‍♂️ **Note**: You can use docker compose override to configure the Postgres database container to publish the db service port to the host machine by changing the `ports` block under the `postgres` service in `docker-compose.override.yml`, then running `docker-compose up -d postgres`:
+> **NOTE**: You can use docker compose override to configure the Postgres database container and publish the db service port to the host machine by changing the `ports` block under the `postgres` service in `docker-compose.override.yml`, then run `docker-compose up -d postgres`:
 ```
 cp docker-compose.override.sample.yml docker-compose.override.yml
 ```
@@ -62,7 +62,7 @@ The container host can connect to the database after the port is published - ex:
 psql -h localhost -U fence_user -d fence_db
 ```
 
-> 🙋‍♂️ **Heads-up**: Similarly, you can add/override any other your custom docker compose config parameters/values in `docker-compose.override.yml` and keep the base config clean. See [docker compose documentation](https://docs.docker.com/compose/extends/) for more.
+> **Heads-up**: Similarly, you can add/override your custom docker compose config parameters/values in `docker-compose.override.yml` and keep the base config clean. See [docker compose documentation](https://docs.docker.com/compose/extends/) for more.
 
 ## Setup
 
@@ -80,7 +80,7 @@ Go through the steps of installing Docker Compose for your platform, then procee
 
 > 🙋‍♂️ **NOTE:** As a minimum, make sure to increase the size of the **memory to 6 GB** (or more) as described [here](https://docs.docker.com/docker-for-mac/#resources).
 
-> ElasticSearch and ETL/Spark jobs (through tube/guppy/spark-service) are particularly resource intensive. If you are running on your laptop, we recommend minimizing/stopping any other background jobs/services during running ETL jobs or hdfs formatting phase during `spark-service` startup, etc. Please do observe with `docker stats` and `top` / `htop`.
+> ElasticSearch and ETL/Spark jobs through tube/guppy/spark-service are particularly resource intensive. If you are running Compose-Services on your laptop, we recommend minimizing/stopping background jobs/services during running ETL jobs or hdfs formatting phase during `spark-service` startup, etc. Please do observe with `docker stats` and `top` / `htop`.
 
 ### Docker ElasticSearch
 
@@ -129,13 +129,13 @@ This command will enter Fence container to run the fence-create sync command, wh
 
 ### Start running your local Gen3 Docker Compose environment
 
-> 🙋‍♂️ **NOTE**:
+> **NOTE**:
 > 
-> 🛑 If your Gen3 Data Commons does not host any data, yet, we recommend commenting out the [kibana-service section](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L270-L281) in the `docker-compose.yaml` and the [guppy section](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L120-L124) in the `nginx.conf` file. After having setup the first program/project and uploaded the first data, we recommend enabling these sections. Precisely, re-enable both services after you have done with this two steps: 
-> 1. [Generating Test Metadata](https://github.com/uc-cdis/compose-services#generating-test-metadata)
-> 2. Upload these simulated data using Portal UI (follow `testData/DataImportOrder.txt` for uploading each data nodes, see [Useful links](https://github.com/uc-cdis/compose-services#useful-links) for how)
+> 🛑 If your Gen3 Data Commons does not host any data, yet, we recommend commenting out the [kibana-service section](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L270-L281) in the `docker-compose.yaml` and the [guppy section](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L120-L124) in the `nginx.conf` file. After having setup the first program/project and uploaded the first data, we recommend enabling these sections. Precisely, re-enable both services after you completed the following two steps: 
+> 1. [Generate Test Metadata](https://github.com/uc-cdis/compose-services#generating-test-metadata)
+> 2. Upload the simulated test metadata to the Data Portal UI. Follow [gen3.org](https://gen3.org/resources/user/submit-data/) and [Useful links](https://github.com/uc-cdis/compose-services#useful-links) for how-to guides and tutorials. 
 
-> 🟢 After then, re-enable kibana and guppy services and, continue follow [Configuring guppy for exploration page](https://github.com/uc-cdis/compose-services#configuring-guppy-for-exploration-page) to run ETL Tube job that create required ES indices for exploration page.
+> 🟢 Finally, re-enable kibana and guppy services before continuing with the section [Configuring guppy for exploration page](https://github.com/uc-cdis/compose-services#configuring-guppy-for-exploration-page). 
 
 Now that you are done with the setup, all Docker Compose features should be available. If you are a non-root user you may need to add yourself to the 'docker' group: `sudo usermod -aG docker your-user`, and the log out and log back in.
 Here are some useful commands:
@@ -189,7 +189,7 @@ after you update some code in order to see changes without having to rebuild all
 
 ### Spark service hdfs reformatting issue
 
-The `spark-service` start up perform `hdfs namenode -format` formatting which is a compute intensive operation. If your `spark-service` fail to start (due to get killed by docker daemon), e.g. the container status is `Exited (255)` and tailing the last lines of log as follows:
+The `spark-service` starts up runs `hdfs namenode -format` formatting, which is a compute intensive operation. If your `spark-service` fails to start due to being killed by docker daemon, e.g. the container status is `Exited (255)`, then tail the last lines of log as follows:
 
 ```
 docker logs spark-service --tail=5
@@ -334,7 +334,7 @@ As this is a change to the Docker Compose configuration, you will need to restar
 ### Configuring guppy for exploration page
 
 In order to enable guppy for exploration page, the `gitops.json`, `etlMapping.yaml` and `guppy_config.json` need to be configured. There are some examples of configurations located at `https://github.com/uc-cdis/cdis-manifest`. It is worth to mentioning that the index and type in `guppy_config.json` need to be matched with the index in `etlMapping.json`.
-
+> NOTE:  The ETL [Tube](https://github.com/uc-cdis/tube) job creates required ElasticSearch indices for the Exploration page.
  When the data dictionary is changed, those files are also configured accordingly so that the exploration page can work.
 
 Install `datadictionary` Python dependency
@@ -347,7 +347,7 @@ Run `bash ./guppy_setup.sh` to create/re-create ES indices
 
 ### Enabling data upload to s3
 
-The `templates/user.yaml` file has been configured to grant `data_upload` privileges to the `yourlogin@gmail.com` user.  Connect it to your s3 bucket by configuring access keys and bucket name in `fence-config.yaml`.
+The `templates/user.yaml` file has been configured to grant `data_upload` privileges to the `username1@gmail.com` user.  Connect it to your s3 bucket by configuring access keys and bucket name in `fence-config.yaml`.
 
 ```
 289,290c289,290
@@ -384,9 +384,9 @@ docker volume ls | grep esdata
 local     compose-services_esdata
 ```
 
-If you would like to re-spin everything and start anew from the scratch, you can/must delete these volumes prior bringing up the stack again.
+If you would like to re-spin everything and/or start from scratch, you can/must delete these volumes prior bringing up the stack again.
 
-> 🛑️ **WARNING**: This will **PERMANENTLY DELETE ALL DATA** state that you have uploaded or ingested into these persistent services.
+> 🛑️ **WARNING**: This will **PERMANENTLY DELETE ALL DATA** stored on the persistent services.
 
 ```
 docker volume rm compose-services_esdata
