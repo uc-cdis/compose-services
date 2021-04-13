@@ -1,0 +1,13 @@
+version: '3'
+services:
+  postgres:
+    environment:
+    # you may override postgres password here:
+      - POSTGRES_PASSWORD=postgres
+    # this makes the postgres container available from the host - ex:
+    #    psql -h localhost -d fence -U fence_user
+    ports:
+      - 5432:5432
+  jupyter-service:
+    environment:
+      - FRAME_ANCESTORS=http://localhost http://*.example.com

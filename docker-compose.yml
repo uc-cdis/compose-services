@@ -2,6 +2,7 @@ version: '3'
 services:
   postgres:
     image: postgres:9.6
+    container_name: postgres
     networks:
       - devnet
     volumes:
@@ -18,11 +19,6 @@ services:
     command: postgres_run.sh
     environment:
       - POSTGRES_PASSWORD=postgres
-    #
-    # uncomment this to make postgres available from the container host - ex:
-    #    psql -h localhost -d fence -U fence_user
-    #ports:
-    #  - 5432:5432
   indexd-service:
     image: "quay.io/cdis/indexd:2021.03"
     command: bash indexd_setup.sh
@@ -89,6 +85,7 @@ services:
       - postgres
   metadata-service:
     image: "quay.io/cdis/metadata-service:2021.03"
+    container_name: metadata-service
     depends_on:
       - postgres
     environment:
@@ -177,6 +174,7 @@ services:
       - "echo -e 'cluster.name: docker-cluster\nhttp.host: 0.0.0.0\nindex.store.type: niofs' > /usr/share/elasticsearch/config/elasticsearch.yml && /usr/local/bin/docker-entrypoint.sh eswrapper"
     volumes:
       - ./scripts/wait_for_esproxy.sh:/usr/bin/wait_for_esproxy.sh:ro
+      - esdata:/usr/share/elasticsearch/data
     healthcheck:
       test: ["CMD-SHELL", "wait_for_esproxy.sh"]
       interval: 60s
@@ -225,9 +223,6 @@ services:
       #- MOCK_STORE=true
       - APP=gitops
       - GDC_SUBPATH=http://revproxy-service/api/v0/submission/
-    depends_on:
-      - sheepdog-service
-      - peregrine-service
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost"]
       interval: 60s
@@ -248,6 +243,8 @@ services:
       - "--NotebookApp.token=''"
     networks:
       - devnet
+    environment:
+      - FRAME_ANCESTORS=http://localhost
   revproxy-service:
     image: "quay.io/cdis/nginx:2021.03"
     container_name: revproxy-service
@@ -289,6 +286,7 @@ services:
       - ./Secrets/etl_creds.json:/usr/share/gen3/tube/creds.json
       - ./Secrets/etlMapping.yaml:/usr/share/gen3/tube/etlMapping.yaml
       - ./Secrets/user.yaml:/usr/share/gen3/tube/user.yaml
+      - ./datadictionary:/tmp/datadictionary
     depends_on:
       - postgres
       - esproxy-service
@@ -324,3 +322,4 @@ networks:
   devnet:
 volumes:
   psqldata:
+  esdata:
