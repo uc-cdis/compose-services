@@ -366,6 +366,8 @@ The `templates/user.yaml` file has been configured to grant `data_upload` privil
 > DATA_UPLOAD_BUCKET: 'bucket1'
 ```
 
+> 🟢 Note: Any upload bucket, including local machine storage, are currently not supported out of the box unless they are S3 compliant. Google Storage Buckets are supported with additional configuration (more info [here](https://github.com/uc-cdis/cirrus#cirrus)). 
+
 ### Uploaded data file in "Generating..." status
 It is important to note that Gen3 Compose-Services use AWS Simple Notification System (SNS) to get notifications when objects are uploaded to a bucket. These notifications are then stored in an AWS Simple Queue System (SQS). The Gen3 [job dispatcher service](https://github.com/uc-cdis/ssjdispatcher) watches the SQS and spins up an [indexing job](https://github.com/uc-cdis/indexs3client) to update indexd with the file information (size, hash). During this process, the UI shows the file status as "Generating..." until indexd is updated.
 
