@@ -8,9 +8,9 @@ This setup uses Docker containers for Postgres, IndexD, Fence, Peregrine, Sheepd
 
 # Key Documentation
 
-* [Database Information](.docs/database_information)
-* [Release History and Migration Instructions](docs/release_history)
-* [Setup](docs/setup)
+* [Database Information](docs/database_information.md)
+* [Release History and Migration Instructions](docs/release_history.md)
+* [Setup](docs/setup.md)
 * [Dev Tips](docs/dev_tips)
-* [Using the Data Commons](docs/using_the_commons)
-* [Useful links](docs/useful_links)
+* [Using the Data Commons](docs/using_the_commons.md)
+* [Useful links](docs/useful_links.md)
