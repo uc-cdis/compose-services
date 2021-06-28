@@ -62,17 +62,17 @@ If your files contain other kinds of sensitive credentials, make sure to remove 
 ## Environment Details
 
 The sandbox ecosystem deployed thus architecturally looks as shown below:
-![Sandbox](SandboxContainers.jpg)
+![Sandbox](https://github.com/uc-cdis/compose-services/blob/master/SandboxContainers.jpg)
 
 
 All the microservices communicate with the Postgres Container based on the configuration specified above. Once the services are up and running, the environment can be visualized using the windmill microservice running on port 80 by typing the URL of the machine on which the containers are deployed. Please see example screenshot below as an example:
 
-![Launch Portal](LaunchPortal.jpg)
+![Launch Portal](https://github.com/uc-cdis/compose-services/blob/master/LaunchPortal.jpg)
 
 Upon clicking 'Login from Google' and providing Google Credentials (if the same Google Account is used where the developer credentials came from), the system redirects the user to their landing page as shown below:
 
 
-![Logged Into Portal](LoggedInScreenshot.jpg)
+![Logged Into Portal](https://github.com/uc-cdis/compose-services/blob/master/LoggedInScreenshot.jpg)
 
 
 ## Revproxy-service cannot start
