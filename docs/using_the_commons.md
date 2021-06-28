@@ -31,7 +31,7 @@ After that, you're ready to start submitting data for that project! Please note 
 
 ## Controlling access to data
 
-Access to data and admin privileges in Gen3 is controlled using Fence through the `user.yaml` file found in the `Secrets` directory. We use `users.policies` for individual access and `groups` for group access. Please refer to the [user.yaml_guide](https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md) to add/subtract users and policies. Make sure to update user privileges with
+Access to data and admin privileges in Gen3 is controlled using Fence through the `user.yaml` file found in the `Secrets` directory. We use `users.policies` for individual access and `groups` for group access. Please refer to the [user.yaml guide](https://github.com/uc-cdis/fence/blob/master/docs/user.yaml_guide.md) to add/subtract users and policies. Make sure to update user privileges with
 ```
 docker exec -it fence-service fence-create sync --arborist http://arborist-service --yaml user.yaml
 ```
