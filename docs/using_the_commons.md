@@ -35,7 +35,7 @@ Access to data and admin privileges in Gen3 is controlled using Fence through th
 ```
 docker exec -it fence-service fence-create sync --arborist http://arborist-service --yaml user.yaml
 ```
-or review how to apply the changes made in the `user.yaml` file to the database in the section [Setting up Users](#Setting-Up-Users).
+or review how to apply the changes made in the `user.yaml` file to the database in the section [Setting up Users](https://github.com/uc-cdis/compose-services/docs/setup.md#Setting-Up-Users).
 
 ## Generating Test Metadata
 

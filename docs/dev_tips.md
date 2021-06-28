@@ -1,6 +1,6 @@
 # Dev Tips
 
-You can quickly find commonly used commands for compose services in our [cheat sheet](./cheat_sheet.md).
+You can quickly find commonly used commands for compose services in our [cheat sheet](https://github.com/uc-cdis/compose-services/docs/cheat_sheet.md).
 
 When developing, you can have local repositories of the services you are working on and use volumes to mount your local repository files onto the containers to override the containers' code (which is built from GitHub using quay.io). Then, you can restart a single container with
 ```
