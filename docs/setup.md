@@ -65,7 +65,7 @@ This command will enter Fence container to run the fence-create sync command, wh
 
 > **NOTE**:
 > 
-> 🛑 If your Gen3 Data Commons does not host any data, yet, we recommend commenting out the [kibana-service section](https://github.com/uc-cdis/compose-services/blob/master/docker-compose.yml#L270-L281) in the `docker-compose.yaml` and the [guppy section](https://github.com/uc-cdis/compose-services/blob/master/nginx.conf#L120-L124) in the `nginx.conf` file. After having setup the first program/project and uploaded the first data, we recommend enabling these sections. Precisely, re-enable both services after you completed the following two steps: 
+> 🛑 If your Gen3 Data Commons does not host any data, yet, we recommend commenting out the [kibana-service section](https://github.com/uc-cdis/compose-services/blob/454d06358a49b4455097e34ddc060e76903e1aa3/docker-compose.yml#L309-L320) in the `docker-compose.yaml` and the [guppy section](https://github.com/uc-cdis/compose-services/blob/454d06358a49b4455097e34ddc060e76903e1aa3/nginx.conf#L140-L142) in the `nginx.conf` file. After having setup the first program/project and uploaded the first data, we recommend enabling these sections. Precisely, re-enable both services after you completed the following two steps: 
 > 1. [Generate Test Metadata](https://github.com/uc-cdis/compose-services/blob/master/docs/using_the_commons.md#generating-test-metadata)
 > 2. Upload the simulated test metadata to the Data Portal UI. Follow [gen3.org](https://gen3.org/resources/user/submit-data/) and [Useful links](https://github.com/uc-cdis/compose-services/blob/master/docs/useful_links.md) for how-to guides and tutorials. 
 
