@@ -230,7 +230,7 @@ services:
       - "echo -e 'cluster.name: docker-cluster\nhttp.host: 0.0.0.0\nindex.store.type: niofs' > /usr/share/elasticsearch/config/elasticsearch.yml && /usr/local/bin/docker-entrypoint.sh eswrapper"
     volumes:
       - ./scripts/wait_for_esproxy.sh:/usr/bin/wait_for_esproxy.sh:ro
-      - esdata_test:/usr/share/elasticsearch/data
+      - esdata:/usr/share/elasticsearch/data
     healthcheck:
       test: ["CMD-SHELL", "wait_for_esproxy.sh"]
       interval: 60s
@@ -385,6 +385,5 @@ networks:
   devnet:
 volumes:
   psqldata:
-  # esdata:
-  esdata_test:
+  esdata:
 
