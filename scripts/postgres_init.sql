@@ -6,6 +6,7 @@ CREATE DATABASE metadata_db; -- Used by sheepdog and peregrine (called "sheepdog
 CREATE DATABASE fence_db;
 CREATE DATABASE indexd_db;
 CREATE DATABASE arborist_db;
+CREATE DATABASE amanuensis_db;
 
 CREATE USER metadata_user;
 ALTER USER metadata_user WITH PASSWORD 'metadata_pass';
@@ -30,3 +31,7 @@ ALTER USER indexd_user WITH SUPERUSER;
 CREATE USER arborist_user;
 ALTER USER arborist_user WITH PASSWORD 'arborist_pass';
 ALTER USER arborist_user WITH SUPERUSER;
+
+CREATE USER amanuensis_user;
+ALTER USER amanuensis_user WITH PASSWORD 'amanuensis_pass';
+ALTER USER amanuensis_user WITH SUPERUSER;
