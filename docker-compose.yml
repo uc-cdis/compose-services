@@ -147,7 +147,8 @@ services:
     depends_on:
       - postgres
   PcdcAnalysisTools-service:
-    image: "quay.io/pcdc/pcdcanalysistools:2021.06"
+    image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2021-07-09T14_53_52-05_00"
+    image: "pcdcanalysistools:test"
     container_name: pcdcanalysistools-service
     entrypoint: bash /PcdcAnalysisTools_setup.sh
     networks:
@@ -264,8 +265,8 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:2021.06"
-    # image: "quay.io/pcdc/windmill:pcdc_dev_2021-06-17T13_26_53-05_00"
+    # image: "quay.io/pcdc/windmill:2021.06"
+    image: "quay.io/pcdc/windmill:pcdc_dev_2021-07-09T15_36_36-05_00"
     # image: "quay.io/pcdc/windmill:subject-info-page-proof-of-concept"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
