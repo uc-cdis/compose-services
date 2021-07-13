@@ -148,7 +148,7 @@ services:
       - postgres
   PcdcAnalysisTools-service:
     image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2021-07-09T14_53_52-05_00"
-    image: "pcdcanalysistools:test"
+    # image: "pcdcanalysistools:test"
     container_name: pcdcanalysistools-service
     entrypoint: bash /PcdcAnalysisTools_setup.sh
     networks:
