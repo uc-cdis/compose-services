@@ -46,9 +46,14 @@ ENCRYPTION_KEY: ''
 # WARNING: DO NOT ENABLE IN PRODUCTION
 DEBUG: true
 # if true, will automatically login a user with username "test"
+# WARNING: DO NOT ENABLE IN PRODUCTION (for testing purposes only)
 MOCK_AUTH: false
-# if true, will only fake a successful login response from Google in /login/google
+# if true, will fake a successful login response from Google in /login/google
+#     NOTE: this will also modify the behavior of /link/google endpoints
+# WARNING: DO NOT ENABLE IN PRODUCTION (for testing purposes only)
+# will login as the username set in cookie DEV_LOGIN_COOKIE_NAME
 MOCK_GOOGLE_AUTH: false
+DEV_LOGIN_COOKIE_NAME: "dev_login"
 # if true, will ignore anything configured in STORAGE_CREDENTIALS
 MOCK_STORAGE: true
 # allow OIDC traffic on http for development. By default it requires https.
@@ -62,9 +67,22 @@ SESSION_COOKIE_SECURE: true
 
 ENABLE_CSRF_PROTECTION: true
 
+# fence (at the moment) attempts a migration on startup. setting this to false will disable that
+# WARNING: ONLY set to false if you do NOT want to automatically migrate your database.
+#          You should be careful about incompatible versions of your db schema with what
+#          fence expects. In other words, things could be broken if you update to a later
+#          fence that expects a schema your database isn't migrated to.
+# NOTE: We are working to improve the migration process in the near future
+ENABLE_DB_MIGRATION: true
+
 # //////////////////////////////////////////////////////////////////////////////////////
-# OPEN ID CONNECT (OIDC) CLIENTS
+# OPEN ID CONNECT (OIDC)
 #   - Fully configure at least one client so login works
+#   - WARNING: Be careful changing the *_ALLOWED_SCOPES as you can break basic
+#              and optional functionality
+#
+# See ``fence/blueprints/login/__init__.py`` IDP_URL_MAP for which identity
+# providers can be configured.
 # //////////////////////////////////////////////////////////////////////////////////////
 OPENID_CONNECT:
   # These Google values must be obtained from Google's Cloud Console
@@ -78,6 +96,13 @@ OPENID_CONNECT:
     client_secret: ''
     # this is be the allowed redirect back to fence, should not need to change
     redirect_url: '{{BASE_URL}}/login/google/login/'
+    # if mock is true, will fake a successful login response from Google in /login/google
+    #     NOTE: this will also modify the behavior of /link/google endpoints
+    # WARNING: DO NOT ENABLE IN PRODUCTION (for testing purposes only)
+    # will login as the username set in cookie DEV_LOGIN_COOKIE_NAME or default provided
+    # here
+    mock: '{{MOCK_GOOGLE_AUTH}}'  # for backwards compatibility with older cfg files
+    mock_default_user: 'test@example.com'
   # Support for multi-tenant fence (another fence is this fence's IDP)
   # If this fence instance is a client of another fence, fill this cfg out.
   # REMOVE if not needed
@@ -102,6 +127,108 @@ OPENID_CONNECT:
     # Custom name to display for consent screens. If not provided, will use `fence`.
     # If the other fence is using NIH Login, you should make name: `NIH Login`
     name: ''
+    # if mock is true, will fake a successful login response for login
+    # WARNING: DO NOT ENABLE IN PRODUCTION (for testing purposes only)
+    mock: false
+    mock_default_user: 'test@example.com'
+    # this is needed to enable InCommon login, if some LOGIN_OPTIONS are configured with idp=fence and a list of shib_idps:
+    shibboleth_discovery_url: 'https://login.bionimbus.org/Shibboleth.sso/DiscoFeed'
+  # you can setup up an orcid client here: https://orcid.org/developer-tools
+  orcid:
+    client_id: ''
+    client_secret: ''
+    # make sure you put the FULL url for this deployment in the allowed redirects in
+    # ORCID.org. DO NOT include {{BASE_URL}} at ORCID.org, you need to actually put the
+    # full url
+    redirect_url: '{{BASE_URL}}/login/orcid/login/'
+    # if mock is true, will fake a successful login response for login
+    # WARNING: DO NOT ENABLE IN PRODUCTION (for testing purposes only)
+    mock: false
+    mock_default_user: '0000-0002-2601-8132'
+  ras:
+    discovery_url: 'https://sts.nih.gov/.well-known/openid-configuration'
+    client_id: ''
+    client_secret: ''
+    redirect_url: '{{BASE_URL}}/login/ras/callback'
+    # if mock is true, will fake a successful login response for login
+    # WARNING: DO NOT ENABLE IN PRODUCTION (for testing purposes only)
+    mock: false
+    mock_default_user: 'test@example.com'
+  # Create a client in Azure here:
+  #   https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredAppsPreview
+  # Currently supports organizational account only, so when registering a new App in
+  # Azure, make sure to select the `Accounts in any organizational directory` for
+  # supported account types.
+  microsoft:
+    # after registering a new appl, client_id can be found as
+    # "APPLICATION (CLIENT) ID" in Microsoft Azure
+    client_id: ''
+    # You have a generate a secret in Azure for this app, there should be a
+    # "Certificates & secrets" section where you can create a "New client secret"
+    client_secret: ''
+    # make sure you put the FULL url for this deployment in the allowed redirects in
+    # your app in Azure. DO NOT include {{BASE_URL}} in Azure, you need to actually put the
+    # full url
+    redirect_url: '{{BASE_URL}}/login/microsoft/login/'
+    # if mock is true, will fake a successful login response for login
+    # WARNING: DO NOT ENABLE IN PRODUCTION (for testing purposes only)
+    mock: false
+    mock_default_user: 'test@example.com'
+  cognito:
+    # You must create a user pool in order to have a discovery url
+    discovery_url: 'https://cognito-idp.{REGION}.amazonaws.com/{USER-POOL-ID}/.well-known/openid-configuration'
+    client_id: ''
+    client_secret: ''
+    redirect_url: '{{BASE_URL}}/login/cognito/login/'
+    # In the case where Cognito is being used solely as an intermediary to a single IdP,
+    # and that IdP is a SAML IdP with no 'email_verified' outgoing claim, but it is safe
+    # to assume all emails from this SAML IdP are in fact verified, we may set this to True
+    assume_emails_verified: False
+  shibboleth:
+    client_id: ''
+    client_secret: ''
+    redirect_url: '{{BASE_URL}}/login/shib/login'
+  synapse:
+    client_id: ''
+    client_secret: ''
+    redirect_url: ''
+
+# these are the *possible* scopes a client can be given, NOT scopes that are
+# given to all clients. You can be more restrictive during client creation
+CLIENT_ALLOWED_SCOPES:
+  - "openid"
+  - "user"
+  - "data"
+  - "google_credentials"
+  - "google_service_account"
+  - "google_link"
+  - "ga4gh_passport_v1"
+
+# these are the scopes that CAN be included in a user's own access_token
+USER_ALLOWED_SCOPES:
+  - "fence"
+  - "openid"
+  - "user"
+  - "data"
+  - "admin"
+  - "google_credentials"
+  - "google_service_account"
+  - "google_link"
+  - "ga4gh_passport_v1"
+
+# these are the scopes that a browser session can create for a user (very
+# similar to USER_ALLOWED_SCOPES, as the session will actually create access_tokens
+# for an actively logged in user)
+SESSION_ALLOWED_SCOPES:
+  - "openid"
+  - "user"
+  - "credentials"
+  - "data"
+  - "admin"
+  - "google_credentials"
+  - "google_service_account"
+  - "google_link"
+  - "ga4gh_passport_v1"
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # LOGIN
@@ -109,23 +236,23 @@ OPENID_CONNECT:
 #   - NOTE: You can have multiple IDPs for users to login with, but one has to be set
 #           as the default
 # //////////////////////////////////////////////////////////////////////////////////////
-# Login url for identity provider (IDP):
-#   Google? Use: '{{BASE_URL}}/login/google'
-#   Multi-tenant fence (e.g. another fence instance)? Use: '{{BASE_URL}}/login/fence'
-#   Sibboleth? Use: '{{BASE_URL}}/login/shib'
-DEFAULT_LOGIN_URL: '{{BASE_URL}}/login/google'
 
-# Which Identity Provider fence will/can use
-#
-# See ``fence/blueprints/login/__init__.py`` for which identity providers can
-# be loaded.
-#
-LOGIN_OPTIONS:
-   - name: 'Login from Google'
-     desc: 'description'
-     idp: google
-
-  #   secondary: True
+# List of enabled login options (used by data-portal to display login buttons).
+# Each option must be configured with a "name" and an "idp".
+# - "idp" must be a configured provider in OPENID_CONNECT section.
+# Multiple options can be configured with the same idp.
+# - if provider_id is "fence", "fence_idp" can be any of the providers
+# supported by the other Fence. If not specified, will default to NIH login.
+# - if provider_id is "fence" and fence_idp is "shibboleth", a list of
+# "shib_idps" can be configured for InCommon login. If not specified, will
+# default to NIH login.
+# - Optional parameters: "desc" (description) and "secondary" (boolean - can
+# be used by the frontend to display secondary buttons differently).
+LOGIN_OPTIONS: # [] # !!! remove the empty list to enable login options!
+  - name: 'Login from Google'
+    desc: ''
+    idp: google
+    # secondary: True
   # - name: 'ORCID Login'
   #   idp: orcid
   # - name: 'Microsoft Login'
@@ -150,9 +277,34 @@ LOGIN_OPTIONS:
   #   shib_idps:
   #     - urn:mace:incommon:nih.gov
   #     - urn:mace:incommon:uchicago.edu
+# The following can be used for shibboleth login, simply uncomment.
+# NOTE: Don't enable shibboleth if the deployment is not protected by
+# shibboleth module, the shib module takes care of preventing header
+# spoofing.
+  # - name: 'Shibboleth Login'
+  #   idp: shibboleth
 
+# Default login provider:
+# - must be configured in LOGIN_OPTIONS and OPENID_CONNECT
+# - if several options in LOGIN_OPTIONS are defined for this IDP, will default
+# to the first one.
+# Default login URL:
+# - Google? Use: '{{BASE_URL}}/login/google'
+# - Multi-tenant fence (e.g. another fence instance)? Use: '{{BASE_URL}}/login/fence'
+# - Sibboleth? Use: '{{BASE_URL}}/login/shib'
+DEFAULT_LOGIN_IDP: 'google'
+DEFAULT_LOGIN_URL: '{{BASE_URL}}/login/google'
 
-DEFAULT_LOGIN_IDP: google
+# `LOGIN_REDIRECT_WHITELIST` is a list of extra whitelisted URLs which can be redirected
+# to by the `/login/*` endpoints. Fence automatically populates this with the redirect
+# URLs for any registered OAuth clients, and its own URL. When validating the redirects,
+# fence chesk whether the domain for the redirect matches a domain in the whitelist (so
+# only the domains for the additional desired redirects are necessary here).
+LOGIN_REDIRECT_WHITELIST: []
+
+### DEPRECATED and replaced by OPENID_CONNECT + LOGIN_OPTIONS configs
+ENABLED_IDENTITY_PROVIDERS:
+
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # LIBRARY CONFIGURATION (authlib & flask)
@@ -183,6 +335,10 @@ ACCESS_TOKEN_COOKIE_NAME: "access_token"
 # Note that the session token also stores information for the
 # ``flask.session`` in the ``context`` field of the token.
 SESSION_COOKIE_NAME: "fence"
+
+# The domain of the browser cookie in which the session token will be stored.
+# Leave unset (not empty string!) for normal single-site deployment.
+SESSION_COOKIE_DOMAIN:
 
 OAUTH2_TOKEN_EXPIRES_IN:
   "authorization_code": 1200
@@ -223,10 +379,25 @@ MAX_API_KEY_TTL: 2592000
 # The number of seconds after an access token is issued until it expires.
 MAX_ACCESS_TOKEN_TTL: 3600
 
+# TEMPORARY: The maximum number of projects allowed in token claims.
+# This config var should be removed after sheepdog and peregrine support
+# auth checks against Arborist, and no longer check the token.
+TOKEN_PROJECTS_CUTOFF: 10
+
+# If set to true, will generate an new access token each time when a browser session update happens
+RENEW_ACCESS_TOKEN_BEFORE_EXPIRATION: false
 
 ########################################################################################
 #                               OPTIONAL CONFIGURATIONS                                #
 ########################################################################################
+
+# For displaying a privacy policy to users, we can either link to the URL specified by
+# PRIVACY_POLICY_URL, or default to the `static/privacy_policy.md` file in fence.
+PRIVACY_POLICY_URL: null
+INITIAL_PRIVACY_POLICY: 'https://github.com/chicagopcdc/Documents/blob/81d60130308b6961c38097b6686a21f8be729a2c/governance/privacy_policy/PCDC-Privacy-Notice.pdf'
+INITIAL_TERM_CONDITION: 'https://github.com/chicagopcdc/Documents/blob/a5f4a87262f6597fc85d95b74c320e4fdf1e9097/governance/terms_and_conditions/GEN3_portal/Pediatric%20Cancer%20Data%20Commons%20-%20Terms%20and%20Conditions.pdf'
+
+
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # SUPPORT INFO
@@ -237,7 +408,7 @@ SUPPORT_EMAIL_FOR_ERRORS: null
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # SHIBBOLETH
-#   - Support using `shibboleth` in ENABLED_IDENTITY_PROVIDERS
+#   - Support using `shibboleth` in LOGIN_OPTIONS
 #   - Contains defaults for using NIH's Login.
 # //////////////////////////////////////////////////////////////////////////////////////
 # assumes shibboleth is deployed under {{BASE_URL}}/shibboleth
@@ -255,16 +426,63 @@ ITRUST_GLOBAL_LOGOUT: 'https://auth.nih.gov/siteminderagent/smlogout.asp?mode=ni
 # User syncing and access can also be done throught a User Access file. See
 # fence's README for more information
 dbGaP:
-  info:
-    host: ''
-    username: ''
-    password: ''
-    port: 22
-    proxy: ''
-    proxy_user: ''
-  protocol: 'sftp'
-  decrypt_key: ''
-  parse_consent_code: true
+  - info:
+      host: ''
+      username: ''
+      password: ''
+      port: 22
+      proxy: ''
+      proxy_user: ''
+    protocol: 'sftp'
+    decrypt_key: ''
+    # parse out the consent from the dbgap accession number such that something     
+    # like "phs000123.v1.p1.c2" becomes "phs000123.c2".462,465c438,469
+    # 'studyX': ['/orgA/', '/orgB/']
+    # 'studyX.c2': ['/orgB/', '/orgC/']
+    # 'studyZ': ['/orgD/']
+  
+    # NOTE: when this is "false" the above would become "phs000123"
+    parse_consent_code: true
+    # A consent of "c999" can indicate access to that study's "exchange area data"
+    # and when a user has access to one study's exchange area data, they
+    # have access to the parent study's "common exchange area data" that is not study
+    # specific. The following config is whether or not to parse/handle "c999" codes
+    # for access to the common exchange area data
+    #
+    # NOTE: When enabled you MUST also provide a mapping to the
+    # `study_common_exchange_areas` from study -> parent common exchange area resource
+    enable_common_exchange_area_access: false
+    # The below configuration is a mapping from studies to their "common exchange area data"
+    # Fence project name a user gets access to when parsing c999 exchange area codes (and
+    # subsequently gives access to an Arborist resource representing this common area
+    # as well)
+    study_common_exchange_areas:
+      'example': 'test_common_exchange_area'
+      # 'studyX': 'test_common_exchange_area'
+      # 'studyY': 'test_common_exchange_area'
+      # 'studyZ': 'test_common_exchange_area'
+    # A mapping from the dbgap study / Fence project to which authorization namespaces the
+    # actual data lives in. For example, `studyX` data may exist in multiple organizations, so
+    # we need to know how to map authorization to all orgs resources
+    study_to_resource_namespaces:
+      '_default': ['/']
+      'test_common_exchange_area': ['/dbgap/']
+      # above are for default support and exchange area support
+      # below are further examples
+      #
+      # 'studyX': ['/orgA/', '/orgB/']
+      # 'studyX.c2': ['/orgB/', '/orgC/']
+      # 'studyZ': ['/orgD/']
+
+# Regex to match an assession number that has consent information in forms like:
+#   phs00301123.c999
+#   phs000123.v3.p1.c3
+#   phs000123.c3
+#   phs00301123.v3.p4.c999
+# Will NOT MATCH forms like: phs000123
+#
+# WARNING: Do not change this without consulting the code that uses it
+DBGAP_ACCESSION_WITH_CONSENT_REGEX: '(?P<phsid>phs[0-9]+)(.(?P<version>v[0-9]+)){0,1}(.(?P<participant_set>p[0-9]+)){0,1}.(?P<consent>c[0-9]+)'
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # STORAGE BACKENDS AND CREDENTIALS
@@ -272,9 +490,18 @@ dbGaP:
 #               Also used during User Syncing process to automate managing Storage
 #               access for users.
 # //////////////////////////////////////////////////////////////////////////////////////
+# When true, this modifies usersync (not fence service itself) such that when syncing user
+# access to a Google storage backend happens in "bulk" by doing a diff *per google group*
+# between what's in Google and what's expected. Then it adds, removes only as necessary.
+# This is in contrast to the default logic which does blind updates per user and ignores
+# 409s from Google.
+# NOTE: This reduces the number of API calls to Google in the general case, but increases
+#       memory usages by usersync (as it has to track all the Google groups and user access)
+GOOGLE_BULK_UPDATES: false
+
 # Configuration for various storage systems for the backend
-# NOTE: Remove the [] and supply backends if needed. Example in comments below
-STORAGE_CREDENTIALS: []
+# NOTE: Remove the {} and supply backends if needed. Example in comments below
+STORAGE_CREDENTIALS: {}
 # Google Cloud Storage backend
 #
 #  'google':
@@ -300,7 +527,6 @@ STORAGE_CREDENTIALS: []
 # AWS BUCKETS AND CREDENTIALS
 #   - Support `/data` endpoints
 # //////////////////////////////////////////////////////////////////////////////////////
-
 AWS_CREDENTIALS: {}
 # NOTE: Remove the {} and supply creds if needed. Example in comments below
 #  'CRED1':
@@ -310,25 +536,30 @@ AWS_CREDENTIALS: {}
 #    aws_access_key_id: ''
 #    aws_secret_access_key: ''
 
-
 # NOTE: the region is optonal for s3_buckets, however it should be specified to avoid a
 # call to GetBucketLocation which you make lack the AWS ACLs for.
+# public buckets do not need the region field.
 S3_BUCKETS: {}
-#  bucket1:
-#    cred: 'CRED1'
-#  bucket2:
-#    cred: 'CRED2'
-#  bucket3:
-#    cred: '*'
-#  bucket4:
-#    cred: 'CRED1'
-#    role-arn: 'arn:aws:iam::role1'
+# NOTE: Remove the {} and supply buckets if needed. Example in comments below
+#   bucket1:
+#     cred: 'CRED1'
+#     region: 'us-east-1'
+#     # optionally you can manually specify an s3-compliant endpoint for this bucket
+#     endpoint_url: 'https://cleversafe.example.com/'
+#   bucket2:
+#     cred: 'CRED2'
+#     region: 'us-east-1'
+#   bucket3:
+#     cred: '*' # public bucket
+#   bucket4:
+#     cred: 'CRED1'
+#     region: 'us-east-1'
+#     role-arn: 'arn:aws:iam::role1'
 
 # `DATA_UPLOAD_BUCKET` specifies an S3 bucket to which data files are uploaded,
 # using the `/data/upload` endpoint. This must be one of the first keys under
 # `S3_BUCKETS` (since these are the buckets fence has credentials for).
-#DATA_UPLOAD_BUCKET: 'bucket1'
-DATA_UPLOAD_BUCKET: null
+DATA_UPLOAD_BUCKET: 'bucket1'
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # PROXY
@@ -342,7 +573,7 @@ HTTP_PROXY:
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # MICROSERVICE PATHS
-#   - Support `/data` endpoints & `/rbac` endpoints
+#   - Support `/data` endpoints & authz functionality
 # //////////////////////////////////////////////////////////////////////////////////////
 # url where indexd microservice is running (for signed urls primarily)
 # NOTE: Leaving as null will force fence to default to {{BASE_URL}}/index
@@ -350,15 +581,21 @@ HTTP_PROXY:
 INDEXD: http://indexd-service
 
 # this is the username which fence uses to make authenticated requests to indexd
-INDEXD_USERNAME: 'indexd_client'
+INDEXD_USERNAME: 'fence'
 # this is the password which fence uses to make authenticated requests to indexd
-INDEXD_PASSWORD: 'indexd_client_pass'
+INDEXD_PASSWORD: ''
 
 # url where role-based access control microservice is running
 ARBORIST: http://arborist-service
 
+# url where the audit-service is running
+# AUDIT_SERVICE: 'http://audit-service'
+# ENABLE_AUDIT_LOGS:
+#   presigned_url: false
+#   login: false
+
 # //////////////////////////////////////////////////////////////////////////////////////
-# CLOUD API LIBRARY (CIRRUS) CONFIGURATION
+# CLOUD API LIBRARY (CIRRUS) AND GOOGLE CONFIGURATION
 #   - Support Google Data Access Methods
 # //////////////////////////////////////////////////////////////////////////////////////
 # Setting this up allows fence to create buckets, manage Google groups, etc.
@@ -378,6 +615,42 @@ CIRRUS_CFG:
 # NOTE: Make this short! Less than 8 characters if possible. Google has
 #       length restrictions on group names.
 GOOGLE_GROUP_PREFIX: ''
+
+# Prefix to namespace Google Service Accounts in a single Google Cloud Platform Project.
+# This is primarily to support multiple instances of fence references the same Google
+# project. If that is not something you need to support, then you can leave this blank.
+#
+# NOTE: Make this short! Less than 8 characters if possible. Google has
+#       length restrictions on service account names.
+GOOGLE_SERVICE_ACCOUNT_PREFIX: ''
+
+# A Google Project identitifier representing the default project to bill to for
+# accessing Google Requester Pays buckets (for signed urls and/or temporary service account
+# credentials). If this is provided and the API call for
+# Google access does not include a `userProject`, this will be used instead.
+#
+# WARNING: Setting this WITHOUT setting "ENABLE_AUTOMATIC_BILLING_*" to `true` below,
+#          means that clients and end-users will be responsible for making sure that
+#          the service account used in either of these methods actually has billing
+#          permission in the specified project.
+BILLING_PROJECT_FOR_SIGNED_URLS:
+BILLING_PROJECT_FOR_SA_CREDS:
+
+# Setting this to `true` will make Fence automatically attempt to create a Custom Role
+# in the billing project and give the necessary Google Service Account that role
+# (which will allow it to bill to the project).
+#
+# NOTE: The Fence SA will need the necessary permissions in the specified project to
+#       both create a custom role and update the Project's IAM Policy to include the
+#       necessary SA. At the time of writing, there are pre-defined roles in Google's
+#       IAM that provide the necessary permissions. Those are "Project IAM Admin" and
+#       "Role Administrator"
+#
+#       NOTE2: It may be possible to further restrict the permissions in the future to
+#              be more fine-grained.
+#
+ENABLE_AUTOMATIC_BILLING_PERMISSION_SIGNED_URLS: false
+ENABLE_AUTOMATIC_BILLING_PERMISSION_SA_CREDS: false
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # EMAIL
@@ -401,9 +674,29 @@ SEND_FROM: 'example@gmail.com'
 SEND_TO: 'example@gmail.com'
 
 # //////////////////////////////////////////////////////////////////////////////////////
+# EMAIL
+#   - Support for sending hubspot API work updates to project management team
+# //////////////////////////////////////////////////////////////////////////////////////
+# Simple Email Service (for sending emails from fence)
+#
+# NOTE: Example in comments below
+AWS_SES:
+  SENDER: "PCDC_GEN3 <pcdc_root@lists.uchicago.edu>"
+  RECIPIENT: "graglia01@gmail.com"
+  AWS_REGION: "us-east-1"
+  AWS_ACCESS_KEY: ""
+  AWS_SECRET_KEY: ""
+
+HUBSPOT:
+  API_KEY: "DEV_KEY"
+
+# //////////////////////////////////////////////////////////////////////////////////////
 # DATA ACCESS: GOOGLE LINKING & SERVICE ACCOUNT REGISTRATION
 #   - Support `/google/service_accounts` endpoints
 # //////////////////////////////////////////////////////////////////////////////////////
+# whether or not to allow access to the /link/google endpoints
+ALLOW_GOOGLE_LINKING: true
+
 # A Google Project with controlled data access will be determined INVALID if
 # if it has a parent organization UNLESS that parent organization's ID is in this
 # whitelist.
@@ -441,6 +734,24 @@ REMOVE_SERVICE_ACCOUNT_EMAIL_NOTIFICATION:
   admin:
     - 'admin@example.edu'
 
+PROBLEM_USER_EMAIL_NOTIFICATION:
+  # this domain MUST exist in GUN_MAIL config
+  domain: 'example.com'
+  from: 'do-not-reply@example.com'
+  subject: 'Account access error notification'
+  # the {} gets replaced dynamically in the Python code to be the Project ID
+  content: >
+    The Data Commons Framework utilizes dbGaP for data access authorization.
+    Another member of a Google project you belong to ({}) is attempting to
+    register a service account to the following additional datasets ({}).
+    Please contact dbGaP to request access.
+  # this admin email will be included as a recipient to *any* email to anyone about
+  # service account removal.
+  #
+  # WARNING: This is NOT a bcc so the email is visible to the end-user
+  admin:
+    - 'admin@example.edu'
+
 # Service account email domains that represent a service account that Google owns.
 # These are usually created when a sepcific GCP service is enabled.
 # This is used for Service Account Validation for Data Access.
@@ -465,5 +776,40 @@ GOOGLE_MANAGED_SERVICE_ACCOUNT_DOMAINS:
   - 'compute-system.iam.gserviceaccount.com'
   - 'gcp-sa-websecurityscanner.iam.gserviceaccount.com'
   - 'storage-transfer-service.iam.gserviceaccount.com'
+  - 'firebase-sa-management.iam.gserviceaccount.com'
+  - 'firebase-rules.iam.gserviceaccount.com'
+  - 'gcp-sa-cloudbuild.iam.gserviceaccount.com'
+  - 'gcp-sa-automl.iam.gserviceaccount.com'
+  - 'gcp-sa-datalabeling.iam.gserviceaccount.com'
+  - 'gcp-sa-cloudscheduler.iam.gserviceaccount.com'
 
-ENABLE_DB_MIGRATION: true
+# The types of service accounts that are allowed to be registered at
+# /google/service_accounts endpoints
+ALLOWED_USER_SERVICE_ACCOUNT_DOMAINS:
+  # compute engine default service account
+  - 'developer.gserviceaccount.com'
+  # app engine default service account
+  - 'appspot.gserviceaccount.com'
+  # user-managed service account
+  - 'iam.gserviceaccount.com'
+
+# Synapse integration and DREAM challenge mapping. Team is from Synapse, and group is
+# providing the actual permission in Arborist. User will be added to the group for TTL
+# seconds if the team matches.
+DREAM_CHALLENGE_TEAM: 'DREAM'
+DREAM_CHALLENGE_GROUP: 'DREAM'
+SYNAPSE_URI: 'https://repo-prod.prod.sagebase.org/auth/v1'
+SYNAPSE_JWKS_URI:
+SYNAPSE_DISCOVERY_URL:
+SYNAPSE_AUTHZ_TTL: 86400
+# RAS refresh_tokens expire in 15 days
+RAS_REFRESH_EXPIRATION: 1296000
+# Number of projects that can be registered to a Google Service Accont
+SERVICE_ACCOUNT_LIMIT: 6
+# Settings for usersync with visas
+USERSYNC:
+  sync_from_visas: false
+  # fallback to dbgap sftp when there are no valid visas for a user i.e. if they're expired or if they're malformed
+  fallback_to_dbgap_sftp: false
+  visa_types:
+    ras: [https://ras.nih.gov/visas/v1, https://ras.nih.gov/visas/v1.1]
