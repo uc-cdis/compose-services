@@ -147,7 +147,9 @@ echo "Setup Python Virtual Env"
 cd $GEN3_SCRIPTS_DIR/populate_fake_data
 if [ ! -d "./env" ] || [ ! -e "./env/bin/activate" ]; then
   # if env found but not populated
-  rm -f "./env"
+  if [ -e "./env" ]; then 
+    rm -f "./env"
+  fi
   echo "Python Virtual Env not found, creating it."
   python -m venv env 
   echo "Activating python env"
@@ -166,16 +168,8 @@ fi
 cd ./operations
 
 # handle different versions of sed that require different parameters
-echo "Edit the etl.py so it includes your GITHUB_TOKEN"
-WHICH_SED=$(command -v sed)
-if [[ "$WHICH_SED" == "/usr/bin/sed" ]]; then
-  # default mac developer tools version of sed
-  sed -i ' ' -e "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" etl.py
-else 
-  # gnu-sed, /usr/local/opt/gnu-sed/libexec/gnubin/sed
-  # or an undetermined sed
-  sed -i "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" etl.py
-fi
+echo "Edit etl.py so it includes your GITHUB_TOKEN"
+perl -i -pe "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" etl.py
 
 #------------------------------------------------------
 # Run:  etl.py load, Load data into postgres db
@@ -194,7 +188,9 @@ cd ../../es_etl_patch
 echo "Setup ES ETL Python Virtual Env"
 if [ ! -d "./env" ] || [ ! -e "./env/bin/activate" ]; then
   # if env found but not populated
-  rm -f "./env"
+  if [ -e "./env" ]; then 
+    rm -f "./env"
+  fi
   echo "Python Virtual Env not found, creating it."
   python -m venv env 
   echo "Activating python env"
@@ -212,15 +208,16 @@ fi
 #-------------------------------------------------------------
 cd ./etl
 
-echo "Edit the ES etl/build_json.py so it includes your GITHUB_TOKEN"
-if [[ "$WHICH_SED" == "/usr/bin/sed" ]]; then
-  # default mac developer tools version of sed
-  sed -i ' ' -e "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" build_json.py
-else 
-  # gnu-sed, /usr/local/opt/gnu-sed/libexec/gnubin/sed
-  # or an undetermined sed
-  sed -i "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" build_json.py
-fi
+echo "Edit ES etl/build_json.py so it includes your GITHUB_TOKEN"
+perl -i -pe "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" build_json.py
+# if [[ "$WHICH_SED" == "/usr/bin/sed" ]]; then
+#   # default mac developer tools version of sed
+#   sed -i ' ' -e "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" build_json.py
+# else 
+#   # gnu-sed, /usr/local/opt/gnu-sed/libexec/gnubin/sed
+#   # or an undetermined sed
+#   sed -i "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" build_json.py
+# fi
 
 #------------------------------------------------------
 # Load ES data
@@ -243,10 +240,13 @@ fi
 #------------------------------------------------------
 # Guppy Setup
 #------------------------------------------------------
-echo "Run: guppy_setup.sh"
-bash $COMPOSE_SVCS_DIR/guppy_setup.sh
+# echo "Run: guppy_setup.sh"
+# bash $COMPOSE_SVCS_DIR/guppy_setup.sh
 
-echo "Docker restart revproxy-service (last time)"
+echo "Docker restart guppy-service"
+docker restart guppy-service
+
+echo 'Docker restart revproxy-service (last time)'
 docker restart revproxy-service
 
 # Back to where we started

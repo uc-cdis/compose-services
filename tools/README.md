@@ -12,11 +12,7 @@ Make sure your test gmail account is included in [configuration-files]:/compose-
 
 ### PREREQUISITES
 - pyenv
-- gnu-sed (preferred)
-  - add: 
-    ```
-    export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH" to your path setting
-    ```
+
 ### Install with Homebrew on MAC OS
 brew update
 brew install pyenv

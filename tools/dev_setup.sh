@@ -85,9 +85,9 @@ fi
 echo "Running: creds_setup.sh"
 bash ./creds_setup.sh
 
-#------------------------------------------------------
-# Copy Configuration-Files into Compose-Services
-#------------------------------------------------------
+#-------------------------------------------------------
+# Copy Secrets, Configuration-Files --> Compose-Services
+#-------------------------------------------------------
 echo "Copying: configuration-files specialty items into compose-services"
 # sync
 cp -fr $CONFIG_FILES_DIR/compose-service/Secrets $COMPOSE_SVCS_DIR/
@@ -101,41 +101,9 @@ cp -fr $CONFIG_FILES_DIR/compose-service/Secrets $COMPOSE_SVCS_DIR/
 #------------------------------------------------------
 echo "Update fence-config.yaml Google oAuth credentials"
 FENCE_CONFIG="$COMPOSE_SVCS_DIR/Secrets/fence-config.yaml"
-FENCE_CONFIG_TMP="$COMPOSE_SVCS_DIR/Secrets/fence-config.tmp"
-cp -fr $FENCE_CONFIG $FENCE_CONFIG_TMP
-rm -fr $FENCE_CONFIG
-touch $FENCE_CONFIG
-OPENID_CONNECT=
-GOOGLE=
-DONE=
-OLD_IFS="$IFS"
-IFS=
-while read -r line; do
-  if [[ $line != '#*' ]] && [ -z $DONE ]; then
-    if [[ $OPENID_CONNECT == "1" ]] && [[ $GOOGLE == "1" ]]; then
-      if [[ $line =~ "client_id" ]]; then
-        # echo "CLIENT_ID=$CLIENT_ID"
-        line=$(sed s/\'\'/\'${CLIENT_ID}\'/ <<< $line)
-        # echo $line
-      elif [[ $line =~ "client_secret" ]]; then
-        # echo "CLIENT_SECRET=$CLIENT_SECRET"
-        line=$(sed s/\'\'/\'${CLIENT_SECRET}\'/ <<< $line)
-        # echo $line
-        DONE="1"
-      fi
-    fi
-    if [[ $OPENID_CONNECT != "1" ]] && [[ $line =~ "OPENID_CONNECT:" ]]; then
-      OPENID_CONNECT="1"
-    fi
-    if [[ $GOOGLE != "1" ]] && [[ $line =~ "google:" ]]; then
-      GOOGLE="1"
-    fi
-  fi
-  echo "$line" >> $FENCE_CONFIG
-done < $FENCE_CONFIG_TMP
-IFS="$OLD_IFS"
+perl -i -pe "s/GOOGLE_CLIENT_ID/${CLIENT_ID}/" $FENCE_CONFIG
+perl -i -pe "s/GOOGLE_CLIENT_SECRET/${CLIENT_SECRET}/" $FENCE_CONFIG
 
-rm -f $FENCE_CONFIG_TMP
 
 #------------------------------------------------------
 # nginx.conf - Disable guppy-service block
