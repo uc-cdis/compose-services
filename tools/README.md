@@ -1,6 +1,6 @@
 # Automated Gen3 Dev Setup
 
-Create a .env file in the [configuration-files]:/tools subdirectory with the following values:
+Create a .env file in the [compose-services]:/tools subdirectory with the following values:
 
 - CLIENT_ID='[google oauth client id]'
 - CLIENT_SECRET='[google oauth client secret]'
@@ -9,7 +9,6 @@ Create a .env file in the [configuration-files]:/tools subdirectory with the fol
 The .env file will be ignored by Git.
 
 Make sure your test gmail account is included in [configuration-files]:/compose-service/Secrets/user.yaml with correct permissions
-
 
 ### PREREQUISITES
 - pyenv
@@ -60,7 +59,7 @@ NOTE:  Once the script completes, it may take a few minutes for the site to be a
 1. Visit Gen3 in the browser & login at https://localhost/login
 2. Visit https://localhost/identity
 3. Click 'Create API key'
-4. Download and save credentials.json file into the ```/populate_fake_data``` directory of configuration-files repo.
+4. Download and save credentials.json file into the [gen3_scripts]:/populate_fake_data directory.
 
 NOTE:  pyenv should be installed on the host machine at this point.
 

@@ -64,9 +64,33 @@ fi
 CWD=$(cd $(dirname "$0") && pwd)
 COMPOSE_SVCS_DIR="$CWD/.."
 
-CONFIG_FILES_DIR="$CWD/../../configuration-files"
+# Swtiched to using chicagopcdc/gen3_scripts repo (pcdc_dev branch)
+GEN3_ROOT="$CWD/../.."
+GEN3_SCRIPTS_DIR="$GEN3_ROOT/gen3_scripts"
+GEN3_SCRIPTS_REPO="https://github.com/chicagopcdc/gen3_scripts.git"
+GEN3_SCRIPTS_REPO_BRANCH="origin/pcdc_dev"
+
+CONFIG_FILES_DIR="$GEN3_ROOT/configuration-files"
 CONFIG_FILES_REPO="https://github.com/chicagopcdc/configuration-files.git"
 CONFIG_FILES_REPO_BRANCH="origin/pcdc_dev"
+
+#------------------------------------------------------
+# Clone or Update chicagopcdc/gen3_scripts repo
+#------------------------------------------------------
+
+echo "Clone or Update chicagopcdc/gen3_scripts repo from github"
+
+# Does compose-services repo exist?  If not, go get it!
+if [ ! -d "$GEN3_SCRIPTS_DIR" ]; then
+  cd "$GEN3_ROOT"
+  git clone $GEN3_SCRIPTS_REPO
+
+  cd $GEN3_SCRIPTS_DIR
+
+  git checkout -t $GEN3_SCRIPTS_REPO_BRANCH
+  git pull
+  cd ..
+fi
 
 #------------------------------------------------------
 # Clone or Update chicagopcdc/configuration-files repo
@@ -78,7 +102,7 @@ echo "Clone or Update chicagopcdc/configuration-files repo from github"
 
 # Does compose-services repo exist?  If not, go get it!
 if [ ! -d "$CONFIG_FILES_DIR" ]; then
-  cd ../..
+  cd "$GEN3_ROOT"
   git clone $CONFIG_FILES_REPO
 
   cd $CONFIG_FILES_DIR

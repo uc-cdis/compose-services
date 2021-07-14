@@ -66,45 +66,26 @@ fi
 #------------------------------------------------------
 
 CWD=$(cd $(dirname "$0") && pwd)
+GEN3_ROOT="$CWD/../.."
 COMPOSE_SVCS_DIR="$CWD/.."
-GEN3_SCRIPTS_DIR="$CWD/../../gen3_scripts"
-GEN3_SCRIPTS_REPO="https://github.com/chicagopcdc/gen3_scripts.git"
-GEN3_SCRIPTS_REPO_BRANCH="origin/pcdc_dev"
+GEN3_SCRIPTS_DIR="$GEN3_ROOT/gen3_scripts"
 
 CREDENTIALS_FILE="$GEN3_SCRIPTS_DIR/populate_fake_data/credentials.json"
 PYTHON_REQD_VERSION=$(pyenv install --list | grep -e '\s3\.9\.\d$' | tail -n1)
 NGINX_CONF="$COMPOSE_SVCS_DIR/nginx.conf"
 NGINX_CONF_TMP="$COMPOSE_SVCS_DIR/nginx.conf.tmp"
 
+
 #------------------------------------------------------
 # Setup the Python Virtual Env
 #------------------------------------------------------
-echo "Check for the credentials file and the correct version of Python"
+echo "Check for the credentials file"
 
 if [ ! -e "$CREDENTIALS_FILE" ]; then
   echo "ERROR:  $CREDENTIALS_FILE not found"
   echo "Login to http://localhost/login and visit http://localhost/identity to 'Create API key' and download credentials.json file into the populate_fake_data directory."
   exit 1
 fi 
-
-#------------------------------------------------------
-# Clone or Update chicagopcdc/gen3_scripts repo
-#------------------------------------------------------
-
-# Swtiched to using chicagopcdc/gen3_scripts repo (pcdc_dev branch)
-
-echo "Clone or Update chicagopcdc/gen3_scripts repo from github"
-
-# Does compose-services repo exist?  If not, go get it!
-if [ ! -d "$GEN3_SCRIPTS_DIR" ]; then
-  cd ../..
-  git clone $GEN3_SCRIPTS_REPO
-
-  cd $GEN3_SCRIPTS_DIR
-
-  git checkout -t $GEN3_SCRIPTS_REPO_BRANCH
-  git pull
-fi
 
 #------------------------------------------------------
 # Setup the Python Environment
