@@ -10,14 +10,18 @@ The .env file will be ignored by Git.
 
 Make sure your test gmail account is included in [configuration-files]:/compose-service/Secrets/user.yaml with correct permissions
 
+
 ### PREREQUISITES
 - pyenv
 
 ### Install with Homebrew on MAC OS
+```
 brew update
 brew install pyenv
+```
 
 ### Upgrade pyenv
+```
 brew update
 brew upgrade
 ```
