@@ -42,7 +42,7 @@ docker images -a | grep quay | awk '{print $3}' | xargs docker rmi
 
 ### GEN3 SETUP
 
-In configuration-files:
+In compose-services:
 ```
 cd ./tools
 ./dev_setup.sh
