@@ -588,6 +588,8 @@ INDEXD_PASSWORD: ''
 # url where role-based access control microservice is running
 ARBORIST: http://arborist-service
 
+BASIC_REGISTRATION_ACCESS_POLICY: [login_no_access, analysis]
+
 # url where the audit-service is running
 # AUDIT_SERVICE: 'http://audit-service'
 # ENABLE_AUDIT_LOGS:
