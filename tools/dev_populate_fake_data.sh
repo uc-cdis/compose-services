@@ -104,8 +104,6 @@ if [ ! -d "$GEN3_SCRIPTS_DIR" ]; then
 
   git checkout -t $GEN3_SCRIPTS_REPO_BRANCH
   git pull
-  git reset --hard $GEN3_SCRIPTS_REPO_BRANCH
-  git pull 
 fi
 
 #------------------------------------------------------
