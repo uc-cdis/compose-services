@@ -254,20 +254,20 @@ users:
   # username1@gmail.com: {}
   graglia01@gmail.com:
     admin: True
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access]
   shea.maunsell@gmail.com:
     policies: [analysis, login_no_access]
   slv@uchicago.edu:
     admin: True
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access]
   furner.brian@gmail.com:
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access]
   # bfurner@uchicago.edu
   bkang.dev@gmail.com:
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, login_no_access]
   dvenckus@uchicago.edu:
     admin: True
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access]
   # username2:
   #   tags:
   #     name: John Doe
