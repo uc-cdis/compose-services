@@ -71,7 +71,9 @@ COMPOSE_SVCS_DIR="$CWD/.."
 GEN3_SCRIPTS_DIR="$GEN3_ROOT/gen3_scripts"
 
 CREDENTIALS_FILE="$GEN3_SCRIPTS_DIR/populate_fake_data/credentials.json"
-PYTHON_REQD_VERSION=$(pyenv install --list | grep -e '\s3\.9\.\d$' | tail -n1)
+# xargs is trimming whitespace
+PYTHON3_LATEST_VERSION=$(pyenv install --list | grep -E '\s3\.([6-9]|\d{2,})\.\d+$' | tail -n1 | xargs)
+PYTHON3_MIN_VERSION='^3\.([6-9]|\d{2,})\.\d+$'
 NGINX_CONF="$COMPOSE_SVCS_DIR/nginx.conf"
 NGINX_CONF_TMP="$COMPOSE_SVCS_DIR/nginx.conf.tmp"
 
@@ -102,24 +104,23 @@ else
   echo "Found pyenv"
 fi
 
-# Check for required python version
-echo "Does the current version of python match the required version $PYTHON_REQD_VERSION ?"
-PYTHON_CURRENT_VERSION=$(python --version)
-if [[ ! $PYTHON_CURRENT_VERSION =~ "Python $PYTHON_REQD_VERSION" ]]; then
-  # Use pyenv to setup required python local version
-  IS_REQD_VERSION_INSTALLED=$(pyenv versions | grep "$PYTHON_REQD_VERSION")
-  if [ -z "$IS_REQD_VERSION_INSTALLED" ]; then
-    # not installed, let's do that now
-    echo "pyenv python $PYTHON_REQD_VERSION not detected. Verifying installation."
-    pyenv install --skip-existing $PYTHON_REQD_VERSION
-  else
-    echo "pyenv python $PYTHON_REQD_VERSION found"
-  fi
-  # setup the required version for this project (creates a .python-version file)
-  echo "Setting: 'pyenv local $PYTHON_REQD_VERSION' for this project"
-  pyenv local $PYTHON_REQD_VERSION
+# Check for the minimum required python version
+echo "Is the Python minimum required version installed?"
+cd $GEN3_SCRIPTS_DIR
+PYTHON3_VERSION=$(pyenv version | awk '{print $1}')
+HAS_PYTHON3_MIN_VERSION=$(echo "$PYTHON3_VERSION" | grep -E "$PYTHON3_MIN_VERSION")
+echo "Python version: $PYTHON3_VERSION"
+if [ -z "$HAS_PYTHON3_MIN_VERSION" ]; then
+  # Python min version not detected, install if it's not there
+  echo "Pyenv python minimum version not detected. Verifying installation or will install $PYTHON3_LATEST_VERSION"
+  pyenv install --skip-existing $PYTHON3_LATEST_VERSION
+  
+  # setup the required version for this project (creates a .python-version file)  
+  cd $GEN3_SCRIPTS_DIR
+  echo "Setting: 'pyenv local $PYTHON3_LATEST_VERSION' for gen3_scripts"
+  pyenv local $PYTHON3_LATEST_VERSION
 else
-  echo "Found $PYTHON_REQD_VERSION"
+  echo "Found python3 minimum verion."
 fi
 
 echo "Setup Python Virtual Env"
@@ -189,14 +190,7 @@ cd ./etl
 
 echo "Edit ES etl/build_json.py so it includes your GITHUB_TOKEN"
 perl -i -pe "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" build_json.py
-# if [[ "$WHICH_SED" == "/usr/bin/sed" ]]; then
-#   # default mac developer tools version of sed
-#   sed -i ' ' -e "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" build_json.py
-# else 
-#   # gnu-sed, /usr/local/opt/gnu-sed/libexec/gnubin/sed
-#   # or an undetermined sed
-#   sed -i "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" build_json.py
-# fi
+
 
 #------------------------------------------------------
 # Load ES data
