@@ -169,9 +169,8 @@ services:
     depends_on:
       - postgres
   amanuensis-service:
-    # image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-06-07T13_43_03-05_00" 
-    # image: "amanuensis:test"
-    image: "quay.io/pcdc/amanuensis:2021.06"
+    image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-07-16T11_12_29-05_00" 
+    # image: "quay.io/pcdc/amanuensis:2021.06"
     command: bash /var/www/amanuensis/amanuensis_setup.sh
     container_name: amanuensis-service
     networks:
@@ -194,7 +193,7 @@ services:
       - postgres
       - arborist-service
   guppy-service:
-    image: "quay.io/pcdc/guppy:2021.06"
+    image: "quay.io/pcdc/guppy:fix_bug_nested_query"
     container_name: guppy-service
     networks:
       - devnet
