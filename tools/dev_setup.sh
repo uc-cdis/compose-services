@@ -70,9 +70,6 @@ GEN3_SCRIPTS_DIR="$GEN3_ROOT/gen3_scripts"
 GEN3_SCRIPTS_REPO="https://github.com/chicagopcdc/gen3_scripts.git"
 GEN3_SCRIPTS_REPO_BRANCH="origin/pcdc_dev"
 
-CONFIG_FILES_DIR="$GEN3_ROOT/configuration-files"
-CONFIG_FILES_REPO="https://github.com/chicagopcdc/configuration-files.git"
-CONFIG_FILES_REPO_BRANCH="origin/pcdc_dev"
 
 #------------------------------------------------------
 # Clone or Update chicagopcdc/gen3_scripts repo
@@ -92,25 +89,6 @@ if [ ! -d "$GEN3_SCRIPTS_DIR" ]; then
   cd ..
 fi
 
-#------------------------------------------------------
-# Clone or Update chicagopcdc/configuration-files repo
-#------------------------------------------------------
-
-# Swtiched to using chicagopcdc/gen3_scripts repo (pcdc_dev branch)
-
-echo "Clone or Update chicagopcdc/configuration-files repo from github"
-
-# Does compose-services repo exist?  If not, go get it!
-if [ ! -d "$CONFIG_FILES_DIR" ]; then
-  cd "$GEN3_ROOT"
-  git clone $CONFIG_FILES_REPO
-
-  cd $CONFIG_FILES_DIR
-
-  git checkout -t $CONFIG_FILES_REPO_BRANCH
-  git pull
-fi
-
 cd $COMPOSE_SVCS_DIR
 
 #------------------------------------------------------
@@ -127,16 +105,6 @@ fi
 echo "Running: creds_setup.sh"
 bash ./creds_setup.sh
 
-#-------------------------------------------------------
-# Copy Secrets, Configuration-Files --> Compose-Services
-#-------------------------------------------------------
-echo "Copying: configuration-files specialty items into compose-services"
-# sync
-cp -fr $CONFIG_FILES_DIR/compose-service/Secrets $COMPOSE_SVCS_DIR/
-# cp -fr ./scripts/* $COMPOSE_SVCS_DIR/scripts/
-# cp -fr ./Secrets   $COMPOSE_SVCS_DIR/
-# cp -fr ./*.*   $COMPOSE_SVCS_DIR/
-# cd -
 
 #------------------------------------------------------
 # Add Google oAuth client_id and client_secret settings
