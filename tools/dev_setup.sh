@@ -88,7 +88,6 @@ if [ ! -d "$GEN3_SCRIPTS_DIR" ]; then
   cd ..
 fi
 
-
 cd $COMPOSE_SVCS_DIR
 
 #------------------------------------------------------
