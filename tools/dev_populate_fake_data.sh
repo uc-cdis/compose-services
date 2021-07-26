@@ -107,18 +107,31 @@ fi
 # Check for the minimum required python version
 echo "Is the Python minimum required version installed?"
 cd $GEN3_SCRIPTS_DIR
+# Is the current python version acceptable?
 PYTHON3_VERSION=$(pyenv version | awk '{print $1}')
-HAS_PYTHON3_MIN_VERSION=$(echo "$PYTHON3_VERSION" | grep -E "$PYTHON3_MIN_VERSION")
+USING_PYTHON3_MIN_VERSION=$(echo "$PYTHON3_VERSION" | grep -E "$PYTHON3_MIN_VERSION")
 echo "Python version: $PYTHON3_VERSION"
-if [ -z "$HAS_PYTHON3_MIN_VERSION" ]; then
-  # Python min version not detected, install if it's not there
-  echo "Pyenv python minimum version not detected. Verifying installation or will install $PYTHON3_LATEST_VERSION"
-  pyenv install --skip-existing $PYTHON3_LATEST_VERSION
-  
-  # setup the required version for this project (creates a .python-version file)  
-  cd $GEN3_SCRIPTS_DIR
-  echo "Setting: 'pyenv local $PYTHON3_LATEST_VERSION' for gen3_scripts"
-  pyenv local $PYTHON3_LATEST_VERSION
+if [ -z "$USING_PYTHON3_MIN_VERSION" ]; then
+  # Not currently using python min version
+  # We need to do something about this!
+
+  # Is an acceptable python version already installed?  Get latest from pyenv versions
+  MIN_VERSION_ALREADY_INSTALLED=$(pyenv versions| awk '{print $1}' | grep -E "^3\.([6-9]|\d{2,})\.\d+$" | tail -n1)
+
+  if [ -z "$MIN_VERSION_ALREADY_INSTALLED" ]; then
+    # Python min version not detected, install if it's not there
+    echo "Pyenv python minimum version not detected. Verifying installation or will install $PYTHON3_LATEST_VERSION"
+    pyenv install --skip-existing $PYTHON3_LATEST_VERSION
+    
+    # setup the required version for this project (creates a .python-version file)  
+    cd $GEN3_SCRIPTS_DIR
+    echo "Setting: 'pyenv local $PYTHON3_LATEST_VERSION' for gen3_scripts"
+    pyenv local $PYTHON3_LATEST_VERSION
+  else 
+    # Found one!  Activate it
+    echo "Setting: 'pyenv local $MIN_VERSION_ALREADY_INSTALLED' for gen3_scripts"
+    pyenv local $MIN_VERSION_ALREADY_INSTALLED
+  fi
 else
   echo "Found python3 minimum verion."
 fi

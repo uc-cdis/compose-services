@@ -70,7 +70,6 @@ GEN3_SCRIPTS_DIR="$GEN3_ROOT/gen3_scripts"
 GEN3_SCRIPTS_REPO="https://github.com/chicagopcdc/gen3_scripts.git"
 GEN3_SCRIPTS_REPO_BRANCH="origin/pcdc_dev"
 
-
 #------------------------------------------------------
 # Clone or Update chicagopcdc/gen3_scripts repo
 #------------------------------------------------------

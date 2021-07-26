@@ -171,6 +171,8 @@ services:
   amanuensis-service:
     image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-07-16T11_12_29-05_00" 
     # image: "quay.io/pcdc/amanuensis:2021.06"
+    # image: amanuensis:test09
+    # build: ../amanuensis
     command: bash /var/www/amanuensis/amanuensis_setup.sh
     container_name: amanuensis-service
     networks:
