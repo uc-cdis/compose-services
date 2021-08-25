@@ -61,7 +61,7 @@ services:
       - postgres
       - arborist-service
   arborist-service:
-    image: "quay.io/cdis/arborist:2021.07"
+    image: "quay.io/cdis/arborist:2021.08"
     container_name: arborist-service
     entrypoint: bash /go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     networks:
@@ -265,7 +265,7 @@ services:
   #     - peregrine-service
   portal-service:
     # image: "quay.io/pcdc/windmill:2021.06"
-    image: "quay.io/pcdc/windmill:pcdc_dev_2021-07-30T13_15_12-05_00"
+    image: "quay.io/pcdc/windmill:pcdc_dev_2021-08-23T16_23_56-05_00"
     # image: "quay.io/pcdc/windmill:subject-info-page-proof-of-concept"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
@@ -307,7 +307,7 @@ services:
   #   environment:
   #     - FRAME_ANCESTORS=http://localhost
   revproxy-service:
-    image: "quay.io/cdis/nginx:2021.07"
+    image: "quay.io/cdis/nginx:2021.08"
     container_name: revproxy-service
     networks:
       - devnet
@@ -332,7 +332,7 @@ services:
       - portal-service
 #      - pidgin-service
   tube-service:
-    image: "quay.io/pcdc/tube:2021.07"
+    image: "quay.io/cdis/tube:feat_multiple_field_join"
     container_name: tube-service
     command: bash -c "while true; do sleep 5; done"
     networks:
@@ -354,7 +354,7 @@ services:
       - esproxy-service
       - spark-service
   spark-service:
-    image: "quay.io/cdis/gen3-spark:2021.07"
+    image: "quay.io/cdis/gen3-spark:2021.08"
     container_name: spark-service
     command: bash -c "python run_config.py && hdfs namenode -format && hdfs --daemon start namenode && hdfs --daemon start datanode && yarn --daemon start resourcemanager && yarn --daemon start nodemanager && hdfs dfsadmin -safemode leave &&  hdfs dfs -mkdir /result && while true; do sleep 5; done"
     expose:
