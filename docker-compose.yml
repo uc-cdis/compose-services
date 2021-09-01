@@ -38,7 +38,7 @@ services:
   #   depends_on:
   #     - postgres
   fence-service:
-    image: "quay.io/pcdc/fence:pcdc_dev_2021-08-03T16_13_42-05_00"
+    image: "quay.io/pcdc/fence:2021.08"
     command: bash /var/www/fence/fence_setup.sh
     container_name: fence-service
     networks:
@@ -98,7 +98,7 @@ services:
   #   networks:
   #     - devnet
   peregrine-service:
-    image: "quay.io/pcdc/peregrine:2021.07"
+    image: "quay.io/pcdc/peregrine:2021.08"
     container_name: peregrine-service
     networks:
       - devnet
@@ -110,7 +110,7 @@ services:
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
       - ./datadictionary/gdcdictionary/schemas:/schemas_dir
     environment: &env
-      DICTIONARY_URL: https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose.json
+      DICTIONARY_URL: https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-test.json
         #https://pcdc-gen3-dictionaries.s3.amazonaws.com/luca_test.json
       # DICTIONARY_URL: https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-demo-amia.json  
       # questo PATH_TO_SCHEMA_DIR: /schemas_dir
@@ -126,7 +126,7 @@ services:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/pcdc/sheepdog:pcdc_dev_2021-08-03T12_00_07-05_00"    
+    image: "quay.io/pcdc/sheepdog:2021.08"    
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -146,7 +146,7 @@ services:
     depends_on:
       - postgres
   PcdcAnalysisTools-service:
-    image: "quay.io/pcdc/pcdcanalysistools:2021.07"
+    image: "quay.io/pcdc/pcdcanalysistools:2021.08"
     container_name: pcdcanalysistools-service
     entrypoint: bash /PcdcAnalysisTools_setup.sh
     networks:
@@ -169,7 +169,7 @@ services:
     depends_on:
       - postgres
   amanuensis-service:
-    image: "quay.io/pcdc/amanuensis:2021.07" 
+    image: "quay.io/pcdc/amanuensis:2021.08" 
     # image: "quay.io/pcdc/amanuensis:2021.06"
     # image: amanuensis:test09
     # build: ../amanuensis
@@ -195,7 +195,7 @@ services:
       - postgres
       - arborist-service
   guppy-service:
-    image: "quay.io/pcdc/guppy:2021.07"
+    image: "quay.io/pcdc/guppy:2021.08"
     container_name: guppy-service
     networks:
       - devnet
@@ -264,8 +264,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    # image: "quay.io/pcdc/windmill:2021.06"
-    image: "quay.io/pcdc/windmill:pcdc_dev_2021-08-23T16_23_56-05_00"
+    image: "quay.io/pcdc/windmill:2021.08"
     # image: "quay.io/pcdc/windmill:subject-info-page-proof-of-concept"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
@@ -338,7 +337,7 @@ services:
     networks:
       - devnet
     environment:
-      - DICTIONARY_URL=https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose.json
+      - DICTIONARY_URL=https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-test.json
       #https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose.json # https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema.json  # 
       - ES_URL=esproxy-service
       - ES_INDEX_NAME=etl
