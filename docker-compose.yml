@@ -61,7 +61,7 @@ services:
       - postgres
       - arborist-service
   arborist-service:
-    image: "quay.io/cdis/arborist:2021.08"
+    image: "quay.io/cdis/arborist:2021.10"
     container_name: arborist-service
     entrypoint: bash /go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     networks:
@@ -98,7 +98,7 @@ services:
   #   networks:
   #     - devnet
   peregrine-service:
-    image: "quay.io/pcdc/peregrine:2021.08"
+    image: "quay.io/pcdc/peregrine:pcdc_dev_2021-09-16T12_17_03-05_00"
     container_name: peregrine-service
     networks:
       - devnet
@@ -111,8 +111,6 @@ services:
       - ./datadictionary/gdcdictionary/schemas:/schemas_dir
     environment: &env
       DICTIONARY_URL: https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-test.json
-        #https://pcdc-gen3-dictionaries.s3.amazonaws.com/luca_test.json
-      # DICTIONARY_URL: https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-demo-amia.json  
       # questo PATH_TO_SCHEMA_DIR: /schemas_dir
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
       AUTHZ_ENTITY_NAME: subject
@@ -126,7 +124,7 @@ services:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/pcdc/sheepdog:2021.08"    
+    image: "quay.io/pcdc/sheepdog:pcdc_dev_2021-09-16T12_30_43-05_00"    
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -169,7 +167,7 @@ services:
     depends_on:
       - postgres
   amanuensis-service:
-    image: "quay.io/pcdc/amanuensis:2021.08" 
+    image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-09-08T09_40_15-05_00" 
     # image: "quay.io/pcdc/amanuensis:2021.06"
     # image: amanuensis:test09
     # build: ../amanuensis
@@ -195,7 +193,8 @@ services:
       - postgres
       - arborist-service
   guppy-service:
-    image: "quay.io/pcdc/guppy:2021.08"
+    image: "quay.io/pcdc/guppy:pcdc_dev_2021-09-14T16_09_04-05_00"
+    # image: "guppy:test"
     container_name: guppy-service
     networks:
       - devnet
@@ -264,7 +263,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:2021.08"
+    image: "quay.io/pcdc/windmill:pcdc_dev_2021-09-16T10_26_48-05_00"
     # image: "quay.io/pcdc/windmill:subject-info-page-proof-of-concept"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
@@ -306,7 +305,7 @@ services:
   #   environment:
   #     - FRAME_ANCESTORS=http://localhost
   revproxy-service:
-    image: "quay.io/cdis/nginx:2021.08"
+    image: "quay.io/cdis/nginx:2021.10"
     container_name: revproxy-service
     networks:
       - devnet
@@ -338,7 +337,6 @@ services:
       - devnet
     environment:
       - DICTIONARY_URL=https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-test.json
-      #https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose.json # https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema.json  # 
       - ES_URL=esproxy-service
       - ES_INDEX_NAME=etl
       - HADOOP_URL=hdfs://spark-service:9000
