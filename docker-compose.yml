@@ -38,7 +38,7 @@ services:
   #   depends_on:
   #     - postgres
   fence-service:
-    image: "quay.io/pcdc/fence:2021.08"
+    image: "quay.io/pcdc/fence:pcdc_dev_2021-09-16T13_51_21-05_00"
     command: bash /var/www/fence/fence_setup.sh
     container_name: fence-service
     networks:
@@ -61,7 +61,7 @@ services:
       - postgres
       - arborist-service
   arborist-service:
-    image: "quay.io/cdis/arborist:2021.10"
+    image: "quay.io/cdis/arborist:2021.09"
     container_name: arborist-service
     entrypoint: bash /go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     networks:
@@ -305,7 +305,7 @@ services:
   #   environment:
   #     - FRAME_ANCESTORS=http://localhost
   revproxy-service:
-    image: "quay.io/cdis/nginx:2021.10"
+    image: "quay.io/cdis/nginx:2021.09"
     container_name: revproxy-service
     networks:
       - devnet
