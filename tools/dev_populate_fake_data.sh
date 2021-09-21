@@ -4,6 +4,7 @@
 #
 # Usage:  dev_populate_fake_data.sh 
 #               -t,--token <github_token> 
+#               -r,--recreate-env
 #               OR 
 #               create a .env file, see the README.md for detals
 #
@@ -30,6 +31,7 @@
 echo "Begin dev_populate_fake_data.sh"
 
 GITHUB_TOKEN=
+RECREATE_ENV=
 
 USAGE="Usage:  dev_populate_fake_data.sh -t <github_token>"
 
@@ -41,25 +43,31 @@ USAGE="Usage:  dev_populate_fake_data.sh -t <github_token>"
 # if not, check commandline arguments
 source ./.env
 
-if [ -z "$GITHUB_TOKEN" ]; then
+# extract options and their arguments into variables.
+while (( "$#" )); do
+  var=$1
 
-  # extract options and their arguments into variables.
-  while (( "$#" )); do
-    var=$1
+  case "$var" in
+    -t|--token)
+        if [ -z "$GITHUB_TOKEN" ]; then
+          # use the parameters if it's not in the .env file
+          GITHUB_TOKEN=$2 
+        fi
+        shift 2 ;;
 
-    case "$var" in
-      -t|--token)
-          GITHUB_TOKEN=$2 ; shift 2 ;;
-    esac
-    # shift
-  done
-fi
+    -r|--recreate-env)
+        RECREATE_ENV=1 ; shift 1 ;;
+  esac
+  # shift
+done
+
 
 if [ -z "$GITHUB_TOKEN" ]; then
   echo "Missing paramters: "
   echo "  github_token:     $GITHUB_TOKEN"
   echo "$USAGE"
 fi
+
 
 #------------------------------------------------------
 # CONSTANTS
@@ -136,14 +144,14 @@ else
   echo "Found python3 minimum verion."
 fi
 
-echo "Setup Python Virtual Env"
+echo "Checking for Python Virtual Env"
 cd $GEN3_SCRIPTS_DIR/populate_fake_data
-if [ ! -d "./env" ] || [ ! -e "./env/bin/activate" ]; then
-  # if env found but not populated
+if [ ! -d "./env" ] || [ ! -e "./env/bin/activate" ] || [ ! -z "$RECREATE_ENV" ]; then
+  # if env not found, not populated or needs to be recreated
   if [ -e "./env" ]; then 
-    rm -f "./env"
+    rm -rf "./env"
   fi
-  echo "Python Virtual Env not found, creating it."
+  echo "Python Virtual Env not found or being recreated, creating new env."
   python -m venv env 
   echo "Activating python env"
   source env/bin/activate
@@ -160,7 +168,6 @@ fi
 #------------------------------------------------------
 cd ./operations
 
-# handle different versions of sed that require different parameters
 echo "Edit etl.py so it includes your GITHUB_TOKEN"
 perl -i -pe "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" etl.py
 
@@ -172,19 +179,18 @@ python ./etl.py load
 
 deactivate  # exit python venv
 
-
 #------------------------------------------------------
 # Run:  Load data into elasticsearch
 #------------------------------------------------------
 cd ../../es_etl_patch
 
-echo "Setup ES ETL Python Virtual Env"
-if [ ! -d "./env" ] || [ ! -e "./env/bin/activate" ]; then
-  # if env found but not populated
+echo "Checking for ES ETL Python Virtual Env"
+if [ ! -d "./env" ] || [ ! -e "./env/bin/activate" ] || [ ! -z "$RECREATE_ENV" ]; then
+  # if env not found, not populated or needs to be recreated
   if [ -e "./env" ]; then 
-    rm -f "./env"
+    rm -rf "./env"
   fi
-  echo "Python Virtual Env not found, creating it."
+  echo "Python Virtual Env not found or being recreated, creating new env."
   python -m venv env 
   echo "Activating python env"
   source env/bin/activate
@@ -211,6 +217,8 @@ perl -i -pe "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" build_json.py
 echo "Load ES Data, python create_index.py"
 python create_index.py
 
+deactivate  # exit python venv
+
 #--------------------------------------------------------------
 # Replace nginx.conf (current one has guppy location commented)
 #--------------------------------------------------------------
@@ -224,10 +232,8 @@ if [ -e "$NGINX_CONF_TMP" ]; then
 fi
 
 #------------------------------------------------------
-# Guppy Setup
+# Services Restart
 #------------------------------------------------------
-# echo "Run: guppy_setup.sh"
-# bash $COMPOSE_SVCS_DIR/guppy_setup.sh
 
 echo "Docker restart guppy-service"
 docker restart guppy-service
