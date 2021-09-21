@@ -193,8 +193,7 @@ services:
       - postgres
       - arborist-service
   guppy-service:
-    image: "quay.io/pcdc/guppy:pcdc_dev_2021-09-14T16_09_04-05_00"
-    # image: "guppy:test"
+    image: "quay.io/pcdc/guppy:pcdc_dev_2021-09-21T14_13_26-05_00"
     container_name: guppy-service
     networks:
       - devnet
