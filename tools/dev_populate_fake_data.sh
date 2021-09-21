@@ -144,7 +144,7 @@ else
   echo "Found python3 minimum verion."
 fi
 
-echo "Setup Python Virtual Env"
+echo "Checking for Python Virtual Env"
 cd $GEN3_SCRIPTS_DIR/populate_fake_data
 if [ ! -d "./env" ] || [ ! -e "./env/bin/activate" ] || [ ! -z "$RECREATE_ENV" ]; then
   # if env not found, not populated or needs to be recreated
@@ -168,7 +168,6 @@ fi
 #------------------------------------------------------
 cd ./operations
 
-# handle different versions of sed that require different parameters
 echo "Edit etl.py so it includes your GITHUB_TOKEN"
 perl -i -pe "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" etl.py
 
@@ -180,13 +179,12 @@ python ./etl.py load
 
 deactivate  # exit python venv
 
-
 #------------------------------------------------------
 # Run:  Load data into elasticsearch
 #------------------------------------------------------
 cd ../../es_etl_patch
 
-echo "Setup ES ETL Python Virtual Env"
+echo "Checking for ES ETL Python Virtual Env"
 if [ ! -d "./env" ] || [ ! -e "./env/bin/activate" ] || [ ! -z "$RECREATE_ENV" ]; then
   # if env not found, not populated or needs to be recreated
   if [ -e "./env" ]; then 
@@ -219,6 +217,8 @@ perl -i -pe "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" build_json.py
 echo "Load ES Data, python create_index.py"
 python create_index.py
 
+deactivate  # exit python venv
+
 #--------------------------------------------------------------
 # Replace nginx.conf (current one has guppy location commented)
 #--------------------------------------------------------------
@@ -232,10 +232,8 @@ if [ -e "$NGINX_CONF_TMP" ]; then
 fi
 
 #------------------------------------------------------
-# Guppy Setup
+# Services Restart
 #------------------------------------------------------
-# echo "Run: guppy_setup.sh"
-# bash $COMPOSE_SVCS_DIR/guppy_setup.sh
 
 echo "Docker restart guppy-service"
 docker restart guppy-service
