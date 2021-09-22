@@ -91,10 +91,6 @@
           "icon": "upload",
           "link": "/submission",
           "name": "Data Submission"
-        },
-        {
-          "link": "https://uc-cdis.github.io/gen3-user-doc/user-guide/guide-overview",
-          "name": "Documentation"
         }
       ]
     },
@@ -133,10 +129,6 @@
       "ethnicity": {
         "chartType": "bar",
         "title": "Ethnicity"
-      },
-      "data_contributor_id": {
-        "chartType": "bar",
-        "title": "Data Contributor"
       }
     },
     "filters": {
@@ -151,7 +143,6 @@
           "fields": [
             "project_id",
             "consortium",
-            "data_contributor_id",
             "external_references.external_resource_name",
             "sex",
             "race",
@@ -166,9 +157,9 @@
             "histologies.histology",
             "histologies.histology_grade",
             "histologies.histology_inpc",
+            "tumor_assessments.age_at_tumor_assessment",
             "tumor_assessments.tumor_classification",
             "tumor_assessments.tumor_site",
-            "tumor_assessments.tumor_size",
             "tumor_assessments.longest_diam_dim1",
             "tumor_assessments.invasiveness",
             "tumor_assessments.nodal_clinical",
@@ -220,16 +211,16 @@
         ]
     },
     "patientIds": {
-       "filter": true,
-       "export": true
-    },
-    "survivalAnalysis": {
-       "result": {
-         "pval": true,
-         "risktable": true,
-         "survival": true
-       }
-    },
+      "filter": true,
+      "export": true
+   },
+   "survivalAnalysis": {
+      "result": {
+        "pval": true,
+        "risktable": true,
+        "survival": true
+      }
+   },
     "guppyConfig": {
       "dataType": "subject",
       "nodeCountTitle": "Subjects",
