@@ -167,7 +167,7 @@ services:
     depends_on:
       - postgres
   amanuensis-service:
-    image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-09-08T09_40_15-05_00" 
+    image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-10-04T15_06_44-05_00" 
     # image: "quay.io/pcdc/amanuensis:2021.06"
     # image: amanuensis:test09
     # build: ../amanuensis
@@ -262,7 +262,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:pcdc_dev_2021-09-20T15_46_55-05_00"
+    image: "quay.io/pcdc/windmill:pcdc_dev_2021-10-04T16_22_57-05_00"
     # image: "quay.io/pcdc/windmill:subject-info-page-proof-of-concept"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
@@ -328,8 +328,11 @@ services:
       - fence-service
       - portal-service
 #      - pidgin-service
+# feat/nested branch of github, feat_nested tag for qua
   tube-service:
-    image: "quay.io/cdis/tube:feat_multiple_field_join"
+    image: "quay.io/cdis/tube:feat_nested"
+    # image: "tube:test"
+    # image: "quay.io/cdis/tube:feat_multiple_field_join"
     container_name: tube-service
     command: bash -c "while true; do sleep 5; done"
     networks:
@@ -350,7 +353,7 @@ services:
       - esproxy-service
       - spark-service
   spark-service:
-    image: "quay.io/cdis/gen3-spark:2021.08"
+    image: "quay.io/cdis/gen3-spark:2021.09"
     container_name: spark-service
     command: bash -c "python run_config.py && hdfs namenode -format && hdfs --daemon start namenode && hdfs --daemon start datanode && yarn --daemon start resourcemanager && yarn --daemon start nodemanager && hdfs dfsadmin -safemode leave &&  hdfs dfs -mkdir /result && while true; do sleep 5; done"
     expose:
