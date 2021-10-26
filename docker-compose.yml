@@ -144,7 +144,7 @@ services:
     depends_on:
       - postgres
   PcdcAnalysisTools-service:
-    image: "quay.io/pcdc/pcdcanalysistools:2021.08"
+    image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2021-10-22T15_37_06-05_00"
     container_name: pcdcanalysistools-service
     entrypoint: bash /PcdcAnalysisTools_setup.sh
     networks:
@@ -193,7 +193,7 @@ services:
       - postgres
       - arborist-service
   guppy-service:
-    image: "quay.io/pcdc/guppy:pcdc_dev_2021-09-21T14_13_26-05_00"
+    image: "quay.io/pcdc/guppy:pcdc_dev_2021-10-26T13_47_17-05_00"
     container_name: guppy-service
     networks:
       - devnet
@@ -262,7 +262,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:pcdc_dev_2021-10-06T13_50_21-05_00"
+    image: "quay.io/pcdc/windmill:pcdc_dev_2021-10-26T12_33_45-05_00"
     # image: "quay.io/pcdc/windmill:subject-info-page-proof-of-concept"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
@@ -280,6 +280,7 @@ services:
       - GDC_SUBPATH=http://revproxy-service/api/v0/submission/
       - TIER_ACCESS_LEVEL=granular
       - TIER_ACCESS_LIMIT=1
+      - DATA_RELEASE_VERSION=pcdc-20211006
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost"]
       interval: 60s
