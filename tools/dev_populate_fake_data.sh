@@ -169,7 +169,7 @@ fi
 cd ./operations
 
 echo "Edit etl.py so it includes your GITHUB_TOKEN"
-perl -i -pe "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" etl.py
+perl -i -pe "s/token = \"[0-9a-zA-Z_]*\"/token =\"${GITHUB_TOKEN}\"/" etl.py
 
 #------------------------------------------------------
 # Run:  etl.py load, Load data into postgres db
