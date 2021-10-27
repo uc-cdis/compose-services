@@ -1,0 +1,4 @@
+DICTIONARY_URL: https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-test.json
+# questo PATH_TO_SCHEMA_DIR: /schemas_dir
+REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
+AUTHZ_ENTITY_NAME: subject

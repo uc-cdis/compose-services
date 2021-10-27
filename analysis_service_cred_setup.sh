@@ -1,4 +1,6 @@
 #!/bin/bash
+###### DEPRECATED --> see creds_setup_services.sh  #########
+
 # Script to setup keys for fence as well as ssl credentials
 
 if [[ ! -d ./Secrets ]]; then

@@ -53,21 +53,29 @@ rm "$tempFile"
 
 cd Secrets
 
+#change to fence-jwt-keys
+# service_key_dir="fenceJwtKeys"
+service_name="fence"
+service_key_dir="fence-jwt-keys"
+
 # make directories for temporary credentials
 timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-# generate private and public key for fence
+# generate private and public key for service
 yearMonth="$(date +%Y-%m)"
-if [[ ! -d ./fenceJwtKeys ]] || ! (ls ./fenceJwtKeys | grep "$yearMonth" > /dev/null 2>&1); then
-    echo "Generating fence OAUTH key pairs under Secrets/fenceJwtKeys"
-    mkdir -p fenceJwtKeys
-    mkdir -p fenceJwtKeys/${timestamp}
+if [[ ! -d ./$service_key_dir ]] || ! (ls ./$service_key_dir | grep "$yearMonth" > /dev/null 2>&1); then
+    echo "Generating $service_name OAUTH key pairs under Secrets/$service_key_dir"
+    mkdir -p $service_key_dir
+    mkdir -p $service_key_dir/${timestamp}
 
-    openssl genpkey -algorithm RSA -out fenceJwtKeys/${timestamp}/jwt_private_key.pem \
+    openssl genpkey -algorithm RSA -out $service_key_dir/${timestamp}/jwt_private_key.pem \
         -pkeyopt rsa_keygen_bits:2048
-    openssl rsa -pubout -in fenceJwtKeys/${timestamp}/jwt_private_key.pem \
-        -out fenceJwtKeys/${timestamp}/jwt_public_key.pem
-    chmod -R a+rx fenceJwtKeys
+    openssl rsa -pubout -in $service_key_dir/${timestamp}/jwt_private_key.pem \
+        -out $service_key_dir/${timestamp}/jwt_public_key.pem
+    chmod -R a+rx $service_key_dir
+
+    cp $service_key_dir/${timestamp}/jwt_private_key.pem $service_key_dir/jwt_private_key.pem
+    cp $service_key_dir/${timestamp}/jwt_public_key.pem $service_key_dir/jwt_public_key.pem 
 fi
 
 # generate certs for nginx ssl
