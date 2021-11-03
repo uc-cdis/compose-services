@@ -160,7 +160,7 @@ services:
       - arborist-service
       - esproxy-service
   esproxy-service:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.12
+    image: quay.io/cdis/elasticsearch-oss:6.8.12
     container_name: esproxy-service
     environment:
       - cluster.name=elasticsearch-cluster
@@ -307,7 +307,7 @@ services:
       - HADOOP_URL=hdfs://0.0.0.0:9000
       - HADOOP_HOST=0.0.0.0
   kibana-service:
-    image: docker.elastic.co/kibana/kibana-oss:6.5.4
+    image: quay.io/cdis/kibana-oss:6.5.4
     container_name: kibana-service
     environment:
       - SERVER_NAME=kibana-service
