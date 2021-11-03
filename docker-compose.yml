@@ -40,7 +40,7 @@ services:
   fence-service:
     image: "quay.io/pcdc/fence:pcdc_dev_2021-09-16T13_51_21-05_00"
     # build: ../fence
-    # image: fence:00
+    # image: fence:01
     command: bash /var/www/fence/fence_setup.sh
     container_name: fence-service
     networks:
@@ -49,7 +49,7 @@ services:
       - ./Secrets/fence-config.yaml:/var/www/fence/fence-config.yaml
       - ./Secrets/user.yaml:/var/www/fence/user.yaml
       - ./Secrets/TLS/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
-      - ./Secrets/fence-jwt-keys:/fence/keys
+      - ./Secrets/fenceJwtKeys:/fence/keys
       - ./Secrets/amanuensis-jwt-keys/jwt_public_key.pem:/amanuensis/jwt_public_key.pem
       - ./scripts/fence_setup.sh:/var/www/fence/fence_setup.sh
     healthcheck:
@@ -58,9 +58,7 @@ services:
       timeout: 5s
       retries: 3
     environment:
-      - SERVICE_NAME=fence
       - PYTHONPATH=/var/www/fence
-      - AMANUENSIS_PUBLIC_KEY=/amanuensis/jwt_public_key.pem
       - GEN3_DEBUG=True
     depends_on:
       - postgres
@@ -74,7 +72,6 @@ services:
     volumes:
       - ./scripts/arborist_setup.sh:/go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     environment:
-      - SERVICE_NAME=arborist
       - JWKS_ENDPOINT=http://fence-service/.well-known/jwks
       - PGDATABASE=arborist_db
       - PGUSER=arborist_user
@@ -115,10 +112,11 @@ services:
       - ./Secrets/TLS/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
       - ./datadictionary/gdcdictionary/schemas:/schemas_dir
-    environment:
-      SERVICE_NAME: peregrine
-    env_file: 
-      - shared_env
+    environment: &env
+      DICTIONARY_URL: https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-test.json
+      # questo PATH_TO_SCHEMA_DIR: /schemas_dir
+      REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
+      AUTHZ_ENTITY_NAME: subject
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost/_status"]
       interval: 60s
@@ -140,10 +138,7 @@ services:
       - ./Secrets/config_helper.py:/var/www/sheepdog/config_helper.py
       - ./scripts/sheepdog_setup.sh:/sheepdog_setup.sh
       - ./datadictionary/gdcdictionary/schemas:/schemas_dir
-    environment: 
-      SERVICE_NAME: sheepdog
-    env_file:
-      - shared_env
+    environment: *env
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost/_status"]
       interval: 60s
@@ -166,10 +161,7 @@ services:
       - ./datadictionary/gdcdictionary/schemas:/schemas_dir
       - ./fake_data/fake.json:/var/www/PcdcAnalysisTools/data/fake.json
       - ./fake_data/analysis_count_fake.json:/var/www/PcdcAnalysisTools/data/analysis_count_fake.json
-    environment: 
-      SERVICE_NAME: pcdcanalysistools
-    env_file:
-      - shared_env
+    environment: *env
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost/_status"]
       interval: 60s
@@ -181,7 +173,7 @@ services:
     image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-10-04T15_06_44-05_00" 
     # image: "quay.io/pcdc/amanuensis:2021.06"
     # build: ../amanuensis
-    # image: amanuensis:00
+    # image: amanuensis:01
     command: bash /var/www/amanuensis/amanuensis_setup.sh
     container_name: amanuensis-service
     networks:
@@ -190,7 +182,7 @@ services:
       - ./Secrets/amanuensis-config.yaml:/var/www/amanuensis/amanuensis-config.yaml
       - ./Secrets/user.yaml:/var/www/amanuensis/user.yaml
       - ./Secrets/TLS/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
-      - ./Secrets/fence-jwt-keys:/amanuensis/keys
+      - ./Secrets/fenceJwtKeys:/amanuensis/keys
       - ./Secrets/amanuensis-jwt-keys/jwt_private_key.pem:/var/www/amanuensis/jwt_private_key.pem
       - ./scripts/amanuensis_setup.sh:/var/www/amanuensis/amanuensis_setup.sh
     healthcheck:
@@ -199,9 +191,7 @@ services:
       timeout: 5s
       retries: 3
     environment:
-      - SERVICE_NAME=amanuensis
       - PYTHONPATH=/var/www/amanuensis
-      - PRIVATE_KEY_PATH=/var/www/amanuensis/jwt_private_key.pem
       - GEN3_DEBUG=True
       - HUBSPOT_DEBUG=True
       - AWS_SES_DEBUG=True
@@ -221,7 +211,6 @@ services:
     entrypoint: /usr/bin/wait_for_esproxy.sh
     command: node --max-http-header-size 16000 dist/server/server.js
     environment:
-      - SERVICE_NAME=guppy
       - GUPPY_CONFIG_FILEPATH=/guppy/guppy_config.json
       - PUBLIC_KEY_PATH=/guppy/jwt_public_key.pem
       - GEN3_ARBORIST_ENDPOINT=http://arborist-service
@@ -295,7 +284,6 @@ services:
     environment:
       # - NODE_ENV=dev
       - APP=gitops
-      - SERVICE_NAME=portal
       - GDC_SUBPATH=http://revproxy-service/api/v0/submission/
       - TIER_ACCESS_LEVEL=granular
       - TIER_ACCESS_LIMIT=1
@@ -390,7 +378,6 @@ services:
   #   image: docker.elastic.co/kibana/kibana-oss:6.5.4
   #   container_name: kibana-service
   #   environment:
-  #     - SERVER_NAME=kibana-service
   #     - ELASTICSEARCH_URL=http://esproxy-service:9200
   #   ports:
   #     - 5601:5601

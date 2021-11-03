@@ -1,6 +1,7 @@
 from PcdcAnalysisTools.api import app, app_init
 from os import environ
 import config_helper
+from pcdcutils.environment import is_env_enabled
 
 APP_NAME='PcdcAnalysisTools'
 def load_json(file_name):
@@ -8,6 +9,9 @@ def load_json(file_name):
 
 conf_data = load_json('creds.json')
 config = app.config
+
+config['SERVICE_NAME'] = 'pcdcanalysistools'
+config['PRIVATE_KEY_PATH'] = "/var/www/PcdcAnalysisTools/jwt_private_key.pem"
 
 config["AUTH"] = 'https://auth.service.consul:5000/v3/'
 config["AUTH_ADMIN_CREDS"] = None
@@ -53,6 +57,10 @@ config['OAUTH2'] = {
     'oauth_provider': 'https://%s/user/oauth2/' % conf_data['hostname'],
     'redirect_uri': 'https://%s/api/v0/oauth2/authorize'  % conf_data['hostname']
 }
+
+# trailing slash intentionally omitted
+config['GUPPY_API'] = 'http://guppy-service'
+
 config['USER_API'] = 'http://fence-service/'
 # option to force authutils to prioritize USER_API setting over the issuer from
 # token when redirecting, used during local docker compose setup when the
@@ -66,4 +74,4 @@ else:
 
 app_init(app)
 application = app
-application.debug = (environ.get('GEN3_DEBUG') == "True")
+application.debug = (is_env_enabled('GEN3_DEBUG'))
