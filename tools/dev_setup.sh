@@ -155,10 +155,10 @@ IFS="$OLD_IFS"
 # rm -f $NGINX_CONF_TMP
 
 #------------------------------------------------------
-# Analysis Service Credentials Setup
+# Credentials Setup for Gen3 Services
 #------------------------------------------------------
-echo "Running: analysis_service_cred_setup.sh"
-bash ./analysis_service_cred_setup.sh
+echo "Running: creds_setup_services.sh"
+bash ./creds_setup_services.sh
 
 #------------------------------------------------------
 # Docker

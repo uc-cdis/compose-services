@@ -38,7 +38,9 @@ services:
   #   depends_on:
   #     - postgres
   fence-service:
-    image: "quay.io/pcdc/fence:pcdc_dev_2021-09-16T13_51_21-05_00"
+    image: "quay.io/pcdc/fence:pcdc_dev_2021-11-05T13_32_54-05_00"
+    # build: ../fence
+    # image: fence:01
     command: bash /var/www/fence/fence_setup.sh
     container_name: fence-service
     networks:
@@ -48,6 +50,7 @@ services:
       - ./Secrets/user.yaml:/var/www/fence/user.yaml
       - ./Secrets/TLS/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
       - ./Secrets/fenceJwtKeys:/fence/keys
+      - ./Secrets/amanuensis-jwt-keys/jwt_public_key.pem:/amanuensis/jwt_public_key.pem
       - ./scripts/fence_setup.sh:/var/www/fence/fence_setup.sh
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost/_status"]
@@ -98,7 +101,7 @@ services:
   #   networks:
   #     - devnet
   peregrine-service:
-    image: "quay.io/pcdc/peregrine:pcdc_dev_2021-09-16T12_17_03-05_00"
+    image: "quay.io/pcdc/peregrine:1.0.0"
     container_name: peregrine-service
     networks:
       - devnet
@@ -124,7 +127,7 @@ services:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/pcdc/sheepdog:pcdc_dev_2021-09-16T12_30_43-05_00"    
+    image: "quay.io/pcdc/sheepdog:pcdc_dev_2021-11-03T17_07_59-05_00"    
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -144,7 +147,9 @@ services:
     depends_on:
       - postgres
   PcdcAnalysisTools-service:
-    image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2021-10-22T15_37_06-05_00"
+    image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2021-11-08T15_05_36-06_00"
+    # build: ../PcdcAnalysisTools
+    # image: pcdcanalysistools:01
     container_name: pcdcanalysistools-service
     entrypoint: bash /PcdcAnalysisTools_setup.sh
     networks:
@@ -152,7 +157,7 @@ services:
     volumes:
       - ./Secrets/PcdcAnalysisTools_settings.py:/var/www/PcdcAnalysisTools/wsgi.py
       - ./Secrets/PcdcAnalysisTools_creds.json:/var/www/PcdcAnalysisTools/creds.json
-      - ./Secrets/analysisJwtKeys/jwt_private_key.pem:/var/www/PcdcAnalysisTools/jwt_private_key.pem
+      - ./Secrets/analysis-jwt-keys/jwt_private_key.pem:/var/www/PcdcAnalysisTools/jwt_private_key.pem
       - ./Secrets/config_helper.py:/var/www/PcdcAnalysisTools/config_helper.py
       - ./scripts/PcdcAnalysisTools_setup.sh:/PcdcAnalysisTools_setup.sh
       - ./datadictionary/gdcdictionary/schemas:/schemas_dir
@@ -167,10 +172,9 @@ services:
     depends_on:
       - postgres
   amanuensis-service:
-    image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-10-04T15_06_44-05_00" 
-    # image: "quay.io/pcdc/amanuensis:2021.06"
-    # image: amanuensis:test09
+    image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-11-08T14_53_30-06_00" 
     # build: ../amanuensis
+    # image: amanuensis:02
     command: bash /var/www/amanuensis/amanuensis_setup.sh
     container_name: amanuensis-service
     networks:
@@ -180,6 +184,7 @@ services:
       - ./Secrets/user.yaml:/var/www/amanuensis/user.yaml
       - ./Secrets/TLS/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
       - ./Secrets/fenceJwtKeys:/amanuensis/keys
+      - ./Secrets/amanuensis-jwt-keys/jwt_private_key.pem:/var/www/amanuensis/jwt_private_key.pem
       - ./scripts/amanuensis_setup.sh:/var/www/amanuensis/amanuensis_setup.sh
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost/_status"]
@@ -189,6 +194,9 @@ services:
     environment:
       - PYTHONPATH=/var/www/amanuensis
       - GEN3_DEBUG=True
+      - HUBSPOT_DEBUG=True
+      - AWS_SES_DEBUG=True
+      - SEND_MESSAGE_DEBUG=True
     depends_on:
       - postgres
       - arborist-service
@@ -199,7 +207,7 @@ services:
       - devnet
     volumes:
       - ./Secrets/guppy_config.json:/guppy/guppy_config.json
-      - ./Secrets/analysisJwtKeys/jwt_public_key.pem:/guppy/jwt_public_key.pem
+      - ./Secrets/analysis-jwt-keys/jwt_public_key.pem:/guppy/jwt_public_key.pem
       - ./scripts/wait_for_esproxy.sh:/usr/bin/wait_for_esproxy.sh:ro
     entrypoint: /usr/bin/wait_for_esproxy.sh
     command: node --max-http-header-size 16000 dist/server/server.js
@@ -262,8 +270,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:pcdc_dev_2021-10-26T12_33_45-05_00"
-    # image: "quay.io/pcdc/windmill:subject-info-page-proof-of-concept"
+    image: "quay.io/pcdc/windmill:pcdc_dev_2021-11-08T10_40_44-06_00"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
@@ -286,7 +293,6 @@ services:
       interval: 60s
       timeout: 5s
       retries: 10
-
     depends_on:
       - postgres   #can comment this
       - peregrine-service
@@ -372,7 +378,6 @@ services:
   #   image: docker.elastic.co/kibana/kibana-oss:6.5.4
   #   container_name: kibana-service
   #   environment:
-  #     - SERVER_NAME=kibana-service
   #     - ELASTICSEARCH_URL=http://esproxy-service:9200
   #   ports:
   #     - 5601:5601

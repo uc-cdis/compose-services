@@ -26,6 +26,9 @@ APP_NAME: 'Gen3 Data Commons'
 # Where amanuensis microservice is deployed
 HOSTNAME: 'localhost'
 BASE_URL: 'https://localhost/amanuensis'
+# a standardized name unique to each app for service-to-service interaction
+# so the service receiving the request knows it came from another Gen3 service
+SERVICE_NAME: 'amanuensis'
 # postgres db to connect to
 # connection url format:
 #     postgresql://[user[:password]@][netloc][:port][/dbname]
@@ -45,6 +48,10 @@ EXECUTIVE_COMMITTEE:
 #     key = base64.urlsafe_b64encode(os.urandom(32))
 #     print(key)
 ENCRYPTION_KEY: ''
+
+# Cross-service keys
+# Private key for signing requests sent to other Gen3 services
+PRIVATE_KEY_PATH: '/var/www/amanuensis/jwt_private_key.pem'
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # DEBUG & SECURITY SETTINGS
@@ -204,6 +211,8 @@ INDEXD_PASSWORD: 'indexd_client_pass'
 
 # url where role-based access control microservice is running
 ARBORIST: http://arborist-service
+
+FENCE: http://fence-service
 
 
 # //////////////////////////////////////////////////////////////////////////////////////
