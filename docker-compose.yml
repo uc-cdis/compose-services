@@ -38,7 +38,7 @@ services:
   #   depends_on:
   #     - postgres
   fence-service:
-    image: "quay.io/pcdc/fence:pcdc_dev_2021-09-16T13_51_21-05_00"
+    image: "quay.io/pcdc/fence:pcdc_dev_2021-11-05T13_32_54-05_00"
     # build: ../fence
     # image: fence:01
     command: bash /var/www/fence/fence_setup.sh
@@ -101,7 +101,7 @@ services:
   #   networks:
   #     - devnet
   peregrine-service:
-    image: "quay.io/pcdc/peregrine:pcdc_dev_2021-09-16T12_17_03-05_00"
+    image: "quay.io/pcdc/peregrine:1.0.0"
     container_name: peregrine-service
     networks:
       - devnet
@@ -127,7 +127,7 @@ services:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/pcdc/sheepdog:pcdc_dev_2021-09-16T12_30_43-05_00"    
+    image: "quay.io/pcdc/sheepdog:pcdc_dev_2021-11-03T17_07_59-05_00"    
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -147,7 +147,9 @@ services:
     depends_on:
       - postgres
   PcdcAnalysisTools-service:
-    image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2021-10-22T15_37_06-05_00"
+    image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2021-11-08T15_05_36-06_00"
+    # build: ../PcdcAnalysisTools
+    # image: pcdcanalysistools:01
     container_name: pcdcanalysistools-service
     entrypoint: bash /PcdcAnalysisTools_setup.sh
     networks:
@@ -170,10 +172,9 @@ services:
     depends_on:
       - postgres
   amanuensis-service:
-    image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-10-04T15_06_44-05_00" 
-    # image: "quay.io/pcdc/amanuensis:2021.06"
+    image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-11-08T14_53_30-06_00" 
     # build: ../amanuensis
-    # image: amanuensis:01
+    # image: amanuensis:02
     command: bash /var/www/amanuensis/amanuensis_setup.sh
     container_name: amanuensis-service
     networks:
@@ -269,8 +270,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:pcdc_dev_2021-10-26T12_33_45-05_00"
-    # image: "quay.io/pcdc/windmill:subject-info-page-proof-of-concept"
+    image: "quay.io/pcdc/windmill:pcdc_dev_2021-11-08T10_40_44-06_00"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
