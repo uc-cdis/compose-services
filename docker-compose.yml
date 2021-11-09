@@ -60,6 +60,7 @@ services:
     environment:
       - PYTHONPATH=/var/www/fence
       - GEN3_DEBUG=True
+      - dd_enabled=False
     depends_on:
       - postgres
       - arborist-service
