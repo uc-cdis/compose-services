@@ -148,7 +148,7 @@ services:
     depends_on:
       - postgres
   PcdcAnalysisTools-service:
-    image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2021-11-09T13_31_16-06_00"
+    image: "quay.io/pcdc/pcdcanalysistools:1.0.0"
     # build: ../PcdcAnalysisTools
     # image: pcdcanalysistools:01
     container_name: pcdcanalysistools-service
@@ -173,7 +173,7 @@ services:
     depends_on:
       - postgres
   amanuensis-service:
-    image: "quay.io/pcdc/amanuensis:authutils_4_0_0" 
+    image: "quay.io/pcdc/amanuensis:1.0.0" 
     # build: ../amanuensis
     # image: amanuensis:02
     command: bash /var/www/amanuensis/amanuensis_setup.sh
