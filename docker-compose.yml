@@ -60,7 +60,7 @@ services:
     environment:
       - PYTHONPATH=/var/www/fence
       - GEN3_DEBUG=True
-      - dd_enabled=False
+      - DD_ENABLED=False
     depends_on:
       - postgres
       - arborist-service
@@ -128,7 +128,7 @@ services:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/pcdc/sheepdog:pcdc_dev_2021-11-03T17_07_59-05_00"    
+    image: "quay.io/pcdc/sheepdog:1.0.0"    
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -148,7 +148,7 @@ services:
     depends_on:
       - postgres
   PcdcAnalysisTools-service:
-    image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2021-11-08T15_05_36-06_00"
+    image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2021-11-09T13_31_16-06_00"
     # build: ../PcdcAnalysisTools
     # image: pcdcanalysistools:01
     container_name: pcdcanalysistools-service
@@ -173,7 +173,7 @@ services:
     depends_on:
       - postgres
   amanuensis-service:
-    image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-11-08T14_53_30-06_00" 
+    image: "quay.io/pcdc/amanuensis:authutils_4_0_0" 
     # build: ../amanuensis
     # image: amanuensis:02
     command: bash /var/www/amanuensis/amanuensis_setup.sh
@@ -202,7 +202,7 @@ services:
       - postgres
       - arborist-service
   guppy-service:
-    image: "quay.io/pcdc/guppy:pcdc_dev_2021-10-26T13_47_17-05_00"
+    image: "quay.io/pcdc/guppy:1.0.0"
     container_name: guppy-service
     networks:
       - devnet
@@ -271,7 +271,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:pcdc_dev_2021-11-09T09_44_02-06_00"
+    image: "quay.io/pcdc/windmill:1.0.0"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
