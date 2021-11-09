@@ -58,7 +58,7 @@ For an introduction to the data model and some essential information for modifyi
 
 The data dictionary the commons uses is dictated by either the `DICTIONARY_URL` or the `PATH_TO_SCHEMA_DIR` environment variable in both Sheepdog and Peregrine. The default value for `DICTIONARY_URL` are set to `https://s3.amazonaws.com/dictionary-artifacts/datadictionary/develop/schema.json` and the default value for `PATH_TO_SCHEMA_DIR` is set to the `datadictionary/gdcdictionary/schemas` directory which is downloaded as part of the compose-services repo (from [here](https://github.com/uc-cdis/datadictionary/tree/develop/gdcdictionary/schemas)). Both correspond to the developer test data dictionary, as one is on AWS and one is a local data dictionary setup. To override this default, edit the `environment` fields in the `peregrine-service` section of the `docker-compose.yml` file. This will change the value of the environment variable in both Sheepdog and Peregrine. An example, where the `DICTIONARY_URL` and `PATH_TO_SCHEMA_DIR` environment variables is set to the default values, is provided in the docker-compose.yml.
 
-**NOTE**: Only one of the two environment variables can be active at a time. The data commons will prefer `DICTIONARY_URL` over `PATH_TO_SCHEMA_DIR`. To reduce confusion, keep the variable you're not using commented out.
+> 🟢 Note: Only one of the two environment variables can be active at a time. The data commons will prefer `DICTIONARY_URL` over `PATH_TO_SCHEMA_DIR`. To reduce confusion, keep the variable you're not using commented out.
 
 There are 3 nodes that are required for the dev (default) portal--`case`, `experiment`, and `aliquot`. If you remove any one of these, then you will also need to [change](https://github.com/uc-cdis/compose-services/blob/master/docs/cheat_sheet.md) the `APP` environment variable in `portal-service`, in addition to changing the `DICTIONARY_URL` or `PATH_TO_SCHEMA` field.
 
@@ -67,8 +67,8 @@ As this is a change to the Docker Compose configuration, you will need to restar
 ## Configuring guppy for exploration page
 
 In order to enable guppy for exploration page, the `gitops.json`, `etlMapping.yaml` and `guppy_config.json` need to be configured. There are some examples of configurations located at `https://github.com/uc-cdis/cdis-manifest`. It is worth to mentioning that the index and type in `guppy_config.json` need to be matched with the index in `etlMapping.json`.
-> NOTE:  The ETL [Tube](https://github.com/uc-cdis/tube) job creates required ElasticSearch indices for the Exploration page.
- When the data dictionary is changed, those files are also configured accordingly so that the exploration page can work.
+> 🟢 Note:  The ETL [Tube](https://github.com/uc-cdis/tube) job creates required ElasticSearch indices for the Exploration page.
+ When the data dictionary is changed, those files are also configured accordingly so that the exploration page can work. For more guidance read further [here](https://gen3.org/resources/operator/#8-etl-and-data-explorer-configurations).
 
 Install `datadictionary` Python dependency
 ```

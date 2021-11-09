@@ -12,7 +12,9 @@ If you've never used Docker before, it may be helpful to read some of the Docker
 The official *Docker* installation page can be found [here](https://docs.docker.com/install/#supported-platforms). The official *Docker Compose* installation page can be found [here](https://docs.docker.com/compose/install/#prerequisites). For Windows and Mac, Docker Compose is included into Docker Desktop. If you are using Linux, then the official Docker installation does not come with Docker Compose; you will need to install Docker Engine before installing Docker Compose.
 Go through the steps of installing Docker Compose for your platform, then proceed to set up credentials. Note, that Docker Desktop is set to use 2 GB runtime memory by default. 
 
-> **NOTE:** As a minimum, make sure to increase the size of the **memory to 6 GB** (or more) as described [here](https://docs.docker.com/docker-for-mac/#resources).
+> **NOTE:**
+> 
+> 🛑 As a minimum, make sure to increase the size of the **memory to 6 GB** (or more) as described [here](https://docs.docker.com/docker-for-mac/#resources).
 
 > ElasticSearch and ETL/Spark jobs through tube/guppy/spark-service are particularly resource intensive. If you are running Compose-Services on your laptop, we recommend minimizing/stopping background jobs/services during running ETL jobs or hdfs formatting phase during `spark-service` startup, etc. Please do observe with `docker stats` and `top` / `htop`.
 
