@@ -11,3 +11,5 @@ Secrets/
 *.cache
 *pyc
 docker-compose.override.yml
+*.tmp
+

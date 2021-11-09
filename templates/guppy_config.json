@@ -1,1 +1,1 @@
-{ "indices": [ { "index": "etl", "type": "case" }, { "index": "file", "type": "file" } ], "config_index": "etl_array-config", "auth_filter_field": "auth_resource_path" }
+{ "indices": [ { "index": "pcdc_20210915", "type": "subject" } ], "config_index": "pcdc_20210915-array-config", "auth_filter_field": "auth_resource_path" }
