@@ -34,13 +34,6 @@ SERVICE_NAME: 'amanuensis'
 #     postgresql://[user[:password]@][netloc][:port][/dbname]
 DB: 'postgresql://amanuensis_user:amanuensis_pass@postgres:5432/amanuensis_db'
 
-EXECUTIVE_COMMITTEE:
-  INSTRUCT:
-    - 'graglia01@gmail.com'
-    - 'graglia01@libero.it'
-  INRG:
-    - 'graglia01@gmail.com'
-
 # A URL-safe base64-encoded 32-byte key for encrypting keys in db
 # in python you can use the following script to generate one:
 #     import base64
