@@ -38,7 +38,7 @@ services:
   #   depends_on:
   #     - postgres
   fence-service:
-    image: "quay.io/pcdc/fence:pcdc_dev_2021-12-02T11_06_32-06_00"
+    image: "quay.io/pcdc/fence:1.1.0"
     # build: ../fence
     # image: fence:01
     command: bash /var/www/fence/fence_setup.sh
@@ -128,7 +128,7 @@ services:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/pcdc/sheepdog:1.0.0"    
+    image: "quay.io/pcdc/sheepdog:1.1.0"    
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -149,7 +149,7 @@ services:
       - postgres
   PcdcAnalysisTools-service:
     # image: "quay.io/pcdc/pcdcanalysistools:improve_base_image"
-    image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2021-12-02T11_08_10-06_00"
+    image: "quay.io/pcdc/pcdcanalysistools:1.1.0"
     # build: ../PcdcAnalysisTools
     # image: pcdcanalysistools:01
     container_name: pcdcanalysistools-service
@@ -174,7 +174,7 @@ services:
     depends_on:
       - postgres
   amanuensis-service:
-    image: "quay.io/pcdc/amanuensis:pcdc_dev_2021-12-02T10_43_19-06_00" 
+    image: "quay.io/pcdc/amanuensis:1.1.0" 
     # image: "amanuensis:test"
     # build: ../amanuensis
     # image: amanuensis:02
