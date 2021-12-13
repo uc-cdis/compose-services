@@ -273,7 +273,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:pcdc_dev_2021-12-08T17_04_31-06_00"
+    image: "quay.io/pcdc/windmill:1.1.0"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
