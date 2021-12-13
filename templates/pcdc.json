@@ -162,7 +162,6 @@
           {
             "title": "Subject",
             "fields": [
-              "project_id",
               "consortium",
               "external_references.external_resource_name",
               "sex",
