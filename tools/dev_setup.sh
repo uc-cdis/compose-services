@@ -122,12 +122,13 @@ NGINX_CONF_TMP="$COMPOSE_SVCS_DIR/nginx.conf.tmp"
 
 echo "Nginx.conf:  Disable guppy-service block"
 
-# remove old tmp file if it exists
-rm -fr $NGINX_CONF_TMP
-
-# rename the nginx.conf
-cp -f $NGINX_CONF $NGINX_CONF_TMP
-rm -f $NGINX_CONF
+# restore tmp file if it exists (from a previous failed setup)
+if [ ! -e "$NGINX_CONF_TMP" ]; then
+  # rename the nginx.conf
+  mv -f $NGINX_CONF $NGINX_CONF_TMP
+else
+  rm -f $NGINX_CONF
+fi
 
 # start the new nginx.conf file
 touch $NGINX_CONF
