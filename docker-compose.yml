@@ -114,7 +114,7 @@ services:
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
       - ./datadictionary/gdcdictionary/schemas:/schemas_dir
     environment: &env
-      DICTIONARY_URL: https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-test.json
+      DICTIONARY_URL: https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-20220106.json
       # questo PATH_TO_SCHEMA_DIR: /schemas_dir
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
       AUTHZ_ENTITY_NAME: subject
@@ -348,7 +348,7 @@ services:
     networks:
       - devnet
     environment:
-      - DICTIONARY_URL=https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-test.json
+      - DICTIONARY_URL=https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-20220106.json
       - ES_URL=esproxy-service
       - ES_INDEX_NAME=etl
       - HADOOP_URL=hdfs://spark-service:9000
