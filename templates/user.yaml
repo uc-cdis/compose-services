@@ -26,6 +26,8 @@ authz:
     resources:
         - name: 'data_file'
           description: 'data files, stored in S3'
+        - name: 'sower'
+          description: 'sower resource'
         - name: workspace
           description: jupyter notebooks
         - name: analysis
@@ -46,43 +48,8 @@ authz:
         - name: programs
           subresources:
           - name: pcdc
-            subresources:
-            - name: projects
-              subresources:
-              - name: pcdc_20200819
-                subresources:
-                - name: persons
-                  subresources:
-                  - name: pcdc_1
-                    subresources:
-                    - name: subjects
-                      subresources:
-                      - name: sub_id_1
-                      - name: sub_id_2
-                      - name: sub_id_3
-                  - name: pcdc_2 
-                    subresources:
-                    - name: subjects
-                      subresources:
-                      - name: sub_id_4
-                  - name: pcdc_3
-              - name: pcdc_20200831
-                subresources:
-                - name: persons
-                  subresources:
-                  - name: pcdc_1
-                    subresources:
-                    - name: subjects
-                      subresources:
-                      - name: sub_id_1
-              - name: test
-              - name: '2020_10_23'
-          - name: zcssuoxy
-            subresources:
-            - name: projects
-              subresources:
-              - name: zxftnvre
-              
+            
+
 
     policies:
       - id: 'data_upload'
@@ -115,6 +82,10 @@ authz:
           - indexd_admin
         resource_paths:
           - /programs
+      - description: be able to use sower job
+        id: sower
+        resource_paths: [/sower]
+        role_ids: [sower_user]
       - id: 'services.sheepdog-admin'
         description: 'CRUD access to programs and projects'
         role_ids:
@@ -148,6 +119,13 @@ authz:
         - reader
         resource_paths:
         - /portal
+      - id: 'data_admin'
+        description: 'policy test, should write a policy per resource and assign to user in order to avoid duplicating policies'
+        role_ids:
+          - admin
+        resource_paths:
+          - /programs
+          - /programs/pcdc
       - id: 'user1_policy'
         description: 'policy test, should write a policy per resource and assign to user in order to avoid duplicating policies'
         role_ids:
@@ -175,6 +153,10 @@ authz:
         permissions:
         - action: {method: access, service: jupyterhub}
           id: workspace_access
+      - id: sower_user
+        permissions:
+        - action: {method: access, service: job}
+          id: sower_access
       - id: analysis_user
         permissions:
         - action: {method: access, service: analysis}
@@ -254,20 +236,19 @@ users:
   # username1@gmail.com: {}
   graglia01@gmail.com:
     admin: True
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access, sower]
   shea.maunsell@gmail.com:
     policies: [analysis, login_no_access]
   slv@uchicago.edu:
     admin: True
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access, sower]
   furner.brian@gmail.com:
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access]
-  # bfurner@uchicago.edu
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access, sower]
   bkang.dev@gmail.com:
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, login_no_access]
-  dvenckus@uchicago.edu:
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, login_no_access, sower]
+  jooholee@uchicago.edu:
     admin: True
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access, sower]
   # username2:
   #   tags:
   #     name: John Doe
