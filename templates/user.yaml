@@ -133,13 +133,7 @@ authz:
         resource_paths:
           - /programs
           - /programs/pcdc
-          - /programs/pcdc/projects/test
-          - /programs/pcdc/projects/pcdc_20200831
-          - /programs/pcdc/projects/pcdc_20200819
-          # - /programs/pcdc/projects/pcdc_20200819/persons/pcdc_2
-          # - /programs/pcdc/projects/pcdc_20200819/persons/pcdc_1/subjects/sub_id_1
-
-
+          
  
     roles:
       - id: 'file_uploader'
