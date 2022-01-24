@@ -114,7 +114,7 @@ services:
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
       - ./datadictionary/gdcdictionary/schemas:/schemas_dir
     environment: &env
-      DICTIONARY_URL: https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-20220106.json
+      DICTIONARY_URL: https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-20220122.json
       # questo PATH_TO_SCHEMA_DIR: /schemas_dir
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
       AUTHZ_ENTITY_NAME: subject
@@ -204,7 +204,7 @@ services:
       - postgres
       - arborist-service
   guppy-service:
-    image: "quay.io/pcdc/guppy:1.0.0"
+    image: "quay.io/pcdc/guppy:pcdc_dev_2022-01-24T12_57_11-06_00"
     container_name: guppy-service
     networks:
       - devnet
@@ -220,7 +220,7 @@ services:
       - GEN3_ARBORIST_ENDPOINT=http://arborist-service
       - GEN3_ES_ENDPOINT=http://esproxy-service:9200
       - TIER_ACCESS_LEVEL=granular
-      - TIER_ACCESS_LIMIT=1
+      - TIER_ACCESS_LIMIT=5
     depends_on:
       - arborist-service
       - esproxy-service
@@ -289,7 +289,7 @@ services:
       - APP=gitops
       - GDC_SUBPATH=http://revproxy-service/api/v0/submission/
       - TIER_ACCESS_LEVEL=granular
-      - TIER_ACCESS_LIMIT=1
+      - TIER_ACCESS_LIMIT=5
       - DATA_RELEASE_VERSION=pcdc-20211006
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost"]
@@ -348,7 +348,7 @@ services:
     networks:
       - devnet
     environment:
-      - DICTIONARY_URL=https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-20220106.json
+      - DICTIONARY_URL=https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-compose-20220122.json
       - ES_URL=esproxy-service
       - ES_INDEX_NAME=etl
       - HADOOP_URL=hdfs://spark-service:9000
