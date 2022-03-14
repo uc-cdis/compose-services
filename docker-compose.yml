@@ -38,7 +38,7 @@ services:
   #   depends_on:
   #     - postgres
   fence-service:
-    image: "quay.io/pcdc/fence:1.1.0"
+    image: "quay.io/pcdc/fence:1.2.1"
     # build: ../fence
     # image: fence:01
     command: bash /var/www/fence/fence_setup.sh
@@ -65,7 +65,7 @@ services:
       - postgres
       - arborist-service
   arborist-service:
-    image: "quay.io/cdis/arborist:2021.12"
+    image: "quay.io/cdis/arborist:2022.02"
     container_name: arborist-service
     entrypoint: bash /go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     networks:
@@ -102,7 +102,7 @@ services:
   #   networks:
   #     - devnet
   peregrine-service:
-    image: "quay.io/pcdc/peregrine:1.0.0"
+    image: "quay.io/pcdc/peregrine:1.1.0"
     container_name: peregrine-service
     networks:
       - devnet
@@ -149,7 +149,8 @@ services:
       - postgres
   PcdcAnalysisTools-service:
     # image: "quay.io/pcdc/pcdcanalysistools:improve_base_image"
-    image: "quay.io/pcdc/pcdcanalysistools:1.2.0"
+    image: "quay.io/pcdc/pcdcanalysistools:1.3.0"
+    # image: "quay.io/pcdc/pcdcanalysistools:add-logs-tag"
     # build: ../PcdcAnalysisTools
     # image: pcdcanalysistools:01
     container_name: pcdcanalysistools-service
@@ -273,7 +274,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:1.2.0"
+    image: "quay.io/pcdc/windmill:1.3.1"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
@@ -314,7 +315,7 @@ services:
   #   environment:
   #     - FRAME_ANCESTORS=http://localhost
   revproxy-service:
-    image: "quay.io/cdis/nginx:2021.12"
+    image: "quay.io/cdis/nginx:2022.02"
     container_name: revproxy-service
     networks:
       - devnet
