@@ -45,6 +45,7 @@ authz:
               subresources:
               - name: 'program'
               - name: 'project'
+          - name: 'amanuensis'
         - name: programs
           subresources:
           - name: pcdc
@@ -58,6 +59,12 @@ authz:
         - /data_file
         role_ids: 
         - file_uploader
+      - id: 'services.amanuensis-admin'
+        description: 'admin access to amanunsis'
+        role_ids:
+          - 'amanuensis_admin'
+        resource_paths:
+          - '/services/amanuensis'
       - id: workspace
         description: be able to use workspace
         resource_paths: 
@@ -133,7 +140,8 @@ authz:
         resource_paths:
           - /programs
           - /programs/pcdc
-          
+
+
  
     roles:
       - id: 'file_uploader'
@@ -143,6 +151,13 @@ authz:
             action:
                 service: 'fence'
                 method: 'file_upload'
+      - id: 'amanuensis_admin'
+        description: 'can do admin work on project/data request'
+        permissions:
+          - id: 'amanuensis_admin_action'
+            action: 
+                service: 'amanuensis'
+                method: '*'
       - id: workspace_user
         permissions:
         - action: {method: access, service: jupyterhub}
@@ -230,7 +245,7 @@ users:
   # username1@gmail.com: {}
   graglia01@gmail.com:
     admin: True
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access, sower]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, services.amanuensis-admin, user1_policy, analysis, privacy_policy, login_no_access, sower]
   shea.maunsell@gmail.com:
     policies: [analysis, login_no_access]
   slv@uchicago.edu:
@@ -239,7 +254,7 @@ users:
   furner.brian@gmail.com:
     policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access, sower]
   bkang.dev@gmail.com:
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, login_no_access, sower]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, services.amanuensis-admin, user1_policy, analysis, login_no_access, sower]
   jooholee@uchicago.edu:
     admin: True
     policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access, sower]
