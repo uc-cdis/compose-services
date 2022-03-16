@@ -21,4 +21,4 @@ curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer {ACC
 
 
 echo "Changing data request state"
-curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer {ACCESS_TOKEN}" -d '"project_id": 1, "state_id": 1' http://localhost/amanuensis/admin/projects/state
+curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer {ACCESS_TOKEN}" -d '{"project_id": 1, "state_id": 1}' http://localhost/amanuensis/admin/projects/state
