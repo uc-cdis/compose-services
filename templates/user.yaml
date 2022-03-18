@@ -36,7 +36,6 @@ authz:
           description: data portal service
         - name: privacy
           description: User privacy policy
-        # "Sheepdog admin" resources
         - name: 'services'
           subresources:
           - name: 'sheepdog'
@@ -133,13 +132,6 @@ authz:
         resource_paths:
           - /programs
           - /programs/pcdc
-      - id: 'user1_policy'
-        description: 'policy test, should write a policy per resource and assign to user in order to avoid duplicating policies'
-        role_ids:
-          - admin
-        resource_paths:
-          - /programs
-          - /programs/pcdc
 
 
  
@@ -227,12 +219,6 @@ authz:
             action:
               service: '*'
               method: read-storage  
-      # - id: basic_user
-      #   permissions:
-      #     - id: basic_user
-      #       action:
-      #         service: '*'
-      #         method: '*'
 
 
 # clients:
@@ -245,19 +231,19 @@ users:
   # username1@gmail.com: {}
   graglia01@gmail.com:
     admin: True
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, services.amanuensis-admin, user1_policy, analysis, privacy_policy, login_no_access, sower]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, services.amanuensis-admin, data_admin, analysis, privacy_policy, login_no_access, sower]
   shea.maunsell@gmail.com:
     policies: [analysis, login_no_access]
   slv@uchicago.edu:
     admin: True
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access, sower]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, data_admin, analysis, privacy_policy, login_no_access, sower]
   furner.brian@gmail.com:
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access, sower]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, data_admin, analysis, privacy_policy, login_no_access, sower]
   bkang.dev@gmail.com:
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, services.amanuensis-admin, user1_policy, analysis, login_no_access, sower]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, services.amanuensis-admin, data_admin, analysis, login_no_access, sower]
   jooholee@uchicago.edu:
     admin: True
-    policies: ['data_upload', 'workspace', services.sheepdog-admin, user1_policy, analysis, privacy_policy, login_no_access, sower]
+    policies: ['data_upload', 'workspace', services.sheepdog-admin, data_admin, analysis, privacy_policy, login_no_access, sower]
   # username2:
   #   tags:
   #     name: John Doe
