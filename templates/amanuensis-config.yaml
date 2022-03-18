@@ -113,14 +113,6 @@ ENABLE_DB_MIGRATION: true
 # LIBRARY CONFIGURATION (authlib & flask)
 #   - Already contains reasonable defaults
 # //////////////////////////////////////////////////////////////////////////////////////
-# authlib-specific configs for OIDC flow and JWTs
-# NOTE: the OAUTH2_JWT_KEY cfg gets set automatically by fence if keys are setup
-#       correctly
-OAUTH2_JWT_ALG: 'RS256'
-OAUTH2_JWT_ENABLED: true
-OAUTH2_JWT_ISS: '{{BASE_URL}}'
-OAUTH2_PROVIDER_ERROR_URI: '/api/oauth2/errors'
-
 # used for flask, "path mounted under by the application / web server"
 # since we deploy as microservices, fence is typically under {{base}}/user
 # this is also why our BASE_URL default ends in /user
@@ -173,10 +165,9 @@ S3_BUCKETS: {}
 #     region: 'us-east-1'
 #     role-arn: 'arn:aws:iam::role1'
 
-# `DATA_UPLOAD_BUCKET` specifies an S3 bucket to which data files are uploaded,
-# using the `/data/upload` endpoint. This must be one of the first keys under
-# `S3_BUCKETS` (since these are the buckets fence has credentials for).
-DATA_UPLOAD_BUCKET: 'bucket1'
+# `DATA_DOWNLOAD_BUCKET` specifies an S3 bucket to which data files are uploaded by the system/admin user,
+# User Data request files are stored here.
+DATA_DOWNLOAD_BUCKET: 'bucket1'
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # PROXY
@@ -207,28 +198,6 @@ ARBORIST: http://arborist-service
 
 FENCE: http://fence-service
 
-
-# //////////////////////////////////////////////////////////////////////////////////////
-# EMAIL
-#   - Support for sending emails from fence. Used for user certificates
-#     and `/google/service_accounts` endpoints
-# //////////////////////////////////////////////////////////////////////////////////////
-# Gun Mail Service (for sending emails from fence)
-#
-# NOTE: Example in comments below
-GUN_MAIL:
-  'datacommons.io':
-    smtp_hostname: 'smtp.mailgun.org'
-    api_key: ''
-    default_login: 'postmaster@mailgun.example.com'
-    api_url: 'https://api.mailgun.net/v3/mailgun.example.com'
-    smtp_password: ''
-
-# For emails regarding users certificates
-EMAIL_SERVER: 'localhost'
-SEND_FROM: 'example@gmail.com'
-SEND_TO: 'example@gmail.com'
-
 # //////////////////////////////////////////////////////////////////////////////////////
 # EMAIL
 #   - Support for sending hubspot API work updates to project management team
@@ -246,46 +215,3 @@ AWS_SES:
 HUBSPOT:
   API_KEY: "DEV_KEY"
   
-
-# //////////////////////////////////////////////////////////////////////////////////////
-# DATA ACCESS: GOOGLE LINKING & SERVICE ACCOUNT REGISTRATION
-#   - Support `/google/service_accounts` endpoints
-# //////////////////////////////////////////////////////////////////////////////////////
-
-# when service accounts or google projects are determined invalid, an email is sent
-# to the project owners. These settings are for that email
-REMOVE_SERVICE_ACCOUNT_EMAIL_NOTIFICATION:
-  # this domain MUST exist in GUN_MAIL config
-  enable: false
-  domain: 'example.com'
-  from: 'do-not-reply@example.com'
-  subject: 'User service account removal notification'
-  # the {} gets replaced dynamically in the Python code to be the Project ID
-  content: >
-    Service accounts were removed from access control data because some users or
-    service accounts of GCP Project {} are not authorized to access the data sets
-    associated to the service accounts, or do not adhere to the security policies.
-  # this admin email will be included as a recipient to *any* email to anyone about
-  # service account removal.
-  #
-  # WARNING: This is NOT a bcc so the email is visible to the end-user
-  admin:
-    - 'admin@example.edu'
-
-PROBLEM_USER_EMAIL_NOTIFICATION:
-  # this domain MUST exist in GUN_MAIL config
-  domain: 'example.com'
-  from: 'do-not-reply@example.com'
-  subject: 'Account access error notification'
-  # the {} gets replaced dynamically in the Python code to be the Project ID
-  content: >
-    The Data Commons Framework utilizes dbGaP for data access authorization.
-    Another member of a Google project you belong to ({}) is attempting to
-    register a service account to the following additional datasets ({}).
-    Please contact dbGaP to request access.
-  # this admin email will be included as a recipient to *any* email to anyone about
-  # service account removal.
-  #
-  # WARNING: This is NOT a bcc so the email is visible to the end-user
-  admin:
-    - 'admin@example.edu'
