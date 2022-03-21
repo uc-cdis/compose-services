@@ -176,7 +176,7 @@ services:
       - postgres
   amanuensis-service:
     # image: "quay.io/pcdc/amanuensis:2.0.0" 
-    image: "quay.io/pcdc/amanuensis:admin_data_request" 
+    image: "quay.io/pcdc/amanuensis:pcdc_dev_2022-03-21T16_34_05-05_00" 
     # image: "amanuensis:test"
     # build: ../amanuensis
     # image: amanuensis:02

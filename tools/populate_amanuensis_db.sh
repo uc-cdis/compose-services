@@ -9,7 +9,6 @@ curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACC
 curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"name": "Rejected", "code": "REJECTED"}' http://localhost/amanuensis/admin/states
 curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"name": "Approved", "code": "APPROVED"}' http://localhost/amanuensis/admin/states
 
-
 echo "Adding consortiums to the Amanuensis DB"
 curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"name": "INRG", "code": "INRG"}' http://localhost/amanuensis/admin/consortiums
 curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"name": "INSTRUCT", "code": "INSTRUCT"}' http://localhost/amanuensis/admin/consortiums
