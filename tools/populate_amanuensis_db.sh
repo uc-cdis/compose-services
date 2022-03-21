@@ -28,4 +28,4 @@ echo "Changing data request state"
 curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"project_id": 1, "state_id": 3}' http://localhost/amanuensis/admin/projects/state
 
 echo "Adding download URL for approved data request"
-curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"project_id": 1, "approved_url": "https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-prod-20220106.json"}' http://localhost/amanuensis/admin/projects/state
+curl -X PUT  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"project_id": 1, "approved_url": "https://pcdc-gen3-dictionaries.s3.amazonaws.com/pcdc-schema-prod-20220106.json"}' http://localhost/amanuensis/admin/projects
