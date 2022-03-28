@@ -60,6 +60,9 @@ NOTE:  Once the script completes, it may take a few minutes for the site to be a
 2. Visit https://localhost/identity
 3. Click 'Create API key'
 4. Download and save credentials.json file into the [gen3_scripts]:/populate_fake_data directory.
+5. Create a .env file in the [gen3_scripts]:/populate_fake_data/operations subdirectory with the following values:
+    - GITHUB_TOKEN='[github personal authorization token]'
+    - LOCAL_FILE_PATH - if loading from local source, None by default
 
 NOTE:  pyenv should be installed on the host machine at this point.
 
