@@ -14,7 +14,7 @@
 #     login via Google and visit the profile page,
 #     https://locahost/identity
 #     Add API key to your profile and download the credentials.json file to 
-#     configuration-files/populate_fake_data directory
+#     configuration-files/gen3_load directory
 #
 #   PYTHON:  
 #     Requires v3.6+; 'python' should be aliased to python3
@@ -78,7 +78,7 @@ GEN3_ROOT="$CWD/../.."
 COMPOSE_SVCS_DIR="$CWD/.."
 GEN3_SCRIPTS_DIR="$GEN3_ROOT/gen3_scripts"
 
-CREDENTIALS_FILE="$GEN3_SCRIPTS_DIR/populate_fake_data/credentials.json"
+CREDENTIALS_FILE="$GEN3_SCRIPTS_DIR/gen3_load/credentials.json"
 # xargs is trimming whitespace
 PYTHON3_LATEST_VERSION=$(pyenv install --list | grep -E '\s3\.([6-9]|\d{2,})\.\d+$' | tail -n1 | xargs)
 PYTHON3_MIN_VERSION='^3\.([6-9]|\d{2,})\.\d+$'
@@ -93,14 +93,14 @@ echo "Check for the credentials file"
 
 if [ ! -e "$CREDENTIALS_FILE" ]; then
   echo "ERROR:  $CREDENTIALS_FILE not found"
-  echo "Login to http://localhost/login and visit http://localhost/identity to 'Create API key' and download credentials.json file into the populate_fake_data directory."
+  echo "Login to http://localhost/login and visit http://localhost/identity to 'Create API key' and download credentials.json file into the gen3_load directory."
   exit 1
 fi 
 
 #------------------------------------------------------
 # Setup the Python Environment
 #------------------------------------------------------
-cd $GEN3_SCRIPTS_DIR/populate_fake_data
+cd $GEN3_SCRIPTS_DIR/gen3_load
 
 # Is pyenv installed?
 echo "Is pyenv installed?"
@@ -145,7 +145,7 @@ else
 fi
 
 echo "Checking for Python Virtual Env"
-cd $GEN3_SCRIPTS_DIR/populate_fake_data
+cd $GEN3_SCRIPTS_DIR/gen3_load
 if [ ! -d "./env" ] || [ ! -e "./env/bin/activate" ] || [ ! -z "$RECREATE_ENV" ]; then
   # if env not found, not populated or needs to be recreated
   if [ -e "./env" ]; then 
