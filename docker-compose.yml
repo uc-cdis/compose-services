@@ -38,7 +38,7 @@ services:
   #   depends_on:
   #     - postgres
   fence-service:
-    image: "quay.io/pcdc/fence:1.2.1"
+    image: "quay.io/pcdc/fence:pcdc_dev_2022-03-31T13_52_23-05_00"
     # build: ../fence
     # image: fence:01
     command: bash /var/www/fence/fence_setup.sh
@@ -65,7 +65,7 @@ services:
       - postgres
       - arborist-service
   arborist-service:
-    image: "quay.io/cdis/arborist:2022.02"
+    image: "quay.io/cdis/arborist:2022.04"
     container_name: arborist-service
     entrypoint: bash /go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     networks:
@@ -102,7 +102,7 @@ services:
   #   networks:
   #     - devnet
   peregrine-service:
-    image: "quay.io/pcdc/peregrine:1.1.0"
+    image: "quay.io/pcdc/peregrine:pcdc_dev_2022-03-30T11_29_48-05_00"
     container_name: peregrine-service
     networks:
       - devnet
@@ -128,7 +128,7 @@ services:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/pcdc/sheepdog:1.1.2"    
+    image: "quay.io/pcdc/sheepdog:pcdc_dev_2022-03-30T11_33_13-05_00"    
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -176,7 +176,7 @@ services:
       - postgres
   amanuensis-service:
     # image: "quay.io/pcdc/amanuensis:2.0.0" 
-    image: "quay.io/pcdc/amanuensis:pcdc_dev_2022-03-22T10_30_59-05_00" 
+    image: "quay.io/pcdc/amanuensis:admin_data_request" 
     # image: "amanuensis:test"
     # build: ../amanuensis
     # image: amanuensis:02
@@ -206,7 +206,7 @@ services:
       - postgres
       - arborist-service
   guppy-service:
-    image: "quay.io/pcdc/guppy:1.1.0"
+    image: "quay.io/pcdc/guppy:pcdc_dev_2022-03-31T13_36_43-05_00"
     container_name: guppy-service
     networks:
       - devnet
@@ -275,7 +275,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:1.3.4"
+    image: "quay.io/pcdc/windmill:pcdc_dev_2022-04-01T13_40_42-05_00"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
@@ -316,7 +316,7 @@ services:
   #   environment:
   #     - FRAME_ANCESTORS=http://localhost
   revproxy-service:
-    image: "quay.io/cdis/nginx:2022.02"
+    image: "quay.io/cdis/nginx:2022.04"
     container_name: revproxy-service
     networks:
       - devnet
