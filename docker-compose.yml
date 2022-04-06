@@ -38,7 +38,7 @@ services:
   #   depends_on:
   #     - postgres
   fence-service:
-    image: "quay.io/pcdc/fence:pcdc_dev_2022-03-31T13_52_23-05_00"
+    image: "quay.io/pcdc/fence:1.3.0"
     # build: ../fence
     # image: fence:01
     command: bash /var/www/fence/fence_setup.sh
@@ -102,7 +102,7 @@ services:
   #   networks:
   #     - devnet
   peregrine-service:
-    image: "quay.io/pcdc/peregrine:pcdc_dev_2022-03-30T11_29_48-05_00"
+    image: "quay.io/pcdc/peregrine:1.2.0"
     container_name: peregrine-service
     networks:
       - devnet
@@ -128,7 +128,7 @@ services:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/pcdc/sheepdog:pcdc_dev_2022-03-30T11_33_13-05_00"    
+    image: "quay.io/pcdc/sheepdog:1.2.0"    
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -175,8 +175,7 @@ services:
     depends_on:
       - postgres
   amanuensis-service:
-    # image: "quay.io/pcdc/amanuensis:2.0.0" 
-    image: "quay.io/pcdc/amanuensis:admin_data_request" 
+    image: "quay.io/pcdc/amanuensis:2.1.0" 
     # image: "amanuensis:test"
     # build: ../amanuensis
     # image: amanuensis:02
@@ -206,7 +205,7 @@ services:
       - postgres
       - arborist-service
   guppy-service:
-    image: "quay.io/pcdc/guppy:pcdc_dev_2022-03-31T13_36_43-05_00"
+    image: "quay.io/pcdc/guppy:1.2.0"
     container_name: guppy-service
     networks:
       - devnet
@@ -275,7 +274,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:pcdc_dev_2022-04-01T13_40_42-05_00"
+    image: "quay.io/pcdc/windmill:1.4.0"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
