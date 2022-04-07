@@ -38,7 +38,7 @@ services:
   #   depends_on:
   #     - postgres
   fence-service:
-    image: "quay.io/pcdc/fence:1.3.0"
+    image: "quay.io/pcdc/fence:1.3.1"
     # build: ../fence
     # image: fence:01
     command: bash /var/www/fence/fence_setup.sh
@@ -175,7 +175,7 @@ services:
     depends_on:
       - postgres
   amanuensis-service:
-    image: "quay.io/pcdc/amanuensis:2.1.0" 
+    image: "quay.io/pcdc/amanuensis:2.1.2" 
     # image: "amanuensis:test"
     # build: ../amanuensis
     # image: amanuensis:02
