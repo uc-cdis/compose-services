@@ -175,7 +175,7 @@ cd ./operations
 # Run:  etl.py load, Load data into postgres db
 #------------------------------------------------------
 echo "Run: python etl.py load"
-python ./etl.py load
+GITHUB_TOKEN=$GITHUB_TOKEN python ./etl.py load
 
 deactivate  # exit python venv
 
