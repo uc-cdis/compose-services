@@ -235,11 +235,11 @@ users:
   shea.maunsell@gmail.com:
     policies: [analysis, login_no_access]
   slv@uchicago.edu:
-    admin: True
     policies: ['data_upload', 'workspace', services.sheepdog-admin, data_admin, analysis, privacy_policy, login_no_access, sower]
   furner.brian@gmail.com:
     policies: ['data_upload', 'workspace', services.sheepdog-admin, data_admin, analysis, privacy_policy, login_no_access, sower]
   bkang.dev@gmail.com:
+    admin: True
     policies: ['data_upload', 'workspace', services.sheepdog-admin, services.amanuensis-admin, data_admin, analysis, login_no_access, sower]
   jooholee@uchicago.edu:
     admin: True
