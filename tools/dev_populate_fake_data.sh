@@ -2,8 +2,7 @@
 #
 # Script:  dev_populate_fake_data.sh
 #
-# Usage:  dev_populate_fake_data.sh 
-#               -t,--token <github_token> 
+# Usage:  dev_populate_fake_data.sh  
 #               -r,--recreate-env
 #               OR 
 #               create a .env file, see the README.md for detals
@@ -30,10 +29,9 @@
 
 echo "Begin dev_populate_fake_data.sh"
 
-GITHUB_TOKEN=
 RECREATE_ENV=
 
-USAGE="Usage:  dev_populate_fake_data.sh -t <github_token>"
+USAGE="Usage:  dev_populate_fake_data.sh"
 
 #------------------------------------------------------
 # Get Args
@@ -48,26 +46,11 @@ while (( "$#" )); do
   var=$1
 
   case "$var" in
-    -t|--token)
-        if [ -z "$GITHUB_TOKEN" ]; then
-          # use the parameters if it's not in the .env file
-          GITHUB_TOKEN=$2 
-        fi
-        shift 2 ;;
-
     -r|--recreate-env)
         RECREATE_ENV=1 ; shift 1 ;;
   esac
   # shift
 done
-
-
-if [ -z "$GITHUB_TOKEN" ]; then
-  echo "Missing paramters: "
-  echo "  github_token:     $GITHUB_TOKEN"
-  echo "$USAGE"
-fi
-
 
 #------------------------------------------------------
 # CONSTANTS
@@ -163,19 +146,13 @@ else
   source env/bin/activate
 fi
 
-#------------------------------------------------------
-# Modify the etl.py script to include your GITHUB TOKEN
-#------------------------------------------------------
-cd ./operations
-
-# echo "Edit etl.py so it includes your GITHUB_TOKEN"
-# perl -i -pe "s/token = \"[0-9a-zA-Z_]*\"/token =\"${GITHUB_TOKEN}\"/" etl.py
 
 #------------------------------------------------------
 # Run:  etl.py load, Load data into postgres db
 #------------------------------------------------------
 echo "Run: python etl.py load"
-GITHUB_TOKEN=$GITHUB_TOKEN python ./etl.py load
+cd ./operations
+python ./etl.py load
 
 deactivate  # exit python venv
 
@@ -202,19 +179,12 @@ else
   source env/bin/activate
 fi
 
-#-------------------------------------------------------------
-# Modify the build_json.py script to include your GITHUB TOKEN
-#-------------------------------------------------------------
-cd ./etl
-
-echo "Edit ES etl/build_json.py so it includes your GITHUB_TOKEN"
-perl -i -pe "s/GITHUB_TOKEN/${GITHUB_TOKEN}/" build_json.py
-
 
 #------------------------------------------------------
 # Load ES data
 #------------------------------------------------------
 echo "Load ES Data, python create_index.py"
+cd ./etl
 python create_index.py
 
 deactivate  # exit python venv
