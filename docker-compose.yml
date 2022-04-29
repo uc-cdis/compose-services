@@ -129,7 +129,7 @@ services:
       - postgres
       - sheepdog-service
   sheepdog-service:
-    image: "quay.io/pcdc/sheepdog:1.2.0"    
+    image: "quay.io/pcdc/sheepdog:1.2.1"    
     command: bash /sheepdog_setup.sh
     container_name: sheepdog-service
     networks:
@@ -150,7 +150,7 @@ services:
       - postgres
   PcdcAnalysisTools-service:
     # image: "quay.io/pcdc/pcdcanalysistools:improve_base_image"
-    image: "quay.io/pcdc/pcdcanalysistools:1.3.0"
+    image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2022-04-29T09_08_36-05_00"
     # image: "quay.io/pcdc/pcdcanalysistools:add-logs-tag"
     # build: ../PcdcAnalysisTools
     # image: pcdcanalysistools:01
@@ -275,7 +275,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:1.4.0"
+    image: "quay.io/pcdc/windmill:1.4.1"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
