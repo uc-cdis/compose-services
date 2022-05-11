@@ -30,3 +30,6 @@ curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACC
 
 # echo "Adding download URL for approved data request"
 curl -X PUT  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"project_id": 1, "approved_url": "https://luca-pcdc-dev-approved-data-bucket.s3.amazonaws.com/PCDC-request_form.docx"}' http://localhost/amanuensis/admin/projects
+
+# echo "Changing data request state"
+curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"project_id": 1, "state_id": 4}' http://localhost/amanuensis/admin/projects/state
