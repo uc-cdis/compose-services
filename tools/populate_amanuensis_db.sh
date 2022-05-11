@@ -9,6 +9,7 @@ STATISTICIAN_EMAILS='["YOUR-EMAIL-WITHOUT-USER-ID@gmail.com"]'
 curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"name": "In Review", "code": "IN_REVIEW"}' http://localhost/amanuensis/admin/states
 curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"name": "Rejected", "code": "REJECTED"}' http://localhost/amanuensis/admin/states
 curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"name": "Approved", "code": "APPROVED"}' http://localhost/amanuensis/admin/states
+curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"name": "Data Delivered", "code": "DATA_DELIVERED"}' http://localhost/amanuensis/admin/states
 
 # echo "Adding consortiums to the Amanuensis DB"
 curl -X POST  -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d '{"name": "INRG", "code": "INRG"}' http://localhost/amanuensis/admin/consortiums
