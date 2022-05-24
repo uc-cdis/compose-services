@@ -7,6 +7,7 @@ DOCUMENT_JSON='{"type": "survival-user-agreement", "version": 1, "name": "Surviv
 
 # echo "Adding a new document"
 curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d "$DOCUMENT_JSON" http://localhost/user/admin/add_document
+# curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ACCESS_TOKEN" -d "$DOCUMENT_JSON" https://portal.pedscommons.org/user/admin/add_document
 
 # echo "Remove portal resource from all users"
 # curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" http://localhost/user/admin/revoke_permission

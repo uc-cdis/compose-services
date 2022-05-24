@@ -115,7 +115,7 @@ services:
       - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
       - ./datadictionary/gdcdictionary/schemas:/schemas_dir
     environment: &env
-      DICTIONARY_URL: https://pcdc-compose-docs.s3.amazonaws.com/pcdc-schema-compose-20220322.json
+      DICTIONARY_URL: https://pcdc-compose-docs.s3.amazonaws.com/pcdc-schema-compose-20220516.json
       # questo PATH_TO_SCHEMA_DIR: /schemas_dir
       REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
       AUTHZ_ENTITY_NAME: subject
@@ -207,6 +207,7 @@ services:
       - arborist-service
   guppy-service:
     image: "quay.io/pcdc/guppy:1.2.1"
+    # image: "guppy:test"
     container_name: guppy-service
     networks:
       - devnet
@@ -350,7 +351,7 @@ services:
     networks:
       - devnet
     environment:
-      - DICTIONARY_URL=https://pcdc-compose-docs.s3.amazonaws.com/pcdc-schema-compose-20220322.json
+      - DICTIONARY_URL=https://pcdc-compose-docs.s3.amazonaws.com/pcdc-schema-compose-20220516.json
       - ES_URL=esproxy-service
       - ES_INDEX_NAME=etl
       - HADOOP_URL=hdfs://spark-service:9000
