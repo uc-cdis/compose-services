@@ -38,7 +38,7 @@ services:
   #   depends_on:
   #     - postgres
   fence-service:
-    image: "quay.io/pcdc/fence:pcdc_dev_2022-05-03T11_11_17-05_00"
+    image: "quay.io/pcdc/fence:1.5.0"
     # image: "fence:test"
     # build: ../fence
     # image: fence:01
@@ -66,7 +66,7 @@ services:
       - postgres
       - arborist-service
   arborist-service:
-    image: "quay.io/cdis/arborist:2022.05"
+    image: "quay.io/cdis/arborist:2022.06"
     container_name: arborist-service
     entrypoint: bash /go/src/github.com/uc-cdis/arborist/arborist_setup.sh
     networks:
@@ -176,7 +176,7 @@ services:
     depends_on:
       - postgres
   amanuensis-service:
-    image: "quay.io/pcdc/amanuensis:pcdc_dev_2022-05-11T09_44_40-05_00" 
+    image: "quay.io/pcdc/amanuensis:2.1.5" 
     # image: "amanuensis:test"
     # build: ../amanuensis
     # image: amanuensis:02
@@ -276,7 +276,7 @@ services:
   #   depends_on:
   #     - peregrine-service
   portal-service:
-    image: "quay.io/pcdc/windmill:1.5.2"
+    image: "quay.io/pcdc/windmill:1.5.4"
     container_name: portal-service
     command: ["bash", "/var/www/data-portal/waitForContainers.sh"]
     networks:
@@ -317,7 +317,7 @@ services:
   #   environment:
   #     - FRAME_ANCESTORS=http://localhost
   revproxy-service:
-    image: "quay.io/cdis/nginx:2022.04"
+    image: "quay.io/cdis/nginx:2022.05"
     container_name: revproxy-service
     networks:
       - devnet
