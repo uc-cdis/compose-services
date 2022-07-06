@@ -92,23 +92,6 @@
           "leftOrientation": true,
           "link": "https://commons.cri.uchicago.edu/sponsors/",
           "name": "Our Sponsors"
-        },
-        {
-          "icon": "upload",
-          "link": "/submission",
-          "name": "Data Submission"
-        }
-      ],
-      "menuItems": [
-        {
-          "icon": "external-link",
-          "link": "https://github.com/chicagopcdc/Documents/blob/81d60130308b6961c38097b6686a21f8be729a2c/governance/privacy_policy/PCDC-Privacy-Notice.pdf",
-          "name": "Privacy Policy"
-        },
-        {
-          "icon": "external-link",
-          "link": "https://github.com/chicagopcdc/Documents/blob/a5f4a87262f6597fc85d95b74c320e4fdf1e9097/governance/terms_and_conditions/GEN3_portal/Pediatric%20Cancer%20Data%20Commons%20-%20Terms%20and%20Conditions.pdf",
-          "name": "Terms & Conditions"
         }
       ]
     },
