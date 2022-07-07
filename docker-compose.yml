@@ -150,8 +150,8 @@ services:
       - postgres
   PcdcAnalysisTools-service:
     # image: "quay.io/pcdc/pcdcanalysistools:improve_base_image"
-    image: "quay.io/pcdc/pcdcanalysistools:1.3.3"
-    # image: "quay.io/pcdc/pcdcanalysistools:add-logs-tag"
+    image: "quay.io/pcdc/pcdcanalysistools:pcdc_dev_2022-07-06T16_14_06-05_00"
+    # image: "pcdcanalysistools:test"
     # build: ../PcdcAnalysisTools
     # image: pcdcanalysistools:01
     container_name: pcdcanalysistools-service
