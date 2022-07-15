@@ -402,11 +402,28 @@ RENEW_ACCESS_TOKEN_BEFORE_EXPIRATION: false
 PRIVACY_POLICY_URL: null
 
 DOCUMENT_TYPES: ['privacy-policy', 'terms-and-conditions', 'survival-user-agreement']
-INITIAL_PRIVACY_POLICY: 'https://github.com/chicagopcdc/Documents/blob/81d60130308b6961c38097b6686a21f8be729a2c/governance/privacy_policy/PCDC-Privacy-Notice.pdf'
-INITIAL_PRIVACY_POLICY_RAW: 'https://github.com/chicagopcdc/Documents/blob/fda4a7c914173e29d13ab6249ded7bc9adea5674/governance/privacy_policy/privacy_notice.md'
-INITIAL_TERM_CONDITION: 'https://github.com/chicagopcdc/Documents/blob/a5f4a87262f6597fc85d95b74c320e4fdf1e9097/governance/terms_and_conditions/GEN3_portal/Pediatric%20Cancer%20Data%20Commons%20-%20Terms%20and%20Conditions.pdf'
-INITIAL_TERM_CONDITION_RAW: 'https://github.com/chicagopcdc/Documents/blob/23c720c8ce068238541d97dcdd88c636cb48daa1/governance/terms_and_conditions/GEN3_portal/terms-and-conditions.md'
-
+INITIAL_DOCUMENTS:
+  'privacy-policy':
+    type: "privacy-policy"
+    version: 1
+    name: "Privacy Notice"
+    raw: "https://github.com/chicagopcdc/chicagopcdc.github.io/blob/pp_tc_v2/docs/PcdcPrivacyNotice.md"
+    formatted: "https://docs.pedscommons.org/PcdcPrivacyNotice/"
+    required: true
+  'terms-and-conditions':
+    type: "terms-and-conditions"
+    version: 1
+    name: "Terms and Conditions"
+    raw: "https://github.com/chicagopcdc/chicagopcdc.github.io/blob/pp_tc_v2/docs/TermsAndConditions.md"
+    formatted: "https://docs.pedscommons.org/TermsAndConditions/"
+    required: true
+  'survival-user-agreement':
+    type: "survival-user-agreement"
+    version: 1
+    name: "Survival Curve Use Agreement"
+    raw: ""
+    formatted: ""
+    required: false
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # SUPPORT INFO

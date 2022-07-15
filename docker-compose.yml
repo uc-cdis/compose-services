@@ -38,7 +38,7 @@ services:
   #   depends_on:
   #     - postgres
   fence-service:
-    image: "quay.io/pcdc/fence:pcdc_dev_2022-07-07T18_15_41-05_00"
+    image: "quay.io/pcdc/fence:pcdc_dev_2022-07-14T18_11_34-05_00"
     # image: "fence:test"
     # build: ../fence
     # image: fence:01
