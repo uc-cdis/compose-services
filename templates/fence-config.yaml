@@ -401,7 +401,7 @@ RENEW_ACCESS_TOKEN_BEFORE_EXPIRATION: false
 # PRIVACY_POLICY_URL, or default to the `static/privacy_policy.md` file in fence.
 PRIVACY_POLICY_URL: null
 
-DOCUMENT_TYPES: ['privacy-policy', 'terms-and-conditions', 'survival-user-agreement']
+DOCUMENT_TYPES: ['privacy-policy', 'terms-and-conditions', 'survival-user-agreement', 'data-portal-user-guide', 'portal-acceptable-use-policy']
 INITIAL_DOCUMENTS:
   'privacy-policy':
     type: "privacy-policy"

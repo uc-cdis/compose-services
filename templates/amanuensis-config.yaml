@@ -136,7 +136,10 @@ SUPPORT_EMAIL_FOR_ERRORS: null
 # AWS BUCKETS AND CREDENTIALS
 #   - Support `/data` endpoints
 # //////////////////////////////////////////////////////////////////////////////////////
-AWS_CREDENTIALS: {}
+AWS_CREDENTIALS:
+  'DATA_DELIVERY_S3_BUCKET':
+    aws_access_key_id: 'DATA_DELIVERY_S3_BUCKET_ACCESS_KEY'
+    aws_secret_access_key: 'DATA_DELIVERY_S3_BUCKET_PRIVATE_KEY'
 # NOTE: Remove the {} and supply creds if needed. Example in comments below
 #  'CRED1':
 #    aws_access_key_id: ''
