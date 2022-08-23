@@ -1,0 +1,202 @@
+[
+    {
+        "associated_experiment": "b4628bd7c8",
+        "copy_numbers_identified": true,
+        "data_description": "b218f6289a",
+        "experimental_description": "0fab37217e",
+        "experimental_intent": "902c38dfa0",
+        "indels_identified": false,
+        "marker_panel_description": "186b9eb885",
+        "number_experimental_group": 26,
+        "number_samples_per_experimental_group": 8,
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "somatic_mutations_identified": true,
+        "submitter_id": "experiment_0f685afd29",
+        "type": "experiment",
+        "type_of_data": "Processed",
+        "type_of_sample": "b2ad87ccb1",
+        "type_of_specimen": "996caf281b"
+    },
+    {
+        "associated_experiment": "54fc7a2856",
+        "copy_numbers_identified": false,
+        "data_description": "dcd5e734c3",
+        "experimental_description": "7f61081632",
+        "experimental_intent": "fa46368471",
+        "indels_identified": false,
+        "marker_panel_description": "6b9d072421",
+        "number_experimental_group": 27,
+        "number_samples_per_experimental_group": 1,
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "somatic_mutations_identified": true,
+        "submitter_id": "experiment_e7d520c042",
+        "type": "experiment",
+        "type_of_data": "Raw",
+        "type_of_sample": "5133510334",
+        "type_of_specimen": "d74cd171a9"
+    },
+    {
+        "associated_experiment": "45d50a9dc3",
+        "copy_numbers_identified": false,
+        "data_description": "86b519a665",
+        "experimental_description": "26ec9e798f",
+        "experimental_intent": "2b47b5572f",
+        "indels_identified": true,
+        "marker_panel_description": "af0eb4c27f",
+        "number_experimental_group": 90,
+        "number_samples_per_experimental_group": 71,
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "somatic_mutations_identified": false,
+        "submitter_id": "experiment_45b0f0ffac",
+        "type": "experiment",
+        "type_of_data": "Raw",
+        "type_of_sample": "047fa5da0f",
+        "type_of_specimen": "05d0af0e5f"
+    },
+    {
+        "associated_experiment": "996047f4d0",
+        "copy_numbers_identified": false,
+        "data_description": "4147c18304",
+        "experimental_description": "ab17e80761",
+        "experimental_intent": "b5ef975881",
+        "indels_identified": true,
+        "marker_panel_description": "6c5f38773a",
+        "number_experimental_group": 86,
+        "number_samples_per_experimental_group": 91,
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "somatic_mutations_identified": true,
+        "submitter_id": "experiment_278de5e770",
+        "type": "experiment",
+        "type_of_data": "Processed",
+        "type_of_sample": "ef619eb627",
+        "type_of_specimen": "6ba325164c"
+    },
+    {
+        "associated_experiment": "fe0226b6a7",
+        "copy_numbers_identified": true,
+        "data_description": "af6f68c5ab",
+        "experimental_description": "ce4837690b",
+        "experimental_intent": "90c02690eb",
+        "indels_identified": false,
+        "marker_panel_description": "d22a3a0a18",
+        "number_experimental_group": 32,
+        "number_samples_per_experimental_group": 77,
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "somatic_mutations_identified": true,
+        "submitter_id": "experiment_0e89d50614",
+        "type": "experiment",
+        "type_of_data": "Raw",
+        "type_of_sample": "f2e37c9ec9",
+        "type_of_specimen": "2b38af2280"
+    },
+    {
+        "associated_experiment": "c1e914c790",
+        "copy_numbers_identified": true,
+        "data_description": "7a81e7d558",
+        "experimental_description": "f7b724cc74",
+        "experimental_intent": "e0c55a0302",
+        "indels_identified": false,
+        "marker_panel_description": "ab730e44f6",
+        "number_experimental_group": 51,
+        "number_samples_per_experimental_group": 27,
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "somatic_mutations_identified": false,
+        "submitter_id": "experiment_fb48c3d704",
+        "type": "experiment",
+        "type_of_data": "Processed",
+        "type_of_sample": "88d0612c72",
+        "type_of_specimen": "d23ecb8fcc"
+    },
+    {
+        "associated_experiment": "d292fbcbcf",
+        "copy_numbers_identified": true,
+        "data_description": "fd67aefc25",
+        "experimental_description": "0b5d6e5b0f",
+        "experimental_intent": "5eabc40b94",
+        "indels_identified": false,
+        "marker_panel_description": "a49c18fd2c",
+        "number_experimental_group": 92,
+        "number_samples_per_experimental_group": 28,
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "somatic_mutations_identified": true,
+        "submitter_id": "experiment_9952b72ddb",
+        "type": "experiment",
+        "type_of_data": "Raw",
+        "type_of_sample": "cef922f1ae",
+        "type_of_specimen": "720b9f59be"
+    },
+    {
+        "associated_experiment": "61c5db34f5",
+        "copy_numbers_identified": false,
+        "data_description": "280bf045ab",
+        "experimental_description": "c7cc8faba6",
+        "experimental_intent": "bad718b68e",
+        "indels_identified": true,
+        "marker_panel_description": "57c902872e",
+        "number_experimental_group": 3,
+        "number_samples_per_experimental_group": 14,
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "somatic_mutations_identified": false,
+        "submitter_id": "experiment_7a10bb57b5",
+        "type": "experiment",
+        "type_of_data": "Processed",
+        "type_of_sample": "16f15ce8c6",
+        "type_of_specimen": "c035b95814"
+    },
+    {
+        "associated_experiment": "0482cf9bbf",
+        "copy_numbers_identified": true,
+        "data_description": "a1ba930886",
+        "experimental_description": "b77556e777",
+        "experimental_intent": "8353d8d0e8",
+        "indels_identified": true,
+        "marker_panel_description": "615504fdbf",
+        "number_experimental_group": 9,
+        "number_samples_per_experimental_group": 69,
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "somatic_mutations_identified": true,
+        "submitter_id": "experiment_27a86a4f64",
+        "type": "experiment",
+        "type_of_data": "Raw",
+        "type_of_sample": "38d73efef7",
+        "type_of_specimen": "e965f8703d"
+    },
+    {
+        "associated_experiment": "f1b6765009",
+        "copy_numbers_identified": true,
+        "data_description": "cac21075d7",
+        "experimental_description": "3c27a263e6",
+        "experimental_intent": "4ab85a5586",
+        "indels_identified": true,
+        "marker_panel_description": "8b994335c7",
+        "number_experimental_group": 67,
+        "number_samples_per_experimental_group": 79,
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "somatic_mutations_identified": true,
+        "submitter_id": "experiment_ae56bc5dc2",
+        "type": "experiment",
+        "type_of_data": "Processed",
+        "type_of_sample": "e164afca1e",
+        "type_of_specimen": "b418d93f90"
+    }
+]

@@ -1,0 +1,222 @@
+[
+    {
+        "cell_count": 16,
+        "cell_identifier": "2772b60ec9",
+        "cell_type": "ac4f73e056",
+        "consent_codes": [],
+        "data_category": "Slide Image",
+        "data_format": "0a71fe3e6e",
+        "data_type": "Antibody Panel Added",
+        "experimental_strategy": "Diagnostic Slide",
+        "file_name": "699348c56c",
+        "file_size": 60,
+        "frame_identifier": "6c431691c1",
+        "md5sum": "f6b5d76724827125655a3f1ebd9da2d0",
+        "panel_used": "a03e5d0d85",
+        "protocol_used": "629d4b7e8d",
+        "run_name": "15909ff0df",
+        "slides": {
+            "submitter_id": "slide_6f4a0b2f5a"
+        },
+        "submitter_id": "slide_image_b0d6c98833",
+        "type": "slide_image"
+    },
+    {
+        "cell_count": 19,
+        "cell_identifier": "2ab8353b8b",
+        "cell_type": "b030bb1dac",
+        "consent_codes": [],
+        "data_category": "Biospecimen",
+        "data_format": "932283289f",
+        "data_type": "image",
+        "experimental_strategy": "Diagnostic Slide",
+        "file_name": "946dca05a1",
+        "file_size": 15,
+        "frame_identifier": "0b2ecec916",
+        "md5sum": "87545ed5a7ad5593ead5390fd6ceb0dc",
+        "panel_used": "98782696fd",
+        "protocol_used": "ee1a1dd257",
+        "run_name": "953bd878cf",
+        "slides": {
+            "submitter_id": "slide_b0caa747f4"
+        },
+        "submitter_id": "slide_image_7c8d2af582",
+        "type": "slide_image"
+    },
+    {
+        "cell_count": 0,
+        "cell_identifier": "aa49300ead",
+        "cell_type": "d356c27e5b",
+        "consent_codes": [],
+        "data_category": "Biospecimen",
+        "data_format": "c07ce6b6df",
+        "data_type": "Raw IMC Data",
+        "experimental_strategy": null,
+        "file_name": "1ef8735cfc",
+        "file_size": 30,
+        "frame_identifier": "90538ed548",
+        "md5sum": "a660b55e581370f97130f1afa0ab2b29",
+        "panel_used": "d0f73d0e07",
+        "protocol_used": "968eceb0d5",
+        "run_name": "6f32a4fbd1",
+        "slides": {
+            "submitter_id": "slide_b323fa99f7"
+        },
+        "submitter_id": "slide_image_fc69c54d5b",
+        "type": "slide_image"
+    },
+    {
+        "cell_count": 1,
+        "cell_identifier": "5c12044f6e",
+        "cell_type": "84f4352bfd",
+        "consent_codes": [],
+        "data_category": "Slide Image",
+        "data_format": "123589334f",
+        "data_type": "Raw IMC Data",
+        "experimental_strategy": "Tissue Slide",
+        "file_name": "d5ddd05c27",
+        "file_size": 16,
+        "frame_identifier": "ffb0cb2aea",
+        "md5sum": "566191ec89b2625735ab9dee3bf48d27",
+        "panel_used": "04bd8cd8fa",
+        "protocol_used": "37346b0f5b",
+        "run_name": "4e4f6405b8",
+        "slides": {
+            "submitter_id": "slide_b902fb2d0b"
+        },
+        "submitter_id": "slide_image_8799c128a5",
+        "type": "slide_image"
+    },
+    {
+        "cell_count": 6,
+        "cell_identifier": "329c104a8a",
+        "cell_type": "6785ea63e9",
+        "consent_codes": [],
+        "data_category": "Mass Cytometry",
+        "data_format": "f28d71270b",
+        "data_type": "Single Cell Image",
+        "experimental_strategy": "Diagnostic Slide",
+        "file_name": "833aeb7c06",
+        "file_size": 1,
+        "frame_identifier": "12cd4d8a84",
+        "md5sum": "fbf7f5c36f7fc4e1b95332790d44da41",
+        "panel_used": "047d72d505",
+        "protocol_used": "c6cd6a20b4",
+        "run_name": "e97b768b80",
+        "slides": {
+            "submitter_id": "slide_3582360fb6"
+        },
+        "submitter_id": "slide_image_7ac58414fe",
+        "type": "slide_image"
+    },
+    {
+        "cell_count": 1,
+        "cell_identifier": "91af000151",
+        "cell_type": "e95868ea65",
+        "consent_codes": [],
+        "data_category": "Biospecimen",
+        "data_format": "c09c38e912",
+        "data_type": "Raw IMC Data",
+        "experimental_strategy": "Diagnostic Slide",
+        "file_name": "409922c93e",
+        "file_size": 50,
+        "frame_identifier": "5f4d9158c9",
+        "md5sum": "fe510849db51802d70dde51ff9174aee",
+        "panel_used": "b4b8b380b3",
+        "protocol_used": "74211ff7b1",
+        "run_name": "d49f5c2782",
+        "slides": {
+            "submitter_id": "slide_02653d9653"
+        },
+        "submitter_id": "slide_image_7215aa3b1d",
+        "type": "slide_image"
+    },
+    {
+        "cell_count": 93,
+        "cell_identifier": "d32bed5f12",
+        "cell_type": "300a578d9c",
+        "consent_codes": [],
+        "data_category": "Biospecimen",
+        "data_format": "2341c04b0f",
+        "data_type": "image",
+        "experimental_strategy": "Tissue Slide",
+        "file_name": "c022dd7b38",
+        "file_size": 63,
+        "frame_identifier": "bedffec5ab",
+        "md5sum": "94c98f4d1ffca14f093250b21db0d611",
+        "panel_used": "e9aceb235c",
+        "protocol_used": "84c24982e8",
+        "run_name": "5e9697af7a",
+        "slides": {
+            "submitter_id": "slide_c83115620c"
+        },
+        "submitter_id": "slide_image_3535f27f71",
+        "type": "slide_image"
+    },
+    {
+        "cell_count": 47,
+        "cell_identifier": "bf0627bdac",
+        "cell_type": "d971d89d28",
+        "consent_codes": [],
+        "data_category": "Mass Cytometry",
+        "data_format": "b06763cfc5",
+        "data_type": "Raw IMC Data",
+        "experimental_strategy": null,
+        "file_name": "a22ead8a49",
+        "file_size": 6,
+        "frame_identifier": "15e3b1bddc",
+        "md5sum": "a94f6098533d3a11d81af791840719b3",
+        "panel_used": "55ce419235",
+        "protocol_used": "2123082a28",
+        "run_name": "63d0e41d32",
+        "slides": {
+            "submitter_id": "slide_56662c26e2"
+        },
+        "submitter_id": "slide_image_c72e68a7fd",
+        "type": "slide_image"
+    },
+    {
+        "cell_count": 35,
+        "cell_identifier": "89f89a42ab",
+        "cell_type": "b058a56c04",
+        "consent_codes": [],
+        "data_category": "Slide Image",
+        "data_format": "8ef6e5a547",
+        "data_type": "Raw IMC Data",
+        "experimental_strategy": "Diagnostic Slide",
+        "file_name": "42c564499e",
+        "file_size": 22,
+        "frame_identifier": "37d39bc51c",
+        "md5sum": "8be466bd99a9142f08278d2cf538980a",
+        "panel_used": "d23ebcd4c5",
+        "protocol_used": "2dc13cab9a",
+        "run_name": "012fdb25cb",
+        "slides": {
+            "submitter_id": "slide_0c18a6131f"
+        },
+        "submitter_id": "slide_image_3d6e8b0a4b",
+        "type": "slide_image"
+    },
+    {
+        "cell_count": 28,
+        "cell_identifier": "27f38fed67",
+        "cell_type": "950c8eb042",
+        "consent_codes": [],
+        "data_category": "Biospecimen",
+        "data_format": "fe4be5deea",
+        "data_type": "Single Channel IMC Image",
+        "experimental_strategy": null,
+        "file_name": "877fb7b65d",
+        "file_size": 45,
+        "frame_identifier": "9d4cd8025e",
+        "md5sum": "f060687fa5c2d00ae10cbfc866ad7a84",
+        "panel_used": "e0a0bfae4c",
+        "protocol_used": "c22f9cfdfa",
+        "run_name": "0ee3bb9530",
+        "slides": {
+            "submitter_id": "slide_5a4c7f6dd7"
+        },
+        "submitter_id": "slide_image_896e845d31",
+        "type": "slide_image"
+    }
+]

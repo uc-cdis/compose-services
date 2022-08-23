@@ -1,0 +1,212 @@
+[
+    {
+        "contributor": "4c21681405",
+        "coverage": "e40e99a1f9",
+        "creator": "36986cc4a2",
+        "data_type": "4c3b37eb87",
+        "date": "2008-08-04T11:00:39+00:00",
+        "description": "c35197afb0",
+        "format": "583898eef5",
+        "language": "e5f800f6db",
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "publisher": "105216bbc6",
+        "relation": "106e44bdba",
+        "rights": "36ce2ad48e",
+        "source": "52d85c8667",
+        "subject": "6713664a00",
+        "submitter_id": "core_metadata_collection_720bb339f9",
+        "title": "824fe540ad",
+        "type": "core_metadata_collection"
+    },
+    {
+        "contributor": "4721d490de",
+        "coverage": "b1e8dbd9e8",
+        "creator": "1da3b1530d",
+        "data_type": "8749d1e782",
+        "date": "2011-06-21T20:44:17+00:00",
+        "description": "cba9c69fa2",
+        "format": "4c7a610964",
+        "language": "32ce7cd815",
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "publisher": "77ec074675",
+        "relation": "dca81d6b00",
+        "rights": "a7d48185a6",
+        "source": "3f1b0f0174",
+        "subject": "4d39041eae",
+        "submitter_id": "core_metadata_collection_3591879daa",
+        "title": "6b64e1ec6f",
+        "type": "core_metadata_collection"
+    },
+    {
+        "contributor": "e2c2c26715",
+        "coverage": "43a5ee35f7",
+        "creator": "0cde594f83",
+        "data_type": "85d08acf27",
+        "date": "1981-02-10T07:24:31+00:00",
+        "description": "fbd1c953c6",
+        "format": "636e1866cb",
+        "language": "6562e7fc05",
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "publisher": "e7c3fb9040",
+        "relation": "09e901c09a",
+        "rights": "556cc31f8f",
+        "source": "edbac11b9d",
+        "subject": "9a9d0446b4",
+        "submitter_id": "core_metadata_collection_d702b6ecd1",
+        "title": "21c1fc477b",
+        "type": "core_metadata_collection"
+    },
+    {
+        "contributor": "4ead3e22de",
+        "coverage": "6ff14325d7",
+        "creator": "9befe2a7bb",
+        "data_type": "c86b3e1c2b",
+        "date": "2013-03-21T21:46:01+00:00",
+        "description": "42931af385",
+        "format": "0e8c3ae208",
+        "language": "e4ccd71450",
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "publisher": "b0f444c86c",
+        "relation": "04ef30259c",
+        "rights": "25e176cef4",
+        "source": "b998e67806",
+        "subject": "1fd88cfac3",
+        "submitter_id": "core_metadata_collection_d4dac94074",
+        "title": "f4bb69f635",
+        "type": "core_metadata_collection"
+    },
+    {
+        "contributor": "532ad60443",
+        "coverage": "6a1ceedf92",
+        "creator": "c2f467a7f5",
+        "data_type": "a7b44395b3",
+        "date": "1984-06-12T22:24:20+00:00",
+        "description": "d506b48e6d",
+        "format": "3edc90a078",
+        "language": "4a65eb686d",
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "publisher": "5f68a47b53",
+        "relation": "60ab5a3336",
+        "rights": "46b3772093",
+        "source": "83c04b20b8",
+        "subject": "6768a7a07e",
+        "submitter_id": "core_metadata_collection_ab86fe4091",
+        "title": "6d6e234455",
+        "type": "core_metadata_collection"
+    },
+    {
+        "contributor": "1dd3527804",
+        "coverage": "77ba82f055",
+        "creator": "789dd43590",
+        "data_type": "5035d59cde",
+        "date": "2019-10-12T15:40:26+00:00",
+        "description": "e6d29b7c56",
+        "format": "7f4ea977b6",
+        "language": "6af8bc6630",
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "publisher": "5273ab5835",
+        "relation": "efd9881e68",
+        "rights": "e023295fd2",
+        "source": "3a20a6dc48",
+        "subject": "1cf955ee76",
+        "submitter_id": "core_metadata_collection_44ee8e6f6f",
+        "title": "29733e1b9b",
+        "type": "core_metadata_collection"
+    },
+    {
+        "contributor": "70b20b9941",
+        "coverage": "be2e0e6ceb",
+        "creator": "67ec07a8cd",
+        "data_type": "83fef2d246",
+        "date": "2004-06-11T12:35:57+00:00",
+        "description": "f7a1e39958",
+        "format": "fb8b78e63d",
+        "language": "b41ed01533",
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "publisher": "9420b96e91",
+        "relation": "c363402c76",
+        "rights": "03fb7d1131",
+        "source": "a5ed0973f0",
+        "subject": "636292b2f7",
+        "submitter_id": "core_metadata_collection_0f98580fa6",
+        "title": "3c2d7a0377",
+        "type": "core_metadata_collection"
+    },
+    {
+        "contributor": "2316ffc542",
+        "coverage": "1889428587",
+        "creator": "e5cf2adacf",
+        "data_type": "bfe761e85b",
+        "date": "2000-10-15T19:44:36+00:00",
+        "description": "bc80f60f9e",
+        "format": "fb73d82e14",
+        "language": "a1fb543454",
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "publisher": "f35d1c9525",
+        "relation": "1aa3a93038",
+        "rights": "1ee0791428",
+        "source": "304ab3f73f",
+        "subject": "27b8ca105a",
+        "submitter_id": "core_metadata_collection_315432598b",
+        "title": "5f9bbd5ae3",
+        "type": "core_metadata_collection"
+    },
+    {
+        "contributor": "5cb6dac96c",
+        "coverage": "e219e763b6",
+        "creator": "947f117c50",
+        "data_type": "f6567e3e17",
+        "date": "1988-06-17T10:00:50+00:00",
+        "description": "950b406ab8",
+        "format": "e7b1db0ab8",
+        "language": "b9dd58f067",
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "publisher": "0fa61c313d",
+        "relation": "c01c186d13",
+        "rights": "9af5830020",
+        "source": "fa78d5d0b7",
+        "subject": "c85cdb059f",
+        "submitter_id": "core_metadata_collection_5f161a9bac",
+        "title": "74bfcc479f",
+        "type": "core_metadata_collection"
+    },
+    {
+        "contributor": "ffa350d53c",
+        "coverage": "5e73f329b0",
+        "creator": "c3df700eae",
+        "data_type": "c55d1c2574",
+        "date": "2018-08-29T03:19:10+00:00",
+        "description": "74335d699d",
+        "format": "0f0cc4901a",
+        "language": "b8d935c6c5",
+        "projects": {
+            "code": "MyFirstProject"
+        },
+        "publisher": "e88fb77575",
+        "relation": "b5be2394b6",
+        "rights": "a8602e609f",
+        "source": "c9816cbd50",
+        "subject": "206f02e388",
+        "submitter_id": "core_metadata_collection_a78394a6c5",
+        "title": "5154376025",
+        "type": "core_metadata_collection"
+    }
+]
