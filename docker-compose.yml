@@ -82,17 +82,24 @@ services:
       timeout: 5s
       retries: 10
     depends_on:
-      - postgres
+      - postgres  
   metadata-service:
-    image: "quay.io/cdis/metadata-service:2021.03"
+    # update image
+    image: "quay.io/cdis/metadata-service:1.8.0"
     container_name: metadata-service
     depends_on:
       - postgres
+    volumes:
+      # /env/bin/python /src/src/mds/populate.py --config /var/local/metadata-service/aggregate_config.json
+      - ./Secrets/metadata/aggregate_config.json:/var/local/metadata-service/aggregate_config.json
     environment:
       - DB_HOST=postgres
       - DB_USER=metadata_user
       - DB_PASSWORD=metadata_pass
       - DB_DATABASE=metadata
+      # config required by 1.8
+      - USE_AGG_MDS=true
+      - GEN3_ES_ENDPOINT=http://esproxy-service:9200      
     command: >
       sh -c "/env/bin/alembic upgrade head && /env/bin/uvicorn --host 0.0.0.0 --port 80 mds.asgi:app --reload"
     networks:
@@ -165,6 +172,8 @@ services:
     environment:
       - cluster.name=elasticsearch-cluster
       - bootstrap.memory_lock=false
+      # For apple silicon
+      # - bootstrap.system_call_filter=false
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
     entrypoint:
       - /bin/bash
@@ -218,6 +227,10 @@ services:
       - ./Secrets/gitops.json:/data-portal/data/config/gitops.json
       - ./Secrets/gitops-logo.png:/data-portal/custom/logo/gitops-logo.png
       - ./Secrets/gitops.png:/data-portal/custom/createdby/gitops.png
+      #  BRH biomedical research hub graphics
+      # - ./Secrets/gitops-sponsors/createdby_50.png:/data-portal/custom/sponsors/gitops-sponsors/createdby_50.png
+      # - ./Secrets/gitops-sponsors/gen3_50.png:/data-portal/custom/sponsors/gitops-sponsors/gen3_50.png
+      # - ./Secrets/gitops-sponsors/gene_bgy.svg:/data-portal/custom/sponsors/gitops-sponsors/gene_bgy.svg
     environment:
       - NODE_ENV=dev
       #- MOCK_STORE=true
