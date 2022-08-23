@@ -1,5 +1,16 @@
+
+ACED - Training
+===
+> This repo was established as a sandbox to introduce Gen3 in a local, docker-compose laptop friendly environment.
+
+Follow the instructions below to introduce Gen3.  Then, see ACED specific steps [here](aced.md) 
+
+
+
 Compose-Services
 ===
+
+
 
 Docker-compose setup for experimental commons, small commons, or local development of the Gen3 stack. Production use should use [cloud-automation](https://github.com/uc-cdis/cloud-automation).
 
