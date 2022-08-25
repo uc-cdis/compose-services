@@ -1,0 +1,369 @@
+#!/usr/bin/env python3
+import csv
+import gzip
+import io
+import json
+import os
+import itertools
+import logging
+from collections import defaultdict
+from glob import glob
+
+from gen3.auth import Gen3Auth
+from gen3.submission import Gen3Submission
+import click
+import jwt
+
+from cdislogging import get_logger as get_gen3_logger
+
+log_fmt = "%(asctime)s %(name)s %(levelname)s : %(message)s"
+
+# set logging to warning, since gen3.submission logs a verbose INFO message on each call :-()
+logging.basicConfig(level=logging.WARNING, format=log_fmt)
+# set gen3's logger as well
+get_gen3_logger('__name__', log_level='warn', format=log_fmt)
+
+
+def get_logger_(name):
+    """Return logger with level set to info"""
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.INFO)
+    return logger
+
+
+def delete_all(submission_client, program, project, batch_size=200, types=[]):
+    """Delete all nodes in types hierarchy, skips program and project."""
+    for t in types:
+        try:
+            if t in ['program', 'project']:
+                continue
+            delete_type(submission_client, program, project, batch_size, t)
+        except Exception as e:
+            print(e)
+            raise e
+
+
+def delete_type(submission_client, program, project, batch_size, t):
+    """Delete all instances of a type."""
+    logger = get_logger_("delete_type")
+    response = submission_client.export_node(program, project, node_type=t, fileformat='json')
+    # # pool = mp.Pool(mp.cpu_count())
+
+    def collect_result(delete_response):
+        delete_response = delete_response.json()
+        assert delete_response['code'] == 200, delete_response
+        # logger.info('deleted {} {}'.format(t, delete_response['message']))
+
+    if 'data' not in response or len(response['data']) == 0:
+        logger.warning(f'No {t} to delete {response}')
+    else:
+        for ids in grouper(batch_size, [n['id'] for n in response['data']]):
+            logger.info(f'deleting {program}-{project}.{t} {len(ids)} items.')
+            ids = ','.join(ids)
+            collect_result(submission_client.delete_record(program, project, ids))
+            # # pool.apply_async(submission_client.delete_record, args=(program, project, ids), callback=collect_result)
+        # Close Pool and let all the processes complete
+        # postpones the execution of next line of code until all processes in the queue are done
+        # # pool.close()
+        # # pool.join()
+
+
+def create_node(submission_client, program_name, project_code, node):
+    """Create node(s)."""
+    logger = get_logger_("create_node")
+
+    try:
+        nodes = node
+        if not isinstance(node, (list,)):
+            nodes = [node]
+        response = None
+        response = submission_client.submit_record(program_name, project_code, nodes)
+        return response
+    except Exception as e:
+        logger.error(f"create_node: error {e}")
+        logger.error(f"create_node: error {nodes}")
+        if response:
+            for entity in response.get('entities', []):
+                for error in entity.get('errors', []):
+                    logger.error('{} {} {}'.format(error['type'], entity['type'], entity))
+            for error in response.get('transactional_errors', []):
+                logger.error(' transactional_error {}'.format(error))
+                logger.error(json.dumps(response))
+        raise e
+
+
+class JsonReader:
+    """Read json and return dict iterator."""
+
+    def __init__(self, path):
+        """Open file."""
+        if path.endswith(".json.gz"):
+            self.fp = io.TextIOWrapper(io.BufferedReader(gzip.GzipFile(path)))
+        else:
+            self.fp = open(path, "r", encoding='utf-8')
+        self.items = None
+
+    def __iter__(self):
+        """Return self."""
+        return self
+
+    def __next__(self):
+        """Iterate to next row."""
+        try:
+            if self.items and len(self.items) > 0:
+                return self.items.pop(0)
+            if self.items:
+                raise IndexError()
+            line = self.fp.readline()
+            if len(line) < 1:
+                raise IndexError()
+            return json.loads(line)
+        except json.decoder.JSONDecodeError:
+            self.fp.seek(0, 0)
+            obj_ = json.load(self.fp)
+            self.items = obj_
+            if not isinstance(self.items, list):
+                self.items = [self.items]
+            return self.items.pop(0)
+        except IndexError:
+            raise StopIteration()
+
+
+def reader(path, **kwargs):
+    """Wrap gzip if necessary."""
+    if path.endswith(".json.gz"):
+        return JsonReader(path)
+    elif path.endswith(".gz"):
+        return io.TextIOWrapper(
+            io.BufferedReader(gzip.GzipFile(path))
+        )
+    elif path.endswith(".csv"):
+        return csv.DictReader(open(path, "r", encoding='utf-8'), **kwargs)
+    elif path.endswith(".tsv"):
+        return csv.DictReader(open(path, "r", encoding='utf-8'), delimiter="\t", **kwargs)
+    elif path.endswith(".json"):
+        return JsonReader(path)
+    elif path.endswith(".ndjson"):
+        return JsonReader(path)
+    else:
+        return open(path, "r", encoding='utf-8')
+
+
+def grouper(n, iterable):
+    """Chunk iterable into n size chunks."""
+    it = iter(iterable)
+    while True:
+        chunk = tuple(itertools.islice(it, n))
+        if not chunk:
+            return
+        yield chunk
+
+
+def upload_metadata(path, program, project, submission_client, batch_size):
+    """Read gen3 json and write to gen3."""
+
+    logger = get_logger_("upload_metadata")
+
+    def collect_result(response_):
+        is_error = False
+        for entity in response_['entities']:
+            for error in entity.get('errors', []):
+                logger.error('{} {} {}'.format(error['type'], entity['type'], entity))
+                is_error = True
+        for error in response_['transactional_errors']:
+            logger.error('transactional_error {}'.format(error))
+            logger.error(json.dumps(response_))
+            is_error = True
+        if is_error:
+            logger.debug(response_)
+
+    for p in glob(path):
+        logger.info(f"Uploading {p}")
+        for lines in grouper(batch_size, reader(p)):
+            nodes = [line for line in lines]
+
+            if nodes[0]['type'] == 'project':
+                for node in nodes:
+                    logger.debug('creating program')
+                    response = submission_client.create_program(
+                        {'name': program, 'dbgap_accession_number': program, 'type': 'program'})
+                    assert response, 'could not parse response {}'.format(r)
+                    # assert 'code' in response, f'Unexpected response {response}'
+                    # assert response['code'] == 200, 'could not create {} program'.format(response)
+                    assert 'id' in response, 'could not create {} program'.format(response)
+                    assert program in response['name'], 'could not create {} program'.format(response)
+
+                    response = submission_client.create_project(program, node)
+                    assert response, 'could not parse response'
+                    assert 'code' in response, f'Unexpected response {response}'
+                    assert response['code'] == 200, 'could not create {} {}'.format(nodes[0]['type'], response)
+                    assert 'successful' in response['message'], 'could not create {} {}'.format(nodes[0]['type'],
+                                                                                                response)
+                    logger.info('Created project {}'.format(node['code']))
+                continue
+
+            # if nodes[0]['type'] == 'experiment':
+            #     project = nodes[0]['projects'][0]['code']
+
+            collect_result(create_node(submission_client, program, project, nodes))
+
+
+def get_schema(submission_client):
+    """Returns gen3 schema."""
+    schema = submission_client.get_dictionary_all()
+    return schema
+
+
+def nodes_in_load_order(submission_client):
+    """Introspects schema and returns types in order of db load."""
+    schema = get_schema(submission_client)
+    loaded = {}
+
+    def process(current_, depth):
+        loaded[current_['id']] = depth
+
+    def traverse(current_, depth=0, depth_limit=1):
+        if depth > depth_limit:
+            return
+        process(current_, depth)
+        target_type = current_['id']
+        for k in schema.keys():
+            n = schema[k]
+            if 'links' not in n or len(n['links']) == 0:
+                continue
+            links = n['links']
+            if 'subgroup' in links[0]:
+                links = links[0]['subgroup']
+            for link in links:
+                if 'target_type' in link and link['target_type'] == target_type:
+                    process(schema[n['id']], depth)
+            for link in links:
+                if 'target_type' in link and link['target_type'] == target_type:
+                    traverse(schema[n['id']], depth + 1, depth_limit)
+            depth_limit += 1
+
+    schema_keys = [k for k in schema.keys() if
+                   not k.startswith('_') and not schema[k].get('category', None) == 'internal']
+    schema_keys = [schema[schema_key] for schema_key in schema_keys if schema[schema_key].get('links', None) == []][0]
+    traverse(schema_keys)
+
+    load_order_ = []
+    levels = set([v for k, v in loaded.items()])
+    for i in sorted(levels):
+        for k, v in loaded.items():
+            if v == i:
+                load_order_.append(k)
+    return load_order_
+
+
+def extract_endpoint(gen3_credentials_file):
+    """Get base url of jwt issuer claim."""
+    with open(gen3_credentials_file) as input_stream:
+        api_key = json.load(input_stream)['api_key']
+        claims = jwt.decode(api_key, options={"verify_signature": False})
+        assert 'iss' in claims
+        return claims['iss'].replace('/user', '')
+
+
+@click.group()
+@click.option('--gen3_credentials_file', default='credentials.json', show_default=True,
+              help='API credentials file downloaded from gen3 profile.')
+@click.pass_context
+def cli(ctx, gen3_credentials_file):
+    """Metadata loader."""
+
+    endpoint = extract_endpoint(gen3_credentials_file)
+    get_logger_("cli").debug(f"Read {gen3_credentials_file} endpoint {endpoint}")
+    auth = Gen3Auth(endpoint, refresh_file=gen3_credentials_file)
+    submission_client = Gen3Submission(endpoint, auth)
+    ctx.ensure_object(dict)
+    ctx.obj['submission_client'] = submission_client
+    ctx.obj['endpoint'] = endpoint
+    ctx.obj['programs'] = [link.split('/')[-1] for link in submission_client.get_programs()['links']]
+
+
+@cli.command()
+@click.pass_context
+def ls(ctx):
+    """Introspects schema and returns types in order."""
+    submission_client = ctx.obj['submission_client']
+    contents = {'programs': defaultdict(list)}
+
+    programs = submission_client.get_programs()
+
+    for program in ctx.obj['programs']:
+        contents['programs'][program] = [link.split('/')[-1] for link in submission_client.get_projects(program)['links']]
+    contents['entities'] = nodes_in_load_order(submission_client)
+    print(json.dumps(contents))
+
+
+@cli.command()
+@click.option('--program', show_default=True,
+              help='Gen3 "program"')
+@click.option('--project', show_default=True,
+              help='Gen3 "project"')
+@click.option('--batch_size', default=10, show_default=True,
+              help='number of records to process per call')
+@click.pass_context
+def empty(ctx, batch_size, program, project):
+    """Empties project, deletes all metadata."""
+    submission_client = ctx.obj['submission_client']
+    nodes = nodes_in_load_order(submission_client)
+    delete_all(submission_client, program, project, types=reversed(nodes), batch_size=batch_size)
+
+
+@cli.command()
+@click.option('--program', show_default=True,
+              help='Gen3 "program"')
+@click.option('--project', show_default=True,
+              help='Gen3 "project"')
+@click.pass_context
+def drop_project(ctx, program, project):
+    """Drops empty project"""
+    submission_client = ctx.obj['submission_client']
+    submission_client.delete_project(program, project)
+    get_logger_("drop+_project").info(f"Dropped {project}")
+
+
+@cli.command()
+@click.option('--program', show_default=True,
+              help='Gen3 "program"')
+def drop_program(ctx, data_directory, program):
+    """Drops empty program"""
+    submission_client = ctx.obj['submission_client']
+    submission_client.delete_progranm(program)
+
+
+@cli.command()
+@click.option('--data_directory', default='testData', show_default=True,
+              help='directory that contains <entity>.json')
+@click.option('--program', default=None, show_default=True,
+              help='Gen3 "program"')
+@click.option('--project', default=None, show_default=True,
+              help='Gen3 "project"')
+@click.option('--batch_size', default=10, show_default=True,
+              help='number of records to process per call')
+@click.pass_context
+def load(ctx, data_directory, program, project, batch_size):
+    """Loads metadata into project"""
+
+    submission_client = ctx.obj['submission_client']
+    if not program:
+        assert len(ctx.obj['programs']) == 1, f"No program provided and multiple programs {ctx.obj['programs']}"
+        program = ctx.obj['programs'][0]
+    if not project:
+        projects = [link.split('/')[-1] for link in submission_client.get_projects(program)['links']]
+        assert len(projects) == 1, f"No program provided and multiple programs {ctx.obj['projects']} {projects}"
+        project = projects[0]
+
+    nodes = nodes_in_load_order(submission_client)
+
+    for entity in nodes:
+        filename = f"{data_directory}/{entity}.json"
+        if os.path.isfile(filename):
+            upload_metadata(submission_client=submission_client, path=filename, program=program, project=project,
+                            batch_size=batch_size)
+
+
+if __name__ == '__main__':
+    cli()
