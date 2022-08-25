@@ -1,0 +1,82 @@
+[
+    {
+        "acknowledgee": "08e77d3994",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "acknowledgement_bc77db2636",
+        "type": "acknowledgement"
+    },
+    {
+        "acknowledgee": "3fe53d99a0",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "acknowledgement_1f6310d9e2",
+        "type": "acknowledgement"
+    },
+    {
+        "acknowledgee": "de57fb94af",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "acknowledgement_161b508c8d",
+        "type": "acknowledgement"
+    },
+    {
+        "acknowledgee": "5c5d8f4db1",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "acknowledgement_d8c1e3cb4b",
+        "type": "acknowledgement"
+    },
+    {
+        "acknowledgee": "41339ff41c",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "acknowledgement_7a93e2bf76",
+        "type": "acknowledgement"
+    },
+    {
+        "acknowledgee": "aac38f76c5",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "acknowledgement_2dd6ebc1b8",
+        "type": "acknowledgement"
+    },
+    {
+        "acknowledgee": "3c128acc72",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "acknowledgement_acad62d31d",
+        "type": "acknowledgement"
+    },
+    {
+        "acknowledgee": "52700d7183",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "acknowledgement_4c99950e6d",
+        "type": "acknowledgement"
+    },
+    {
+        "acknowledgee": "894d86010b",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "acknowledgement_ccba7f209a",
+        "type": "acknowledgement"
+    },
+    {
+        "acknowledgee": "66f98866fe",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "acknowledgement_84239cb181",
+        "type": "acknowledgement"
+    }
+]

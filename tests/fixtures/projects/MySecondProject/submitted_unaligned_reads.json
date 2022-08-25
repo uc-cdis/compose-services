@@ -1,0 +1,152 @@
+[
+    {
+        "consent_codes": [],
+        "data_category": "Sequencing Reads",
+        "data_format": "BAM",
+        "data_type": "Unaligned Reads",
+        "experimental_strategy": "Low Pass WGS",
+        "file_name": "bd1b4ff3a2",
+        "file_size": 70,
+        "md5sum": "7a9fec04be96b74252f98c0ba25d0b23",
+        "read_groups": {
+            "submitter_id": "read_group_f0cf62050c"
+        },
+        "submitter_id": "submitted_unaligned_reads_40a83db5ed",
+        "type": "submitted_unaligned_reads"
+    },
+    {
+        "consent_codes": [],
+        "data_category": "Raw Sequencing Data",
+        "data_format": "BAM",
+        "data_type": "Unaligned Reads",
+        "experimental_strategy": "WXS",
+        "file_name": "d680a469fa",
+        "file_size": 65,
+        "md5sum": "f3e5f6f6eeeba4ca3726c1ffbef837d2",
+        "read_groups": {
+            "submitter_id": "read_group_d60aefd861"
+        },
+        "submitter_id": "submitted_unaligned_reads_ffe6241984",
+        "type": "submitted_unaligned_reads"
+    },
+    {
+        "consent_codes": [],
+        "data_category": "Raw Sequencing Data",
+        "data_format": "FASTQ",
+        "data_type": "Unaligned Reads",
+        "experimental_strategy": "WGS",
+        "file_name": "f2c6a324a9",
+        "file_size": 78,
+        "md5sum": "7a6f9dfcc29aa15aeb4631fc2e90d97b",
+        "read_groups": {
+            "submitter_id": "read_group_97b9f3a09c"
+        },
+        "submitter_id": "submitted_unaligned_reads_974543499c",
+        "type": "submitted_unaligned_reads"
+    },
+    {
+        "consent_codes": [],
+        "data_category": "Sequencing Data",
+        "data_format": "BAM",
+        "data_type": "Unaligned Reads",
+        "experimental_strategy": "DNA Panel",
+        "file_name": "5d9a7b5526",
+        "file_size": 41,
+        "md5sum": "adaa749d10b055f3b53330ca34f9f23e",
+        "read_groups": {
+            "submitter_id": "read_group_87934435e4"
+        },
+        "submitter_id": "submitted_unaligned_reads_679c62ebc5",
+        "type": "submitted_unaligned_reads"
+    },
+    {
+        "consent_codes": [],
+        "data_category": "Sequencing Data",
+        "data_format": "FASTQ",
+        "data_type": "Unaligned Reads",
+        "experimental_strategy": "Validation",
+        "file_name": "170a3f2151",
+        "file_size": 29,
+        "md5sum": "91f43737b853c182837e450f7442589a",
+        "read_groups": {
+            "submitter_id": "read_group_46efa8704d"
+        },
+        "submitter_id": "submitted_unaligned_reads_8302bf514e",
+        "type": "submitted_unaligned_reads"
+    },
+    {
+        "consent_codes": [],
+        "data_category": "Sequencing Data",
+        "data_format": "FASTQ",
+        "data_type": "Unaligned Reads",
+        "experimental_strategy": "Validation",
+        "file_name": "9bc8bbd8b5",
+        "file_size": 85,
+        "md5sum": "a8c2d7fac38acce5634e318b73bf8ed6",
+        "read_groups": {
+            "submitter_id": "read_group_13370d92c6"
+        },
+        "submitter_id": "submitted_unaligned_reads_406f9bbed3",
+        "type": "submitted_unaligned_reads"
+    },
+    {
+        "consent_codes": [],
+        "data_category": "Sequencing Reads",
+        "data_format": "FASTQ",
+        "data_type": "Unaligned Reads",
+        "experimental_strategy": "Total RNA-Seq",
+        "file_name": "b48f1f33e6",
+        "file_size": 20,
+        "md5sum": "ef6afbfba010ff5c178cdd26756edd01",
+        "read_groups": {
+            "submitter_id": "read_group_d8f57d6e60"
+        },
+        "submitter_id": "submitted_unaligned_reads_06bd6d8849",
+        "type": "submitted_unaligned_reads"
+    },
+    {
+        "consent_codes": [],
+        "data_category": "Sequencing Data",
+        "data_format": "FASTQ",
+        "data_type": "Unaligned Reads",
+        "experimental_strategy": "miRNA-Seq",
+        "file_name": "eb76ad1e47",
+        "file_size": 42,
+        "md5sum": "839b84038b4dcd0c5021c38c6706ed5f",
+        "read_groups": {
+            "submitter_id": "read_group_fda909e6d3"
+        },
+        "submitter_id": "submitted_unaligned_reads_d44a55bf88",
+        "type": "submitted_unaligned_reads"
+    },
+    {
+        "consent_codes": [],
+        "data_category": "Sequencing Reads",
+        "data_format": "FASTQ",
+        "data_type": "Unaligned Reads",
+        "experimental_strategy": "DNA Panel",
+        "file_name": "e416b66d05",
+        "file_size": 81,
+        "md5sum": "aff96d21b4e4fb4c7a7ff2196305d8c9",
+        "read_groups": {
+            "submitter_id": "read_group_8d4f758280"
+        },
+        "submitter_id": "submitted_unaligned_reads_9063462325",
+        "type": "submitted_unaligned_reads"
+    },
+    {
+        "consent_codes": [],
+        "data_category": "Sequencing Reads",
+        "data_format": "BAM",
+        "data_type": "Unaligned Reads",
+        "experimental_strategy": "Total RNA-Seq",
+        "file_name": "e5d267b854",
+        "file_size": 47,
+        "md5sum": "dbca9130beaf48cb5f5cb3c49a4229ba",
+        "read_groups": {
+            "submitter_id": "read_group_c8a6fa2d29"
+        },
+        "submitter_id": "submitted_unaligned_reads_593e312dde",
+        "type": "submitted_unaligned_reads"
+    }
+]

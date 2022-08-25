@@ -1,0 +1,162 @@
+[
+    {
+        "days_to_treatment": 64.3476377487534,
+        "days_to_treatment_end": 36.71451398704553,
+        "days_to_treatment_start": 87.65804619525514,
+        "diagnoses": {
+            "submitter_id": "diagnosis_916d4cfd34"
+        },
+        "submitter_id": "treatment_c13a9ba044",
+        "therapeutic_agents": "0792018380",
+        "treatment_anatomic_site": "Internal Mammary Nodes",
+        "treatment_intent_type": "2c348ed8f3",
+        "treatment_or_therapy": null,
+        "treatment_outcome": "Treatment Stopped Due to Toxicity",
+        "treatment_type": "Not Allowed To Collect",
+        "type": "treatment"
+    },
+    {
+        "days_to_treatment": 30.108884728102005,
+        "days_to_treatment_end": 12.975150860966234,
+        "days_to_treatment_start": 14.48747203218652,
+        "diagnoses": {
+            "submitter_id": "diagnosis_9db8203837"
+        },
+        "submitter_id": "treatment_7c152aa770",
+        "therapeutic_agents": "aed0fd7b3c",
+        "treatment_anatomic_site": "Mantle",
+        "treatment_intent_type": "cb3e1c2e93",
+        "treatment_or_therapy": "unknown",
+        "treatment_outcome": "Partial Response",
+        "treatment_type": null,
+        "type": "treatment"
+    },
+    {
+        "days_to_treatment": 35.75044314687962,
+        "days_to_treatment_end": 76.78701884167604,
+        "days_to_treatment_start": 66.60134446576849,
+        "diagnoses": {
+            "submitter_id": "diagnosis_9437bc05fa"
+        },
+        "submitter_id": "treatment_12acb04977",
+        "therapeutic_agents": "2ff71a9649",
+        "treatment_anatomic_site": "Mediastinal",
+        "treatment_intent_type": "5248cbe383",
+        "treatment_or_therapy": "not reported",
+        "treatment_outcome": "Partial Response",
+        "treatment_type": "Not Allowed To Collect",
+        "type": "treatment"
+    },
+    {
+        "days_to_treatment": 72.12658576677879,
+        "days_to_treatment_end": 53.51977591175007,
+        "days_to_treatment_start": 73.41115070374458,
+        "diagnoses": {
+            "submitter_id": "diagnosis_a23d130dea"
+        },
+        "submitter_id": "treatment_c70205aa10",
+        "therapeutic_agents": "b2622f073a",
+        "treatment_anatomic_site": "Gastrointestinal, NOS",
+        "treatment_intent_type": "5b78f6aa68",
+        "treatment_or_therapy": null,
+        "treatment_outcome": "Treatment Stopped Due to Toxicity",
+        "treatment_type": "Hormone Therapy",
+        "type": "treatment"
+    },
+    {
+        "days_to_treatment": 38.04460618036125,
+        "days_to_treatment_end": 94.1849853654246,
+        "days_to_treatment_start": 16.743031330184543,
+        "diagnoses": {
+            "submitter_id": "diagnosis_1c1b008a25"
+        },
+        "submitter_id": "treatment_65d94b3046",
+        "therapeutic_agents": "ffd2280b9c",
+        "treatment_anatomic_site": "Brain, whole",
+        "treatment_intent_type": "312c93a0a8",
+        "treatment_or_therapy": "yes",
+        "treatment_outcome": "Complete Response",
+        "treatment_type": "Other",
+        "type": "treatment"
+    },
+    {
+        "days_to_treatment": 89.19536213573504,
+        "days_to_treatment_end": 25.24015276543764,
+        "days_to_treatment_start": 28.943291165105954,
+        "diagnoses": {
+            "submitter_id": "diagnosis_b125cfdfde"
+        },
+        "submitter_id": "treatment_3e8c5d84c6",
+        "therapeutic_agents": "8659a321ff",
+        "treatment_anatomic_site": "Genitourinary, Bladder",
+        "treatment_intent_type": "5be16a2a4b",
+        "treatment_or_therapy": "unknown",
+        "treatment_outcome": "Treatment Ongoing",
+        "treatment_type": "Not Reported",
+        "type": "treatment"
+    },
+    {
+        "days_to_treatment": 63.41542995536965,
+        "days_to_treatment_end": 53.890556808026844,
+        "days_to_treatment_start": 29.403247863316828,
+        "diagnoses": {
+            "submitter_id": "diagnosis_33d99f6539"
+        },
+        "submitter_id": "treatment_a066812124",
+        "therapeutic_agents": "c229068399",
+        "treatment_anatomic_site": "Skin, lower extremity, local",
+        "treatment_intent_type": "ab10d1064b",
+        "treatment_or_therapy": "yes",
+        "treatment_outcome": "Complete Response",
+        "treatment_type": "Cryoablation",
+        "type": "treatment"
+    },
+    {
+        "days_to_treatment": 21.7513595257388,
+        "days_to_treatment_end": 95.72813891082578,
+        "days_to_treatment_start": 79.16742326529992,
+        "diagnoses": {
+            "submitter_id": "diagnosis_f8f5c6c0f6"
+        },
+        "submitter_id": "treatment_4a0f1166b9",
+        "therapeutic_agents": "888cfb6077",
+        "treatment_anatomic_site": "Ascites",
+        "treatment_intent_type": "8aa0525109",
+        "treatment_or_therapy": "no",
+        "treatment_outcome": "Complete Response",
+        "treatment_type": "Unknown",
+        "type": "treatment"
+    },
+    {
+        "days_to_treatment": 15.51094559727445,
+        "days_to_treatment_end": 97.8102644555137,
+        "days_to_treatment_start": 86.89035923854364,
+        "diagnoses": {
+            "submitter_id": "diagnosis_b177ebe3cd"
+        },
+        "submitter_id": "treatment_467ce53d25",
+        "therapeutic_agents": "11e168ddd7",
+        "treatment_anatomic_site": "Supraclavicular/Axillary Level 3",
+        "treatment_intent_type": "20410ef0fa",
+        "treatment_or_therapy": "no",
+        "treatment_outcome": "Partial Response",
+        "treatment_type": null,
+        "type": "treatment"
+    },
+    {
+        "days_to_treatment": 78.30872685413605,
+        "days_to_treatment_end": 35.988725659853536,
+        "days_to_treatment_start": 47.26294257775203,
+        "diagnoses": {
+            "submitter_id": "diagnosis_a3bb7b32a2"
+        },
+        "submitter_id": "treatment_5dece4e277",
+        "therapeutic_agents": "adaa2d7775",
+        "treatment_anatomic_site": "Prostate, Seminal Vesicles and Lymph Nodes",
+        "treatment_intent_type": "6d4295ce75",
+        "treatment_or_therapy": "no",
+        "treatment_outcome": "Complete Response",
+        "treatment_type": "Targeted Molecular Therapy",
+        "type": "treatment"
+    }
+]

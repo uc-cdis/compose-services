@@ -1,0 +1,92 @@
+[
+    {
+        "doi": "0da968b330",
+        "pmid": "3426159d46",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "publication_28c2427113",
+        "type": "publication"
+    },
+    {
+        "doi": "aa7159735f",
+        "pmid": "c4d5f1ec5c",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "publication_f94c0dbf30",
+        "type": "publication"
+    },
+    {
+        "doi": "df872839d4",
+        "pmid": "c899b98b43",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "publication_5a24b26670",
+        "type": "publication"
+    },
+    {
+        "doi": "4f2357aa0f",
+        "pmid": "0c436e12cf",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "publication_9679a814d7",
+        "type": "publication"
+    },
+    {
+        "doi": "e08e41485a",
+        "pmid": "288fb27998",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "publication_d5cd36c2ba",
+        "type": "publication"
+    },
+    {
+        "doi": "6bc129dfdc",
+        "pmid": "15ce873c55",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "publication_242a2e6136",
+        "type": "publication"
+    },
+    {
+        "doi": "f59a875afd",
+        "pmid": "dfaedc4583",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "publication_78d47dbef6",
+        "type": "publication"
+    },
+    {
+        "doi": "58f4d6ce99",
+        "pmid": "de715e55ab",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "publication_2b4d045791",
+        "type": "publication"
+    },
+    {
+        "doi": "2219b08e1d",
+        "pmid": "bd227fc7cf",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "publication_04d7c93f52",
+        "type": "publication"
+    },
+    {
+        "doi": "c7e0fb5792",
+        "pmid": "88ef0552a1",
+        "projects": {
+            "code": "MySecondProject"
+        },
+        "submitter_id": "publication_8ddaa04a3d",
+        "type": "publication"
+    }
+]
