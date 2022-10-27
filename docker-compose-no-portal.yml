@@ -1,0 +1,256 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:9.6
+    networks:
+      - devnet
+    volumes:
+      - "psqldata1:/var/lib/postgresql/data"
+      - "./scripts/postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql"
+    environment:
+      POSTGRES_DB: "db"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    restart: unless-stopped
+    healthcheck:
+        test: ["CMD-SHELL", "psql -U fence_user -d fence_db -c 'SELECT 1;'"]
+        interval: 60s
+        timeout: 5s
+        retries: 3
+    #
+    # uncomment this to make postgres available from the container host - ex:
+    #    psql -h localhost -d fence -U fence_user
+    ports:
+     - 6543:5432
+  indexd-service:
+    image: "quay.io/cdis/indexd:master"
+    command: bash indexd_setup.sh
+    container_name: indexd-service
+    networks:
+      - devnet
+    volumes:
+      - ./Secrets/indexd_settings.py:/var/www/indexd/local_settings.py
+      - ./Secrets/indexd_creds.json:/var/www/indexd/creds.json
+      - ./Secrets/config_helper.py:/var/www/indexd/config_helper.py
+      - ./scripts/indexd_setup.sh:/var/www/indexd/indexd_setup.sh
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/_status"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      - postgres
+  fence-service:
+    image: "quay.io/cdis/fence:master"
+    command: bash /var/www/fence/fence_setup.sh
+    container_name: fence-service
+    networks:
+      - devnet
+    volumes:
+      - ./Secrets/fence-config.yaml:/var/www/fence/fence-config.yaml
+      - ./Secrets/user.yaml:/var/www/fence/user.yaml
+      - ./Secrets/TLS/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
+      - ./Secrets/fenceJwtKeys:/fence/keys
+      - ./scripts/fence_setup.sh:/var/www/fence/fence_setup.sh
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/_status"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+    environment:
+      - PYTHONPATH=/var/www/fence
+    depends_on:
+      - postgres
+  arborist-service:
+    image: "quay.io/cdis/arborist:master"
+    container_name: arborist-service
+    entrypoint: bash /go/src/github.com/uc-cdis/arborist/arborist_setup.sh
+    networks:
+      - devnet
+    volumes:
+      - ./scripts/arborist_setup.sh:/go/src/github.com/uc-cdis/arborist/arborist_setup.sh
+    environment:
+      - JWKS_ENDPOINT=http://fence-service/.well-known/jwks
+      - PGDATABASE=arborist_db
+      - PGUSER=arborist_user
+      - PGPASSWORD=arborist_pass
+      - PGHOST=postgres
+      - PGPORT=5432
+      - PGSSLMODE=disable
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/health"]
+      interval: 60s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      - postgres
+  peregrine-service:
+    image: "quay.io/cdis/peregrine:master"
+    container_name: peregrine-service
+    networks:
+      - devnet
+    volumes:
+      - ./Secrets/peregrine_settings.py:/var/www/peregrine/wsgi.py
+      - ./Secrets/peregrine_creds.json:/var/www/peregrine/creds.json
+      - ./Secrets/config_helper.py:/var/www/peregrine/config_helper.py
+      - ./Secrets/TLS/service.crt:/usr/local/share/ca-certificates/cdis-ca.crt
+      - ./scripts/peregrine_setup.sh:/peregrine_setup.sh
+      - ./datadictionary/gdcdictionary/schemas:/schemas_dir
+    environment: &env
+      DICTIONARY_URL: https://s3.amazonaws.com/dictionary-artifacts/tb-datadictionary/1.1.5/schema.json # https://s3.amazonaws.com/dictionary-artifacts/ndhdictionary/3.3.8/schema.json
+      # PATH_TO_SCHEMA_DIR: /schemas_dir
+      REQUESTS_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/_status"]
+      interval: 60s
+      timeout: 5s
+      # give peregrine some extra time to startup
+      retries: 10
+    depends_on:
+      - postgres
+      - sheepdog-service
+  sheepdog-service:
+    image: "quay.io/cdis/sheepdog:master"
+    command: bash /sheepdog_setup.sh
+    container_name: sheepdog-service
+    networks:
+      - devnet
+    volumes:
+      - ./Secrets/sheepdog_settings.py:/var/www/sheepdog/wsgi.py
+      - ./Secrets/sheepdog_creds.json:/var/www/sheepdog/creds.json
+      - ./Secrets/config_helper.py:/var/www/sheepdog/config_helper.py
+      - ./scripts/sheepdog_setup.sh:/sheepdog_setup.sh
+      - ./datadictionary/gdcdictionary/schemas:/schemas_dir
+    environment: *env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/_status"]
+      interval: 60s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - postgres
+  esproxy-service:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.4.1-arm64
+    container_name: esproxy-service
+    environment:
+      - cluster.name=elasticsearch-cluster
+      - bootstrap.memory_lock=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - discovery.type=single-node
+      - network.host=0.0.0.0
+      - http.port=9200
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - devnet
+  pidgin-service:
+    image: "quay.io/cdis/pidgin:master"
+    container_name: pidgin-service
+    networks:
+      - devnet
+    volumes:
+      - ./scripts/waitForContainers.sh:/var/www/data-portal/waitForContainers.sh
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/_status"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      - peregrine-service
+  tube-service:
+    image: "quay.io/cdis/tube:master"
+    container_name: tube-service
+    command: bash -c "while true; do sleep 5; done"
+    networks:
+      - devnet
+    environment:
+      - DICTIONARY_URL=https://s3.amazonaws.com/dictionary-artifacts/ndhdictionary/3.3.8/schema.json # https://s3.amazonaws.com/dictionary-artifacts/tb-datadictionary/1.1.5/schema.json
+      - ES_URL=esproxy-service
+      - ES_INDEX_NAME=etl
+      - HADOOP_URL=hdfs://spark-service:9000
+      - HADOOP_HOST=spark-service
+    volumes:
+      - ./Secrets/etl_creds.json:/usr/share/gen3/tube/creds.json
+      - ./Secrets/etlMapping.yaml:/usr/share/gen3/tube/etlMapping.yaml
+      - ./Secrets/user.yaml:/usr/share/gen3/tube/user.yaml
+    depends_on:
+      - postgres
+      - esproxy-service
+      - spark-service
+  spark-service:
+    image: "quay.io/cdis/gen3-spark:feat_spark-3"
+    container_name: spark-service
+    command: bash -c "python run_config.py && hdfs namenode -format && hdfs --daemon start namenode && hdfs --daemon start datanode && yarn --daemon start resourcemanager && yarn --daemon start nodemanager && hdfs dfsadmin -safemode leave &&  hdfs dfs -mkdir /result && while true; do sleep 5; done"
+    expose:
+      - 22
+      - 8030
+      - 8031
+      - 8032
+      - 9000
+    networks:
+      - devnet
+    environment:
+      - HADOOP_URL=hdfs://0.0.0.0:9000
+      - HADOOP_HOST=0.0.0.0
+    ports:
+      - 9000:9000
+  kibana-service:
+    image: docker.elastic.co/kibana/kibana:8.4.1-arm64
+    container_name: kibana-service
+    environment:
+      SERVER_HOST: 0.0.0.0
+      SERVER_PORT: 5601
+      SERVER_MAXPAYLOADBYTES: 8388608
+
+      ELASTICSEARCH_HOSTS: "http://esproxy-service:9200"
+      ELASTICSEARCH_REQUESTTIMEOUT: 132000
+      ELASTICSEARCH_SHARDTIMEOUT: 120000
+
+      KIBANA_DEFAULTAPPID: "dashboard/653cf1e0-2fd2-11e7-99ed-49759aed30f5"
+      KIBANA_AUTOCOMPLETETIMEOUT: 3000
+      KIBANA_AUTOCOMPLETETERMINATEAFTER: 2500000
+
+      LOGGING_DEST: stdout
+      LOGGING_QUIET: 'false'
+      SERVER_NAME: kibana-service
+      ELASTICSEARCH_URL: http://esproxy-service:9200
+      network.host: 0.0.0.0
+    ports:
+      - 5601:5601
+    networks:
+      - devnet
+    depends_on:
+      - esproxy-service
+  revproxy-service:
+    image: "quay.io/cdis/nginx:master"
+    container_name: revproxy-service
+    networks:
+      - devnet
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./Secrets/TLS/service.crt:/etc/nginx/ssl/nginx.crt
+      - ./Secrets/TLS/service.key:/etc/nginx/ssl/nginx.key
+    ports:
+      - "80:80"
+      - "443:443"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/_status"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      - arborist-service
+      - indexd-service
+      - peregrine-service
+      - sheepdog-service
+      - fence-service
+      - pidgin-service
+networks:
+  devnet:
+volumes:
+  psqldata1:
