@@ -1,0 +1,220 @@
+---
+############################### amanuensis Configuration ####################################
+# This file contains various configurations for the amanuensis microservice.
+#
+# README:
+# - This is initially configured for minimal local development with reasonable defaults.
+# - Descriptions for each of the configurations (if any) will be *above* the variable as
+#   comments.
+# - Some configuration variables will have examples commented out below them.
+# - This is broken up into 2 main sections for REQUIRED and OPTIONAL configurations.
+#     - Optional configs will note what features or endpoints they support
+# - Underneath each main section the variables are logically grouped under named
+#   sections.
+#
+# NOTE: Login is NOT ready out of the box. Fill out REQUIRED configurations first
+
+########################################################################################
+#                               REQUIRED CONFIGURATIONS                                #
+########################################################################################
+
+# //////////////////////////////////////////////////////////////////////////////////////
+# GENERAL
+#   - Fill out all variables!
+# //////////////////////////////////////////////////////////////////////////////////////
+APP_NAME: 'Gen3 Data Commons'
+# Where amanuensis microservice is deployed
+HOSTNAME: 'localhost'
+BASE_URL: 'https://localhost/amanuensis'
+# a standardized name unique to each app for service-to-service interaction
+# so the service receiving the request knows it came from another Gen3 service
+SERVICE_NAME: 'amanuensis'
+# postgres db to connect to
+# connection url format:
+#     postgresql://[user[:password]@][netloc][:port][/dbname]
+DB: 'postgresql://amanuensis_user:amanuensis_pass@postgres:5432/amanuensis_db'
+
+# A URL-safe base64-encoded 32-byte key for encrypting keys in db
+# in python you can use the following script to generate one:
+#     import base64
+#     import os
+#     key = base64.urlsafe_b64encode(os.urandom(32))
+#     print(key)
+ENCRYPTION_KEY: ''
+
+# Cross-service keys
+# Private key for signing requests sent to other Gen3 services
+PRIVATE_KEY_PATH: '/var/www/amanuensis/jwt_private_key.pem'
+
+# //////////////////////////////////////////////////////////////////////////////////////
+# DEBUG & SECURITY SETTINGS
+#   - Modify based on whether you're in a dev environment or in production
+# //////////////////////////////////////////////////////////////////////////////////////
+# flask's debug setting
+# WARNING: DO NOT ENABLE IN PRODUCTION
+DEBUG: true
+# if true, will automatically login a user with username "test"
+# WARNING: DO NOT ENABLE IN PRODUCTION (for testing purposes only)
+MOCK_AUTH: false
+# if true, will fake a successful login response from Google in /login/google
+#     NOTE: this will also modify the behavior of /link/google endpoints
+# WARNING: DO NOT ENABLE IN PRODUCTION (for testing purposes only)
+# will login as the username set in cookie DEV_LOGIN_COOKIE_NAME
+MOCK_GOOGLE_AUTH: false
+
+# if true, will ignore anything configured in STORAGE_CREDENTIALS
+MOCK_STORAGE: true
+# allow OIDC traffic on http for development. By default it requires https.
+#
+# WARNING: ONLY set to true when amanuensis will be deployed in such a way that it will
+#          ONLY receive traffic from internal clients and can safely use HTTP.
+AUTHLIB_INSECURE_TRANSPORT: false
+
+# set if you want browsers to only send cookies with requests over HTTPS
+SESSION_COOKIE_SECURE: true
+
+ENABLE_CSRF_PROTECTION: true
+
+OIDC_ISSUER: 'https://{{HOSTNAME}}/user'
+
+OAUTH2:
+  client_id: 'oauth2_client_id'
+  client_secret: 'oauth2_client_secret'
+  api_base_url: 'https://{{HOSTNAME}}/user/'
+  authorize_url: 'https://{{HOSTNAME}}/user/oauth2/authorize'
+  access_token_url: 'https://{{HOSTNAME}}/user/oauth2/token'
+  refresh_token_url: 'https://{{HOSTNAME}}/user/oauth2/token'
+  client_kwargs: 
+    # redirect_uri: 'https://{{HOSTNAME}}/api/v0/oauth2/authorize'
+    redirect_uri: 'https://{{HOSTNAME}}/amanuensis/oauth2/authorize'
+    scope: 'openid data user'
+  # deprecated key values, should be removed after all commons use new oidc
+  internal_oauth_provider: 'http://fence-service/oauth2/'
+  oauth_provider: 'https://{{HOSTNAME}}/user/oauth2/'
+  # redirect_uri: 'https://{{HOSTNAME}}/api/v0/oauth2/authorize'
+  redirect_uri: 'https://{{HOSTNAME}}/amanuensis/oauth2/authorize'
+
+USER_API: 'http://fence-service/'
+# option to force authutils to prioritize USER_API setting over the issuer from
+# token when redirecting, used during local docker compose setup when the
+# services are on different containers but the hostname is still localhost
+FORCE_ISSUER: true
+
+# amanuensis (at the moment) attempts a migration on startup. setting this to false will disable that
+# WARNING: ONLY set to false if you do NOT want to automatically migrate your database.
+#          You should be careful about incompatible versions of your db schema with what
+#          amanuensis expects. In other words, things could be broken if you update to a later
+#          amanuensis that expects a schema your database isn't migrated to.
+# NOTE: We are working to improve the migration process in the near future
+ENABLE_DB_MIGRATION: true
+
+
+# //////////////////////////////////////////////////////////////////////////////////////
+# LIBRARY CONFIGURATION (authlib & flask)
+#   - Already contains reasonable defaults
+# //////////////////////////////////////////////////////////////////////////////////////
+# used for flask, "path mounted under by the application / web server"
+# since we deploy as microservices, fence is typically under {{base}}/user
+# this is also why our BASE_URL default ends in /user
+APPLICATION_ROOT: '/amanuensis'
+
+
+
+########################################################################################
+#                               OPTIONAL CONFIGURATIONS                                #
+########################################################################################
+
+# //////////////////////////////////////////////////////////////////////////////////////
+# SUPPORT INFO
+# //////////////////////////////////////////////////////////////////////////////////////
+# If you want an email address to show up when an unhandled error occurs, provide one
+# here. Something like: support@example.com
+SUPPORT_EMAIL_FOR_ERRORS: null
+
+
+# //////////////////////////////////////////////////////////////////////////////////////
+# AWS BUCKETS AND CREDENTIALS
+#   - Support `/data` endpoints
+# //////////////////////////////////////////////////////////////////////////////////////
+AWS_CREDENTIALS:
+  'DATA_DELIVERY_S3_BUCKET':
+    aws_access_key_id: 'DATA_DELIVERY_S3_BUCKET_ACCESS_KEY'
+    aws_secret_access_key: 'DATA_DELIVERY_S3_BUCKET_PRIVATE_KEY'
+# NOTE: Remove the {} and supply creds if needed. Example in comments below
+#  'CRED1':
+#    aws_access_key_id: ''
+#    aws_secret_access_key: ''
+#  'CRED2':
+#    aws_access_key_id: ''
+#    aws_secret_access_key: ''
+
+# NOTE: the region is optonal for s3_buckets, however it should be specified to avoid a
+# call to GetBucketLocation which you make lack the AWS ACLs for.
+# public buckets do not need the region field.
+S3_BUCKETS: {}
+# NOTE: Remove the {} and supply buckets if needed. Example in comments below
+#   bucket1:
+#     cred: 'CRED1'
+#     region: 'us-east-1'
+#     # optionally you can manually specify an s3-compliant endpoint for this bucket
+#     endpoint_url: 'https://cleversafe.example.com/'
+#   bucket2:
+#     cred: 'CRED2'
+#     region: 'us-east-1'
+#   bucket3:
+#     cred: '*' # public bucket
+#   bucket4:
+#     cred: 'CRED1'
+#     region: 'us-east-1'
+#     role-arn: 'arn:aws:iam::role1'
+
+# `DATA_DOWNLOAD_BUCKET` specifies an S3 bucket to which data files are uploaded by the system/admin user,
+# User Data request files are stored here.
+DATA_DOWNLOAD_BUCKET: 'bucket1'
+
+# //////////////////////////////////////////////////////////////////////////////////////
+# PROXY
+#   - Optional: If the api is behind firewall that needs to set http proxy
+# //////////////////////////////////////////////////////////////////////////////////////
+# NOTE: leave as-is to not use proxy
+# this is only used by the Google Oauth2Client at the moment if provided
+HTTP_PROXY:
+  host: null
+  port: 3128
+
+# //////////////////////////////////////////////////////////////////////////////////////
+# MICROSERVICE PATHS
+#   - Support `/data` endpoints & authz functionality
+# //////////////////////////////////////////////////////////////////////////////////////
+# url where indexd microservice is running (for signed urls primarily)
+# NOTE: Leaving as null will force fence to default to {{BASE_URL}}/index
+# example value: 'https://example.com/index'
+INDEXD: http://indexd-service
+
+# this is the username which fence uses to make authenticated requests to indexd
+INDEXD_USERNAME: 'indexd_client'
+# this is the password which fence uses to make authenticated requests to indexd
+INDEXD_PASSWORD: 'indexd_client_pass'
+
+# url where role-based access control microservice is running
+ARBORIST: http://arborist-service
+
+FENCE: http://fence-service
+
+# //////////////////////////////////////////////////////////////////////////////////////
+# EMAIL
+#   - Support for sending hubspot API work updates to project management team
+# //////////////////////////////////////////////////////////////////////////////////////
+# Simple Email Service (for sending emails from fence)
+#
+# NOTE: Example in comments below
+AWS_SES:
+  SENDER: "PCDC_GEN3 <pcdc_root@lists.uchicago.edu>"
+  RECIPIENT: "graglia01@gmail.com"
+  AWS_REGION: "us-east-1"
+  AWS_ACCESS_KEY: ""
+  AWS_SECRET_KEY: ""
+
+HUBSPOT:
+  API_KEY: "DEV_KEY"
+  

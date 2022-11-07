@@ -1,86 +1,379 @@
+# mappings:
+#   - name: etl
+#     doc_type: case
+#     type: aggregator
+#     root: case
+#     props:
+#       - name: submitter_id
+#       - name: project_id
+#       - name: disease_type
+#       - name: primary_site
+#     flatten_props:
+#       - path: demographics
+#         props:
+#           - name: gender
+#             value_mappings:
+#               - female: F
+#               - male: M
+#           - name: race
+#             value_mappings:
+#               - american indian or alaskan native: Indian
+#           - name: ethnicity
+#           - name: year_of_birth
+#     aggregated_props:
+#       - name: _samples_count
+#         path: samples
+#         fn: count
+#       - name: _aliquots_count
+#         path: samples.aliquots
+#         fn: count
+#       - name: _submitted_methylations_count
+#         path: samples.aliquots.submitted_methylation_files
+#         fn: count
+#       - name: _submitted_copy_number_files_on_aliquots_count
+#         path: samples.aliquots.submitted_copy_number_files
+#         fn: count
+#       - name: _read_groups_count
+#         path: samples.aliquots.read_groups
+#         fn: count
+#       - name: _submitted_aligned_reads_count
+#         path: samples.aliquots.read_groups.submitted_aligned_reads_files
+#         fn: count
+#       - name: _submitted_unaligned_reads_count
+#         path: samples.aliquots.read_groups.submitted_unaligned_reads_files
+#         fn: count
+#       - name: _submitted_copy_number_files_on_read_groups_count
+#         path: samples.aliquots.read_groups.submitted_copy_number_files
+#         fn: count
+#       - name: _submitted_somatic_mutations_count
+#         path: samples.aliquots.read_groups.submitted_somatic_mutations
+#         fn: count
+#     joining_props:
+#       - index: file
+#         join_on: case_id
+#         props:
+#           - name: data_format
+#             src: data_format
+#             fn: set
+#           - name: data_type
+#             src: data_type
+#             fn: set
+#           - name: file_id
+#             src: file_id
+#             fn: set
+#   - name: file
+#     doc_type: file
+#     type: collector
+#     root: None
+#     category: data_file
+#     props:
+#       - name: object_id
+#       - name: md5sum
+#       - name: file_name
+#       - name: file_size
+#       - name: data_format
+#       - name: data_type
+#       - name: state
+#     injecting_props:
+#       case:
+#         props:
+#           - name: case_id
+#             src: id
+#             fn: set
+#           - name: project_id
+#     target_nodes:
+#       - name: slide_image
+#         path: slides.samples.cases
+
+# REMEMBER TO ADD - name: project_id
 mappings:
-  - name: etl
-    doc_type: case
+  # - name: pcdc_demographic
+  #   doc_type: demographic
+  #   type: aggregator
+  #   root: demographic
+  #   props:
+  #     - name: submitter_id
+  #     - name: project_id
+  #     - name: race
+  #     - name: ethnicity
+  #   parent_props:
+  #     - path: persons[person_submitter_id:submitter_id]
+      # - path: persons[person_submitter_id:submitter_id,project_id:project_id]
+
+# FROM HERE
+  # - name: pcdc_person
+  #   doc_type: person
+  #   type: aggregator
+  #   root: person
+  #   props:
+  #     - name: project_id
+  #     - name: submitter_id
+  #     - name: race
+  #     - name: ethnicity
+  #     - name: sex
+  #     # - name: person_submitter_id
+  #     #   src: submitter_id
+  #   # flatten_props:
+  #   #   - path: demographics
+  #   #     props:
+  #   #       - name: race
+  #   #       - name: ethnicity
+
+  # - name: pcdc_survival_characteristic
+  #   doc_type: survival_characteristic
+  #   type: aggregator
+  #   root: survival_characteristic
+  #   props:
+  #     - name: lkss
+  #     - name: age_at_lkss
+  #     - name: project_id
+  #   parent_props:
+  #     - path: subjects[subject_submitter_id:submitter_id]
+  #     - path: clinical_events[clinical_event_submitter_id:submitter_id,clinical_event_type:clinical_event_type]
+# TO HERE
+
+  # - name: pcdc_clinical_event
+  #   doc_type: clinical_event
+  #   type: aggregator
+  #   root: clinical_event
+  #   props:
+  #     - name: clinical_event_type
+  #     - name: submitter_id
+
+
+
+  # - name: pcdc_clinical_event
+  #   doc_type: clinical_event
+  #   type: aggregator
+  #   root: clinical_event
+  #   props:
+  #     - name: project_id
+  #     - name: clinical_event_type
+    
+
+  - name: pcdc_1
+    doc_type: subject
     type: aggregator
-    root: case
+    root: subject
     props:
-      - name: submitter_id
+      - name: subject_submitter_id
+        src: submitter_id
+      - name: consortium
+      - name: data_contributor_id
+      - name: treatment_arm
       - name: project_id
-      - name: disease_type
-      - name: primary_site
+      - name: age_at_enrollment
+      - name: year_at_enrollment
+      - name: enrolled_status
+    # flatten_props:
+    #   - path: studys
+    #     props:
+    #       - name: study_id
+    #       # - name: enrolled_status
+    #     sorted_by: study_id, desc
     flatten_props:
-      - path: demographics
+      # - path: survival_characteristics
+      #   props:
+      #     - name: age_at_lkss
+      #     - name: lkss
+      #   # parent_props:
+      #   #   - path: clinical_events[ce_submitter_id:submitter_id]
+      #   sorted_by: age_at_lkss, desc
+      - path: survival_characteristics
         props:
-          - name: gender
-            value_mappings:
-              - female: F
-              - male: M
-          - name: race
-            value_mappings:
-              - american indian or alaskan native: Indian
-          - name: ethnicity
-          - name: year_of_birth
+          - name: age_at_lkss
+          - name: cause_of_death
+          - name: lkss
+        # parent_props:
+        #   - path: clinical_events[ce_submitter_id:submitter_id]
+        sorted_by: submitter_id, desc
+      - path: tumor_assessments
+        props:
+          - name: invasiveness
+          - name: longest_diam_dim1
+          - name: longest_diam_dim2
+          - name: longest_diam_dim3
+          - name: nodal_clinical
+          - name: nodal_pathology
+          - name: parameningeal_extension
+          - name: tumor_classification
+          - name: tumor_site
+          - name: tumor_site_other
+          - name: tumor_size
+        sorted_by: submitter_id, desc
+      - path: stagings
+        props:
+          - name: irs_group
+          - name: tnm_finding
+          - name: stage
+          - name: stage_system
+        sorted_by: submitter_id, desc
+      - path: molecular_analysiss
+        props:
+          - name: anaplasia
+          - name: anaplasia_extent
+          - name: gene1
+          - name: gene2
+          - name: molecular_abnormality
+          - name: molecular_abnormality_result
+          - name: variant_type
+        sorted_by: submitter_id, desc
+      - path: histologys
+        props:
+          - name: age_at_hist_assessment
+          - name: histology
+          - name: histology_grade
+          - name: histology_inpc
+        sorted_by: submitter_id, desc
+      - path: biopsy_surgical_procedures
+        props:
+          - name: margins
+          - name: procedure_site
+          - name: procedure_tumor_classification
+          - name: procedure_type
+        sorted_by: submitter_id, desc
+      - path: secondary_malignant_neoplasms
+        props:
+          - name: age_at_smn
+        sorted_by: submitter_id, desc
+
+
+      # TODO TO BE REMOVED ONCE nested object are supported
+      - path: studys
+        props:
+          - name: study_id
+          - name: study_phase
+          - name: study_type          
+        sorted_by: submitter_id, desc
+
+      - path: external_references
+        props:
+          - name: external_resource_name
+          - name: external_resource_icon_path
+          - name: external_subject_url
+          - name: external_subject_id
+          - name: external_links
+        sorted_by: external_resource_name, desc
+
+      - path: clinical_events
+        props:
+          - name: age_at_course_start
+          - name: age_at_course_end
+          - name: age_at_disease_phase
+          - name: clinical_event_type
+          - name: course
+          - name: course_number
+          - name: disease_phase
+          - name: disease_phase_number  
+          - name: year_at_disease_phase
+        sorted_by: submitter_id, desc
+
+
+    parent_props:
+      - path: persons[person_submitter_id:submitter_id,race:race,sex:sex,ethnicity:ethnicity] # .demographics[race:race]
     aggregated_props:
-      - name: _samples_count
-        path: samples
+      # - name: study_id
+      #   path: studys
+      #   src: study_id
+      #   fn: set
+      - name: _study_count
+        path: studys
         fn: count
-      - name: _aliquots_count
-        path: samples.aliquots
+      - name: _molecular_analysis_count
+        path: molecular_analysiss
         fn: count
-      - name: _submitted_methylations_count
-        path: samples.aliquots.submitted_methylation_files
-        fn: count
-      - name: _submitted_copy_number_files_on_aliquots_count
-        path: samples.aliquots.submitted_copy_number_files
-        fn: count
-      - name: _read_groups_count
-        path: samples.aliquots.read_groups
-        fn: count
-      - name: _submitted_aligned_reads_count
-        path: samples.aliquots.read_groups.submitted_aligned_reads_files
-        fn: count
-      - name: _submitted_unaligned_reads_count
-        path: samples.aliquots.read_groups.submitted_unaligned_reads_files
-        fn: count
-      - name: _submitted_copy_number_files_on_read_groups_count
-        path: samples.aliquots.read_groups.submitted_copy_number_files
-        fn: count
-      - name: _submitted_somatic_mutations_count
-        path: samples.aliquots.read_groups.submitted_somatic_mutations
-        fn: count
-    joining_props:
-      - index: file
-        join_on: _case_id
-        props:
-          - name: data_format
-            src: data_format
-            fn: set
-          - name: data_type
-            src: data_type
-            fn: set
-          - name: _file_id
-            src: file_id
-            fn: set
-  - name: file
-    doc_type: file
-    type: collector
-    root: None
-    category: data_file
-    props:
-      - name: object_id
-      - name: md5sum
-      - name: file_name
-      - name: file_size
-      - name: data_format
-      - name: data_type
-      - name: state
-    injecting_props:
-      case:
-        props:
-          - name: _case_id
-            src: id
-            fn: set
-          - name: project_id
-    target_nodes:
-      - name: slide_image
-        path: slides.samples.cases
+
+
+    # joining_props:
+    #   - index: survival_characteristic
+    #     join_on: subject_submitter_id
+    #     props:
+    #       - name: lkss # _diff
+    #         # src: lkss
+    #       - name: age_at_lkss
+    #         fn: max
+    #       - name: clinical_event_type
+
+
+    # joining_props:
+    #   - index: survival_characteristic
+    #     join_on: subject_submitter_id
+    #     props:
+    #       - name: lkss
+    #       - name: age_at_lkss
+
+    # injecting_props:
+    #   survival_characteristic:
+    #     props:
+    #       - name: lkss
+    #         src: lkss
+    #         fn: set
+    #       - name: age_at_lkss
+    #         src: age_at_lkss
+    #         fn: set
+    
+
+
+    # aggregated_props:
+    #   - name: _test_count
+    #     path: tests
+    #     fn: count
+    # aggregated_props:
+    #   - name: lkss
+    #     path: clinical_events.survival_characteristics
+    #     src: lkss
+    #     fn: set
+    #   - name: age_at_lkss
+    #     path: clinical_events.survival_characteristics
+    #     src: age_at_lkss
+    #     fn: set
+        # fn: list
+    #   - path: tests
+    #     props:
+    #       - name: result
+    #       - name: result_numeric
+    #       - name: type
+    #   - name: clinical_event_type
+    #     path: clinical_events
+    #     src: clinical_event_type
+    #     fn: list
+    
+    # joining_props:
+    #   - index: demographic
+    #     join_on: person_submitter_id
+    #     props:
+    #       - name: ethnicity
+    #       - name: race
+    # joining_props:
+    #   - index: person
+    #     join_on: person_submitter_id
+    #     props:
+    #       # - name: auth_resource_path
+    #       - name: race
+    #       - name: ethnicity
+
+
+# EXAMPLE
+# - name: dcf_analysis
+#     doc_type: analysis
+#     type: aggregator
+#     root: analysis
+#     props:
+#       - name: web_browser_url
+#       - name: client_url
+#       - name: category
+#     parent_props:
+#       - path: studies[study_id:id]
+#     joining_props:
+#       - index: subject
+#         join_on: study_id
+#         props:
+#           - name: subject_submitter_id
+#             src: submitter_id
+#             fn: set
+# END EXAMPLE
+      
+    # aggregated_props:
+    #   - name: _relapse_sites_specific_count
+    #     path: relapse_sites_specific
+    #     fn: count
