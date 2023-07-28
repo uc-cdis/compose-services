@@ -66,6 +66,8 @@ ENABLE_CSRF_PROTECTION: true
 # OPEN ID CONNECT (OIDC) CLIENTS
 #   - Fully configure at least one client so login works
 # //////////////////////////////////////////////////////////////////////////////////////
+ENABLE_DB_MIGRATION: false
+
 OPENID_CONNECT:
   # These Google values must be obtained from Google's Cloud Console
   # Follow: https://developers.google.com/identity/protocols/OpenIDConnect
