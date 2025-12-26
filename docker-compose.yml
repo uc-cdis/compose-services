@@ -142,23 +142,23 @@ services:
       retries: 5
     depends_on:
       - postgres
-  guppy-service:
-    image: "quay.io/cdis/guppy:2021.03"
-    container_name: guppy-service
-    networks:
-      - devnet
-    volumes:
-      - ./Secrets/guppy_config.json:/guppy/guppy_config.json
-      - ./scripts/wait_for_esproxy.sh:/usr/bin/wait_for_esproxy.sh:ro
-    entrypoint: /usr/bin/wait_for_esproxy.sh
-    command: node --max-http-header-size 16000 dist/server/server.js
-    environment:
-      - GUPPY_CONFIG_FILEPATH=/guppy/guppy_config.json
-      - GEN3_ARBORIST_ENDPOINT=http://arborist-service
-      - GEN3_ES_ENDPOINT=http://esproxy-service:9200
-    depends_on:
-      - arborist-service
-      - esproxy-service
+  # guppy-service:
+  #   image: "quay.io/cdis/guppy:2021.03"
+  #   container_name: guppy-service
+  #   networks:
+  #     - devnet
+  #     volumes:
+  #       - ./Secrets/guppy_config.json:/guppy/guppy_config.json
+  #       - ./scripts/wait_for_esproxy.sh:/usr/bin/wait_for_esproxy.sh:ro
+  #     entrypoint: /usr/bin/wait_for_esproxy.sh
+  #     command: node --max-http-header-size 16000 dist/server/server.js
+  #     environment:
+  #       - GUPPY_CONFIG_FILEPATH=/guppy/guppy_config.json
+  #       - GEN3_ARBORIST_ENDPOINT=http://arborist-service
+  #       - GEN3_ES_ENDPOINT=http://esproxy-service:9200
+  #     depends_on:
+  #       - arborist-service
+  #       - esproxy-service
   esproxy-service:
     image: quay.io/cdis/elasticsearch-oss:6.8.12
     container_name: esproxy-service
@@ -306,18 +306,18 @@ services:
     environment:
       - HADOOP_URL=hdfs://0.0.0.0:9000
       - HADOOP_HOST=0.0.0.0
-  kibana-service:
-    image: quay.io/cdis/kibana-oss:6.5.4
-    container_name: kibana-service
-    environment:
-      - SERVER_NAME=kibana-service
-      - ELASTICSEARCH_URL=http://esproxy-service:9200
-    ports:
-      - 5601:5601
-    networks:
-      - devnet
-    depends_on:
-      - esproxy-service
+  # kibana-service:
+  #   image: quay.io/cdis/kibana-oss:6.5.4
+  #   container_name: kibana-service
+  #   environment:
+  #     - SERVER_NAME=kibana-service
+  #     - ELASTICSEARCH_URL=http://esproxy-service:9200
+  #   ports:
+  #     - 5601:5601
+  #   networks:
+  #     - devnet
+  #   depends_on:
+  #     - esproxy-service
 networks:
   devnet:
 volumes:
