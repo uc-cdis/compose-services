@@ -22,9 +22,37 @@ Make sure to update user privileges:
 docker exec -it fence-service fence-create sync --arborist http://arborist-service --yaml user.yaml
 ```
 
-To create a program, visit the URL where your Gen3 Commons is hosted and append `/_root`. If you are running the Docker Compose setup locally, then this will be `localhost/_root`. Otherwise, this will be whatever you set the `hostname` field to in the creds files for the services with `/_root` added to the end. Here, you can choose to either use form submission or upload a file.  I will go through the process of using form submission here, as it will show you what your file would need to look like if you were using file upload. Choose form submission, search for "program" in the drop-down list and then fill in the "dbgap_accession_number" and "name" fields. As an example, you can use "123" as "dbgap accession number" and "Program1" as "name". Click 'Upload submission json from form' and then 'Submit'. If the message is green ("succeeded:200"), that indicates success, while a grey message indicates failure. More details can be viewed by clicking on the "DETAILS" button. If you don't see the green message, you can control the sheepdog logs for possible errors and check the Sheepdog database (`/datadictionary`), where programs and projects are stored. If you see your program in the data dictionary, neglect the fact that at this time the green message does not appear and continue to create a project.
 
-To create a project, visit the URL where your Gen3 Commons is hosted and append the name of the program you want to create the project under. For example, if you are running the Docker Compose setup locally and would like to create a project under the program "Program1", the URL you will visit will be `localhost/Program1`. You will see the same options to use form submission or upload a file. This time, search for "project" in the drop-down list and then fill in the fields. As an example, you can use "P1" as "code", "phs1" as "dbgap_accession_number", and "project1" as "name". If you use different entries, make a note of the dbgap_accession_number for later. Click 'Upload submission json from form' and then 'Submit'. Again, a green message indicates success while a grey message indicates failure, and more details can be viewed by clicking on the "DETAILS" button. You can control in the `/datadictionary` whether the program and project have been correctly stored.
+### Submitting Program or Project JSON via the UI
+
+You can submit a program or project using the Data Commons web UI. The submission form allows you to either:
+
+- **Upload a JSON file** (drag-and-drop or file picker)
+- **Paste JSON directly** into a text area
+
+The form validates your JSON and provides feedback before submission. Example for a program:
+
+```json
+{
+  "dbgap_accession_number": "123",
+  "name": "Program1"
+}
+```
+
+After uploading or pasting your JSON, click **Submit**. A green message indicates success; a grey message indicates failure. You can view more details by clicking the "DETAILS" button in the UI.
+
+
+To create a project, visit your Gen3 Commons UI and navigate to the appropriate program (e.g., `localhost/Program1`). Use the submission form as above, but select **project** in the drop-down. Example project JSON:
+
+```json
+{
+  "code": "P1",
+  "dbgap_accession_number": "phs1",
+  "name": "project1"
+}
+```
+
+After submitting, check for a green success message. You can verify the new program/project in the `/datadictionary` section.
 
 After that, you're ready to start submitting data for that project! Please note that Data Submission refers to metadata regarding the file(s) (Image, Sequencing files, etc.) that are to be uploaded. Please refer to the [Gen3 website](https://gen3.org/resources/user/submit-data/) for additional details.
 

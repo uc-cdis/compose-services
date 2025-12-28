@@ -10,6 +10,11 @@ In the following pages you will find information about [migrating existing](docs
 You can quickly find commonly used commands in our [cheat sheet](./docs/cheat_sheet.md). Config file formats were copied from [cloud-automation](https://github.com/uc-cdis/cloud-automation) and stored in the `Secrets` directory and modified for local use with Docker Compose. Setup scripts for some of the containers are kept in the `scripts` directory.
 
 
+
+# Prerequisites
+
+This repository is supported on Linux, MacOS, and Windows (using Git Bash or MSYS2 environments). Most scripts, including `creds_setup.sh`, are optimized for Linux/MacOS shells but now include compatibility fixes for Windows file-system constraints and OpenSSL subject formatting. On Windows, run scripts in a Unix-like shell (e.g., Git Bash). Native Windows Command Prompt or PowerShell is not supported for shell scripts.
+
 # Key Documentation
 
 * [Database Information](docs/database_information.md)

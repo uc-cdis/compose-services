@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 
 # Thing shim around the normal Docker postgres entrypoint that allows us to run
 # non-application migrations. Things like DB and user creations that would be

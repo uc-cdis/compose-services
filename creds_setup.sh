@@ -53,8 +53,15 @@ rm "$tempFile"
 
 cd Secrets
 
-# make directories for temporary credentials
-timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+# OS detection for Windows (Git Bash/MSYS), Linux, or MacOS
+OS_TYPE="$(uname -s)"
+if [[ "$OS_TYPE" =~ (MINGW|MSYS|CYGWIN) ]]; then
+  # Windows: replace colons in timestamp with dashes
+  timestamp=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
+else
+  timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+fi
 
 # generate private and public key for fence
 yearMonth="$(date +%Y-%m)"
@@ -95,9 +102,14 @@ authorityKeyIdentifier = keyid:always,issuer:always
       # erase old certs if they exist
       /bin/rm -rf service.key service.crt
       commonName=${1:-localhost}
-      SUBJ="/countryName=US/stateOrProvinceName=IL/localityName=Chicago/organizationName=CDIS/organizationalUnitName=PlanX/commonName=$commonName/emailAddress=cdis@uchicago.edu"
+      # Use double slashes and backslashes for Windows OpenSSL, single slashes for others
+      if [[ "$OS_TYPE" =~ (MINGW|MSYS|CYGWIN) ]]; then
+        SUBJ="//countryName=US\\stateOrProvinceName=IL\\localityName=Chicago\\organizationName=CDIS\\organizationalUnitName=PlanX\\commonName=$commonName\\emailAddress=cdis@uchicago.edu"
+      else
+        SUBJ="/countryName=US/stateOrProvinceName=IL/localityName=Chicago/organizationName=CDIS/organizationalUnitName=PlanX/commonName=$commonName/emailAddress=cdis@uchicago.edu"
+      fi
       openssl req -new -x509 -nodes -extensions v3_ca -keyout ca-key.pem \
-          -out ca.pem -days 365 -subj $SUBJ $OPTS
+          -out ca.pem -days 365 -subj "$SUBJ" $OPTS
       if [[ $? -eq 1 ]]; then
           echo "problem with creds_setup.sh script, refer to compose-services wiki"
           rm -rf temp*
@@ -151,8 +163,8 @@ EOM
     fi
     if [[ ! -f service.key || ! -f service.crt ]]; then
       openssl genrsa -out "service.key" 2048
-      openssl req -new -key "service.key" \
-          -out "service.csr" -subj $SUBJ
+        openssl req -new -key "service.key" \
+          -out "service.csr" -subj "$SUBJ"
       openssl ca -batch -in "service.csr" -config openssl.cnf \
           -extensions server_cert -days 365 -notext -out "service.crt"
     else
